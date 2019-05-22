@@ -20,9 +20,6 @@ public class UnitOfMeasure {
     private String snowLevel;
     private String pollutionLevel;
 
-    /*@OneToOne(mappedBy = "unitOfMeasure", optional = false)
-    private Station station;*/
-
     //mandatory
     public UnitOfMeasure() {
     }
@@ -124,12 +121,4 @@ public class UnitOfMeasure {
         this.pollutionLevel = pollutionLevel;
     }
 
-
-    /*public Station getStation() {
-        return station;
-    }
-
-    public void setStation(Station station) {
-        this.station = station;
-    }*/
 }

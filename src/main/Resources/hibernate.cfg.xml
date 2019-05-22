@@ -13,6 +13,9 @@
         <property name="hbm2ddl.auto">update</property>
         <mapping class="Model.Datum"></mapping>
         <mapping class="Model.DatumCountry"></mapping>
+        <mapping class="Model.DatumSea"></mapping>
+        <mapping class="Model.DatumMountain"></mapping>
+        <mapping class="Model.DatumCity"></mapping>
         <mapping class="Model.UnitOfMeasure"></mapping>
         <mapping class="Model.Station"></mapping>
     </session-factory>

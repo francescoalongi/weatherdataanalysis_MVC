@@ -2,8 +2,14 @@ package Model;
 
 import javax.persistence.*;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Datum {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Basic(optional = false)
+    private Integer idDatum;
 
     private Long timestamp;
     private Float temperature;
@@ -27,6 +33,10 @@ public abstract class Datum {
         this.rain = rain;
         this.windModule = windModule;
         this.windDirection = windDirection;
+    }
+
+    public Integer getIdDatum() {
+        return idDatum;
     }
 
     public Long getTimestamp() {

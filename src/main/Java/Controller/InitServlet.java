@@ -20,51 +20,78 @@ public class InitServlet extends HttpServlet {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
+        //Country station
+        UnitOfMeasure unitOfMeasureCountry = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose","°C", null, null, null);
+        Set<Datum> datumSetCountry = new HashSet<>();
 
-        UnitOfMeasure unitOfMeasure = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose","°C", null, null, null);
-        Set<Datum> datumSet = new HashSet<>();
-
-        Station station = new Station(unitOfMeasure,"valmorea", "country", (float)34.0, (float)34, (float)109);
+        Station stationCountry = new Station(unitOfMeasureCountry,"valmorea", "country", (float)34.0, (float)34, (float)109);
 
         DatumCountry datumCountry = new DatumCountry(Long.valueOf(1556909), (float)12, (float)1010.2, (float)80, (float)3, (float)4, "NNE", (float)6);
         DatumCountry datumCountry2 = new DatumCountry(Long.valueOf(15569309), (float)15, (float)1010.2, (float)81, (float)3, (float)4, "SEE", (float)6);
 
         // populate first the many side of the relationship, then populate the one side of the relationship.
-        datumCountry.setStation(station);
-        datumCountry2.setStation(station);
-        datumSet.add(datumCountry);
-        datumSet.add(datumCountry2);
-        station.setDatumSet(datumSet);
-//session.remove();
-        session.save(station);
+        datumCountry.setStation(stationCountry);
+        datumCountry2.setStation(stationCountry);
+        datumSetCountry.add(datumCountry);
+        datumSetCountry.add(datumCountry2);
+        stationCountry.setDatumSet(datumSetCountry);
+
+        //Sea station
+        UnitOfMeasure unitOfMeasureSea = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose",null, "mW/cm2", null, null);
+        Set<Datum> datumSetSea = new HashSet<>();
+
+        Station stationSea = new Station(unitOfMeasureSea,"menfi", "sea", (float)34.0, (float)34, (float)109);
+
+        DatumSea datumSea = new DatumSea(Long.valueOf(1556909), (float)12, (float)1010.2, (float)80, (float)3, (float)4, "NNE", (float)6);
+        DatumSea datumSea2 = new DatumSea(Long.valueOf(15569309), (float)15, (float)1010.2, (float)81, (float)3, (float)4, "SEE", (float)6);
+
+        // populate first the many side of the relationship, then populate the one side of the relationship.
+        datumSea.setStation(stationSea);
+        datumSea2.setStation(stationSea);
+        datumSetSea.add(datumSea);
+        datumSetSea.add(datumSea2);
+        stationSea.setDatumSet(datumSetSea);
+
+        //Mountain station
+        UnitOfMeasure unitOfMeasureMountain = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose",null, null, "cm", null);
+        Set<Datum> datumSetMountain = new HashSet<>();
+
+        Station stationMountain = new Station(unitOfMeasureMountain,"Livigno", "mountain", (float)34.0, (float)34, (float)109);
+
+        DatumMountain datumMountain = new DatumMountain(Long.valueOf(1556909), (float)12, (float)1010.2, (float)80, (float)3, (float)4, "NNE", (float)6);
+        DatumMountain datumMountain2 = new DatumMountain(Long.valueOf(15569309), (float)15, (float)1010.2, (float)81, (float)3, (float)4, "SEE", (float)6);
+
+        // populate first the many side of the relationship, then populate the one side of the relationship.
+        datumMountain.setStation(stationMountain);
+        datumMountain2.setStation(stationMountain);
+        datumSetMountain.add(datumMountain);
+        datumSetMountain.add(datumMountain2);
+        stationMountain.setDatumSet(datumSetMountain);
+
+
+        //City station
+        UnitOfMeasure unitOfMeasureCity = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose",null, null, null, "ppm");
+        Set<Datum> datumSetCity = new HashSet<>();
+
+        Station stationCity = new Station(unitOfMeasureCity,"Milano", "city", (float)34.0, (float)34, (float)109);
+
+        DatumCity datumCity = new DatumCity(Long.valueOf(1556909), (float)12, (float)1010.2, (float)80, (float)3, (float)4, "NNE", (float)6);
+        DatumCity datumCity2 = new DatumCity(Long.valueOf(15569309), (float)15, (float)1010.2, (float)81, (float)3, (float)4, "SEE", (float)6);
+
+        // populate first the many side of the relationship, then populate the one side of the relationship.
+        datumCity.setStation(stationCity);
+        datumCity2.setStation(stationCity);
+        datumSetCity.add(datumCity);
+        datumSetCity.add(datumCity2);
+        stationCity.setDatumSet(datumSetCity);
+
+        session.save(stationCountry);
+        session.save(stationSea);
+        session.save(stationMountain);
+        session.save(stationCity);
 
         //Commit the transaction
         session.getTransaction().commit();
         HibernateUtil.shutdown();
-
-        /*Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-
-
-        UnitOfMeasure unitOfMeasure = new UnitOfMeasure("°C","hPa","%", "mm/m^2", "km/h", "wind rose",null, "bau", null, null);
-        Set<DatumSea> datumCountrySet = new HashSet<>();
-
-        Station station = new Station(unitOfMeasure,"valmorea", "sea", (float)34.0, (float)34, (float)109);
-
-        DatumCountry datumCountry = new DatumCountry(Long.valueOf(1556909), (float)12, (float)1010.2, (float)80, (float)3, (float)4, "NNE", (float)6);
-        DatumCountry datumCountry2 = new DatumCountry(Long.valueOf(15569309), (float)15, (float)1010.2, (float)81, (float)3, (float)4, "SEE", (float)6);
-
-        // populate first the many side of the relationship, then populate the one side of the relationship.
-        datumCountry.setStation(station);
-        datumCountry2.setStation(station);
-        datumCountrySet.add(datumCountry);
-        datumCountrySet.add(datumCountry2);
-        station.setDatumCountrySet(datumCountrySet);
-//session.remove();
-        session.save(station);
-
-        //Commit the transaction
-        session.getTransaction().commit();
-        HibernateUtil.shutdown();*/
     }
 }

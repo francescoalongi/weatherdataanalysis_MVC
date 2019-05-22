@@ -29,8 +29,6 @@ public class Station {
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "station")
     private Set<Datum> datumSet = new HashSet<Datum>();
 
-
-
     public Set<Datum> getDatumSet() {
         return datumSet;
     }
