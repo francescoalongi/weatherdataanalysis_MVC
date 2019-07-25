@@ -1,0 +1,25 @@
+.liMargin {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.glyphicon {
+    font-size: 50px;
+}
+
+.top-buffer{
+    margin-top: 20px;
+}
+
+.drop-zone {
+    border: 2px dashed lightgrey;
+}
+
+.marginUnderRow {
+    margin-bottom: 5px;
+}
+
+#inputTextFieldset {
+    margin-bottom: 10px;
+}
