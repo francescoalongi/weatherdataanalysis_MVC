@@ -18,7 +18,6 @@ public class InitServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-
         /*
         // instantiate session
         Session session = HibernateUtil.getSessionFactory().openSession();

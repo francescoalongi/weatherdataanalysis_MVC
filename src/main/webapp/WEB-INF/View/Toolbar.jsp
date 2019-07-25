@@ -9,15 +9,21 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/Stylesheet/Stylesheet.css" type="text/css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="${pageContext.request.contextPath}/Javascript/Sidemenu.js"></script>
+
+<div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Import new data</a>
+                <a href="#">Export displayed data</a>
+</div>
 
 <nav class="navbar navbar-default" style="background-color: #e3f2fd;">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="${pageContext.request.contextPath}">Weather data analyzer</a>
         </div>
-
-        <ul class = "nav navbar-nav navbar-right" id="ulNavBar">
-            <li><span class="glyphicon glyphicon-menu-hamburger"></span></li>
-        </ul>
+        <div class="nav navbar-nav navbar-right">
+            <span class="glyphicon glyphicon-menu-hamburger" onclick="openNav()"></span>
+        </div>
     </div>
 </nav>

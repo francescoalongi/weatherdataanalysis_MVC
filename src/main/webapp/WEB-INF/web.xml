@@ -7,9 +7,9 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-  <welcome-file-list>
+  <!--<welcome-file-list>
     <welcome-file>InitServlet</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>-->
 
   <servlet>
     <servlet-name>InitServlet</servlet-name>
@@ -28,7 +28,7 @@
   
   <servlet-mapping>
     <servlet-name>InitServlet</servlet-name>
-    <url-pattern>/</url-pattern>
+    <url-pattern></url-pattern>
   </servlet-mapping>
 
 </web-app>
