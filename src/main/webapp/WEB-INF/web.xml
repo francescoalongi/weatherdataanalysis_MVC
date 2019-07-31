@@ -10,25 +10,50 @@
   <!--<welcome-file-list>
     <welcome-file>InitServlet</welcome-file>
   </welcome-file-list>-->
-
-  <servlet>
-    <servlet-name>InitServlet</servlet-name>
-    <servlet-class>Controller.InitServlet</servlet-class>
-  </servlet>
+    
+    
+    <!--servlet-->
+    <servlet>
+        <servlet-name>InitServlet</servlet-name>
+        <servlet-class>Controller.InitServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>LoadStations</servlet-name>
+        <servlet-class>Controller.LoadStationsServlet</servlet-class>
+    </servlet>
   
-  <servlet>
-    <servlet-name>Homepage</servlet-name>
-    <jsp-file>/WEB-INF/View/Homepage.jsp</jsp-file>
-  </servlet>
+    <servlet>
+        <servlet-name>UploadDataServlet</servlet-name>
+        <servlet-class>Controller.UploadDataServlet</servlet-class>
+    </servlet>
+    
+    <!--jsp-->
+    <servlet>
+        <servlet-name>Homepage</servlet-name>
+        <jsp-file>/WEB-INF/View/Homepage.jsp</jsp-file>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>Homepage</servlet-name>
-    <url-pattern>/Homepage</url-pattern>
-  </servlet-mapping>
+    <!--jsp mapping-->
+    <servlet-mapping>
+        <servlet-name>Homepage</servlet-name>
+        <url-pattern>/Homepage</url-pattern>
+    </servlet-mapping>
   
-  <servlet-mapping>
-    <servlet-name>InitServlet</servlet-name>
-    <url-pattern></url-pattern>
-  </servlet-mapping>
+    <!-- servlet mapping-->
+    <servlet-mapping>
+        <servlet-name>InitServlet</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>LoadStations</servlet-name>
+        <url-pattern>/LoadStations</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>UploadDataServlet</servlet-name>
+        <url-pattern>/UploadData</url-pattern>
+    </servlet-mapping>
 
 </web-app>

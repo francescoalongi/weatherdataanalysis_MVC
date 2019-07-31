@@ -1,6 +1,8 @@
 package Model;
 
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +28,7 @@ public class Station {
 
 
     //Cascade is here necessary because otherwise the statement session.save(station) will just insert the station (without its inner field)
+    @JsonIgnore //This annotation is added in order to correctly serialize into json object a Station (avoiding circular references)
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "station")
     private Set<Datum> datumSet = new HashSet<Datum>();
 
