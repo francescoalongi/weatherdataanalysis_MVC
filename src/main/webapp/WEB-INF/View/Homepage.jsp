@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Homepage</title>
-    <script src="${pageContext.request.contextPath}/Javascript/AJAXRetrieveStations.js"></script>
+    <script src="${pageContext.request.contextPath}/Javascript/UploadDataModal.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Bootstrap core CSS -->
@@ -24,8 +24,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>
 </head>
 <body>
 
@@ -56,7 +54,7 @@
                 </button>
             </div>
             <div class="modal-body mx-3">
-                <p>Choose the station to which your data belongs</p>
+                <p>Choose the station to which your data belongs and then choose the dataset you want to upload</p>
                 <div id="stationList">
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border" role="status"></div>
@@ -65,7 +63,7 @@
 
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-indigo">Send</button>
+                <button class="btn btn-indigo" onclick="submitForm()">Send</button>
             </div>
         </div>
     </div>
@@ -81,6 +79,6 @@
     </div>
 </div>
 
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>
 </body>
 </html>

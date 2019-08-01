@@ -28,6 +28,8 @@ public class LoadStationsServlet extends HttpServlet {
         String hql = "FROM Station";
         Query query = session.createQuery(hql);
         List<Station> results = query.list();
+        session.getTransaction().commit();
+        session.close();
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(results);
