@@ -25,7 +25,7 @@
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="modalSetup()">
 
 <nav class="navbar navbar-default" style="background-color: #e3f2fd;" >
     <div class="container-fluid">
@@ -46,24 +46,15 @@
 
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div id="uploadDataModalContent" class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold">Upload data</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body mx-3">
-                <p>Choose the station to which your data belongs and then choose the dataset you want to upload</p>
-                <div id="stationList">
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-border" role="status"></div>
-                    </div>
-                </div>
+            <div id="modalBody" class="modal-body mx-3">
 
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-indigo" onclick="submitForm()">Send</button>
             </div>
         </div>
     </div>
