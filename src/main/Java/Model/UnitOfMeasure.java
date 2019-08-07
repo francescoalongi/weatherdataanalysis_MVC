@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class UnitOfMeasure {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUnitOfMeasure;
     private String temperature;
     private String pressure;

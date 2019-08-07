@@ -3,7 +3,7 @@ function retrieveStations() {
 
     //First of all create and append a spinner, it will be deleted when the AJAX response will get to the client
     var spinner = document.createElement("div");
-    spinner.setAttribute("class", "spinner-border");
+    spinner.setAttribute("class", "spinner-border mb-3");
     spinner.setAttribute("role", "status");
 
     var rowSpinner = document.createElement("div");
@@ -26,7 +26,7 @@ function retrieveStations() {
 
 
 
-    var modalBody = document.getElementById("modalBody");
+    var modalBody = document.getElementById("uploadDataModalBody");
     modalBody.appendChild(spinnerContainer);
 
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -41,7 +41,8 @@ function retrieveStations() {
                 var par = document.createElement("p");
                 var a = document.createElement("a");
                 a.setAttribute("data-toggle", "modal");
-                a.setAttribute("href", "#createStationModal");
+                a.setAttribute("href", "#modalCreateStation");
+                a.setAttribute("onclick", "closeCurrentModal()");
                 a.innerText = "here";
                 par.appendChild(document.createTextNode("No station has been created yet. Click "));
                 par.appendChild(a);
@@ -126,7 +127,7 @@ function retrieveStations() {
                 var modalContent = document.getElementById("uploadDataModalContent");
                 if (modalContent.getElementsByClassName("modal-footer").length === 0) {
                     var modalFooter = document.createElement("div");
-                    modalFooter.setAttribute("class", "modal-footer d-flex justify-content-center");
+                    modalFooter.setAttribute("class", "modal-footer modal-footer-upload d-flex justify-content-center");
                     var sendButton = document.createElement("button");
                     sendButton.setAttribute("class", "btn btn-indigo");
                     sendButton.setAttribute("onclick", "submitForm()");
@@ -157,22 +158,26 @@ function submitForm() {
     }
 }
 
-// used to empty a modal whenever it gets hidden
-function modalSetup() {
-    $('.modal').on('hidden.bs.modal', function (e) {
+
+function closeCurrentModal() {
+    $("#modalUpload").modal('hide');
+    $('.modal').css('overflow-y', 'auto');
+}
+
+function uploadDataModalSetup() {
+    $('#modalUpload').on('hidden.bs.modal', function (e) {
         var body = document.getElementsByClassName("modal-body");
         body[0].innerHTML = "";
 
         //if any, delete footer
         var modalContents = document.getElementsByClassName("modal-content");
         for (var i = 0; i < modalContents.length; i++) {
-            var footers = modalContents[i].getElementsByClassName("modal-footer");
+            var footers = modalContents[i].getElementsByClassName("modal-footer-upload");
             if (footers.length > 0){
                 footers[0].parentNode.removeChild(footers[0]);
             }
         }
     });
-
 }
 
 // Helper function
