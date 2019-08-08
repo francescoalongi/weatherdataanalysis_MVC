@@ -8,15 +8,16 @@
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mydb?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</property>
         <property name="hibernate.connection.password">root</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
-        <mapping class="Model.Datum"></mapping>
-        <mapping class="Model.DatumCountry"></mapping>
-        <mapping class="Model.DatumSea"></mapping>
-        <mapping class="Model.DatumMountain"></mapping>
-        <mapping class="Model.DatumCity"></mapping>
-        <mapping class="Model.UnitOfMeasure"></mapping>
-        <mapping class="Model.Station"></mapping>
+        <property name="hibernate.jdbc.batch_size">50</property>
+        <mapping class="Model.Datum"/>
+        <mapping class="Model.DatumCountry"/>
+        <mapping class="Model.DatumSea"/>
+        <mapping class="Model.DatumMountain"/>
+        <mapping class="Model.DatumCity"/>
+        <mapping class="Model.UnitOfMeasure"/>
+        <mapping class="Model.Station"/>
     </session-factory>
 </hibernate-configuration>
