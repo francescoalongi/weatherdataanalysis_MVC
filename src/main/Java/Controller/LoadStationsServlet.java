@@ -22,13 +22,7 @@ public class LoadStationsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        String hql = "FROM Station";
-        Query query = session.createQuery(hql);
-        List<Station> results = query.list();
-        session.getTransaction().commit();
-        session.close();
+        List results = (List) HibernateUtil.executeSelect("FROM Station", true);
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(results);

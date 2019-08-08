@@ -31,7 +31,7 @@ public class UploadDataServlet extends HttpServlet {
         String hql = "FROM Station WHERE idStation = :idStation";
         Query query = session.createQuery(hql);
         query.setParameter("idStation", Integer.parseInt(idStation));
-        Station station = (Station) query.list().get(0);
+        Station station = (Station) query.list().get(0); //wrong! use getSingleResult() instead
 
         Part filePart = request.getPart("newData");
         InputStream fileContent = filePart.getInputStream();
