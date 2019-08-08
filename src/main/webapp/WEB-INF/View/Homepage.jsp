@@ -28,7 +28,7 @@
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
-<body onload="uploadDataModalSetup()">
+<body>
 
 <nav class="navbar navbar-default" style="background-color: #e3f2fd;" >
     <div class="container-fluid">
@@ -50,6 +50,23 @@
         </div>
     </div>
 </nav>
+
+<% if (request.getAttribute("outcomeUpload") != null) {%>
+<div aria-live="polite" aria-atomic="true" style="position: relative;" >
+    <div class="toast" style="position: absolute; top: 10px; right: 10px" data-delay="4000">
+        <div class="toast-header">
+            <strong class="mr-auto">Upload data </strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            <%= request.getAttribute("outcomeUpload") %>
+        </div>
+    </div>
+</div>
+
+<% }%>
 
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -125,7 +142,7 @@
                 <input type="text" id="createStationAdditionalField" class="form-control mb-3" placeholder="Pollution level">
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-indigo" onclick="createStation(event)">Create station</button>
+                <button class="btn btn-indigo" onclick="sendAJAX()">Create station</button>
             </div>
         </div>
     </div>
@@ -140,6 +157,7 @@
     </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/Javascript/WindowSetUp.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>
 </body>
 </html>

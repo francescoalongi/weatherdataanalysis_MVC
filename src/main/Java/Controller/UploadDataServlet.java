@@ -46,23 +46,24 @@ public class UploadDataServlet extends HttpServlet {
                 Float rain = Float.parseFloat(record.get("rain"));
                 Float windModule = Float.parseFloat(record.get("windModule"));
                 String windDirection = record.get("windDirection");
+                // Maybe the below line should be an Object instead of a Float?
                 Float additionalField;
                 Datum datum;
 
                 switch(station.getType()) {
-                    case "city":
+                    case "City":
                         additionalField = Float.parseFloat(record.get("pollutionLevel"));
                         datum = new DatumCity(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "country":
+                    case "Country":
                         additionalField = Float.parseFloat(record.get("dewPoint"));
                         datum = new DatumCountry(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "mountain":
+                    case "Mountain":
                         additionalField = Float.parseFloat(record.get("snowLevel"));
                         datum = new DatumMountain(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "sea":
+                    case "Sea":
                         additionalField = Float.parseFloat(record.get("uvRadiation"));
                         datum = new DatumSea(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
@@ -74,15 +75,14 @@ public class UploadDataServlet extends HttpServlet {
                 session.save(datum);
             }
         } catch (IllegalArgumentException e) {
-            //TODO: this exception is raised if one of the parameter of the record.get function is not mapped in the header,
-            // this case must be handled. Namely, if we chose a sea station but we are uploading data corresponding to
-            // a country station, the program flow ends up here.
+            request.setAttribute("outcomeUpload", "The .csv file you are trying to upload does not fit for the selected station. Use another one.");
+            request.getRequestDispatcher("/Homepage").forward(request,response);
         }
 
         session.getTransaction().commit();
         session.close();
-        //TODO: notificate the user of the successful operation
-        response.sendRedirect(getServletContext().getContextPath() + "/Homepage");
+        request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
+        request.getRequestDispatcher("/Homepage").forward(request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

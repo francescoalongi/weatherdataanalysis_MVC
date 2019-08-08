@@ -28,6 +28,32 @@
         <servlet-class>Controller.UploadDataServlet</servlet-class>
     </servlet>
     
+    <servlet>
+        <servlet-name>CreateStation</servlet-name>
+        <servlet-class>Controller.CreateStationServlet</servlet-class>
+    </servlet>
+
+    <!-- servlet mapping-->
+    <servlet-mapping>
+        <servlet-name>InitServlet</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LoadStations</servlet-name>
+        <url-pattern>/LoadStations</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UploadDataServlet</servlet-name>
+        <url-pattern>/UploadData</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>CreateStation</servlet-name>
+        <url-pattern>/CreateStation</url-pattern>
+    </servlet-mapping>
+    
     <!--jsp-->
     <servlet>
         <servlet-name>Homepage</servlet-name>
@@ -38,22 +64,6 @@
     <servlet-mapping>
         <servlet-name>Homepage</servlet-name>
         <url-pattern>/Homepage</url-pattern>
-    </servlet-mapping>
-  
-    <!-- servlet mapping-->
-    <servlet-mapping>
-        <servlet-name>InitServlet</servlet-name>
-        <url-pattern></url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>LoadStations</servlet-name>
-        <url-pattern>/LoadStations</url-pattern>
-    </servlet-mapping>
-    
-    <servlet-mapping>
-        <servlet-name>UploadDataServlet</servlet-name>
-        <url-pattern>/UploadData</url-pattern>
     </servlet-mapping>
 
 </web-app>
