@@ -1,5 +1,11 @@
 package Controller;
 
+import Model.Station;
+import Utils.HibernateUtil;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.JSONPObject;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,12 +22,21 @@ public class CreateStationServlet extends HttpServlet {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
 
-        String json = "";
-        if(br != null){
-            json = br.readLine();
-            // code for inserting the station and notify the user of the outcome of the operation
+        String json = br.readLine();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Station station = mapper.readValue(json, Station.class);
+            HibernateUtil.executeInsert(station);
+        } catch (JsonMappingException e) {
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"success\": \"false\", \"text\": \"Latitude, Longitude and Altitude must be numbers!\"}");
+            return;
         }
 
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"success\": \"true\", \"text\": \"The new station has been created succesfully.\"}");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

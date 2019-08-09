@@ -53,7 +53,7 @@
 
 <% if (request.getAttribute("outcomeUpload") != null) {%>
 <div aria-live="polite" aria-atomic="true" style="position: relative;" >
-    <div class="toast" style="position: absolute; top: 10px; right: 10px" data-delay="4000">
+    <div class="toast"  id="uploadDataToast" data-delay="4000">
         <div class="toast-header">
             <strong class="mr-auto">Upload data </strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -67,6 +67,20 @@
 </div>
 
 <% }%>
+
+<div aria-live="polite" aria-atomic="true" style="position: relative;" >
+    <div class="toast toast-create-station" id="toastCreateStation" data-delay="4000">
+        <div class="toast-header">
+            <strong class="mr-auto">Create station </strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="toastCreateStationBody">
+
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
