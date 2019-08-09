@@ -19,27 +19,30 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 @WebServlet(name = "UploadDataServlet")
 @MultipartConfig
 public class UploadDataServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String idStation = request.getParameter("radios");
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
         String hql = "FROM Station WHERE idStation = :idStation";
-        Query query = session.createQuery(hql);
-        query.setParameter("idStation", Integer.parseInt(idStation));
-        Station station = (Station) query.list().get(0); //wrong! use getSingleResult() instead
+        String idStation = request.getParameter("radios"); // Why radios?
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("idStation", Integer.parseInt(idStation));
+        Station station = (Station) HibernateUtil.executeSelect(hql, false, param);
 
         Part filePart = request.getPart("newData");
         InputStream fileContent = filePart.getInputStream();
         Reader in = new InputStreamReader(fileContent, StandardCharsets.UTF_8);
-        Iterable<CSVRecord> records = CSVFormat.EXCEL.withHeader().parse(in);
+        Iterable<CSVRecord> records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(in);
+        Vector<Datum> dataToUpload = new Vector<>();
         try {
             for (CSVRecord record : records) {
-                Long timestamp = Long.parseLong(record.get("\uFEFFtimestamp")); // /uFEFF is the Byte Order Mark
+                Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
                 Float temperature = Float.parseFloat(record.get("temperature"));
                 Float pressure = Float.parseFloat(record.get("pressure"));
                 Float humidity = Float.parseFloat(record.get("humidity"));
@@ -50,42 +53,41 @@ public class UploadDataServlet extends HttpServlet {
                 Float additionalField;
                 Datum datum;
 
-                switch(station.getType()) {
-                    case "City":
+                switch (station.getType().toLowerCase()) {
+                    case "city":
                         additionalField = Float.parseFloat(record.get("pollutionLevel"));
                         datum = new DatumCity(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "Country":
+                    case "country":
                         additionalField = Float.parseFloat(record.get("dewPoint"));
                         datum = new DatumCountry(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "Mountain":
+                    case "mountain":
                         additionalField = Float.parseFloat(record.get("snowLevel"));
                         datum = new DatumMountain(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
-                    case "Sea":
+                    case "sea":
                         additionalField = Float.parseFloat(record.get("uvRadiation"));
                         datum = new DatumSea(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                         break;
                     default:
                         throw new IllegalArgumentException();
                 }
-
                 datum.setStation(station);
-                session.save(datum);
+                dataToUpload.add(datum);
+
             }
         } catch (IllegalArgumentException e) {
             request.setAttribute("outcomeUpload", "The .csv file you are trying to upload does not fit for the selected station. Use another one.");
             request.getRequestDispatcher("/Homepage").forward(request,response);
         }
 
-        session.getTransaction().commit();
-        session.close();
+        HibernateUtil.executeInsert(dataToUpload);
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
         request.getRequestDispatcher("/Homepage").forward(request,response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         //TODO: An error page must be created to redirect users there when they perform illegal actions
     }
 }

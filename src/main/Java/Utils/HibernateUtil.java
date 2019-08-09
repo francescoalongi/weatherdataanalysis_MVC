@@ -8,7 +8,6 @@ import org.hibernate.query.Query;
 
 import javax.persistence.RollbackException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 public class HibernateUtil
@@ -93,12 +92,12 @@ public class HibernateUtil
         Transaction tr = session.beginTransaction();
         int i = 0;
         for (Object datum : data) {
+            i++;
             session.save(datum);
             if (i % Integer.parseInt(new Configuration().configure().getProperty("hibernate.jdbc.batch_size")) == 0) {
                 session.flush();
                 session.clear();
             }
-            i++;
         }
         try {
             tr.commit();
