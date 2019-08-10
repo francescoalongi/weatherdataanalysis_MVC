@@ -29,7 +29,9 @@ function createStation() {
                 document.getElementById("toastCreateStationBody").innerText = JSONResponse.text;
                 $('#toastCreateStation').toast('show');
             } else {
-                insertAlert(JSONResponse.text);
+                var createStationModalBody = document.getElementById("createStationModalBody")
+                insertAlert(createStationModalBody, JSONResponse.text);
+                $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow')
                 document.getElementById("createStationLatitude").classList.add("is-invalid");
                 document.getElementById("createStationLongitude").classList.add("is-invalid");
                 document.getElementById("createStationAltitude").classList.add("is-invalid");
@@ -65,31 +67,16 @@ function sendAJAX() {
     if (everyInputFilled()) {
         createStation();
     } else{
-        insertAlert("It is necessary to fill in every input form!");
-    }
-}
-
-function insertAlert(text){
-    if (document.getElementById("divAlert") === null) {
         var divCreateStationModalBody = document.getElementById("createStationModalBody");
-        var divAlert = document.createElement("div");
-        divAlert.setAttribute("class", "alert alert-danger text-center");
-        divAlert.setAttribute("role", "alert");
-        divAlert.setAttribute("id", "divAlert");
-        divAlert.innerText = text;
-
-        divCreateStationModalBody.insertBefore(divAlert, divCreateStationModalBody.firstChild);
-    } else {
-        var existentDivAlert = document.getElementById("divAlert");
-        existentDivAlert.innerText = text;
+        insertAlert(divCreateStationModalBody, "It is necessary to fill in every input form!");
+        $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');
     }
-    $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');
 }
 
 function everyInputFilled() {
     var inputList = document.querySelector('[id^="createStation"]').getElementsByTagName("input");
     for (var i = 0; i < inputList.length; i++) {
-        if (inputList[i].value === "") return false;
+        if (inputList[i].type === "text" && inputList[i].value === "") return false;
     }
     return true;
 }

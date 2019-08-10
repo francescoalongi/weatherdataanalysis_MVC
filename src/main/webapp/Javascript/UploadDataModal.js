@@ -1,33 +1,9 @@
 
 function retrieveStations() {
 
-    //First of all create and append a spinner, it will be deleted when the AJAX response will get to the client
-    var spinner = document.createElement("div");
-    spinner.setAttribute("class", "spinner-border mb-3");
-    spinner.setAttribute("role", "status");
-
-    var rowSpinner = document.createElement("div");
-    rowSpinner.setAttribute("class", "row");
-    rowSpinner.appendChild(spinner);
-
-    var divText = document.createElement("div");
-    var strongText = document.createElement("strong");
-    strongText.innerText = "Please wait, stations are being loaded...";
-    divText.appendChild(strongText);
-
-    var rowDivText = document.createElement("div");
-    rowDivText.setAttribute("class", "row");
-    rowDivText.appendChild(divText);
-
-    var spinnerContainer = document.createElement("div");
-    spinnerContainer.setAttribute("class", "d-flex justify-content-center flex-column align-items-center");
-    spinnerContainer.appendChild(rowSpinner);
-    spinnerContainer.appendChild(rowDivText);
-
-
-
+    var spinner = generateSpinner("Please wait, stations are being loaded...");
     var modalBody = document.getElementById("uploadDataModalBody");
-    modalBody.appendChild(spinnerContainer);
+    modalBody.appendChild(spinner);
 
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('GET', getContextPath() + "/LoadStations");
@@ -144,17 +120,11 @@ function retrieveStations() {
 
 function submitForm() {
     var uploadDataForm = document.getElementById("uploadDataForm");
-    if (isOneRadioChecked() && document.getElementById("inputFile").value)
+    if (isOneRadioChecked("radios") && document.getElementById("inputFile").value) {
         uploadDataForm.submit();
-    else if (document.getElementById("divAlert") === null) {
+    } else {
         var divStationList = document.getElementById("stationList");
-        var divAlert = document.createElement("div");
-        divAlert.setAttribute("class", "alert alert-danger text-center");
-        divAlert.setAttribute("role", "alert");
-        divAlert.setAttribute("id", "divAlert");
-        divAlert.innerText = "It is necessary to select one station and one dataset!";
-
-        divStationList.insertBefore(divAlert, divStationList.firstChild);
+        insertAlert(divStationList, "It is necessary to select one station and one dataset!");
     }
 }
 
@@ -180,18 +150,6 @@ function uploadDataModalSetup() {
     });
 }
 
-// Helper function
-function isOneRadioChecked() {
-    var radios = document.getElementsByName("radios");
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) return true;
-    }
-    return false;
 
-}
 
-// Helper function
-function getContextPath() {
-    return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
-}
 

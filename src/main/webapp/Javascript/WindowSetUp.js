@@ -8,3 +8,4 @@ function setupFunction(){
 $(document).ready(function(){
     $('#uploadDataToast').toast('show'); //if any
 });
+
