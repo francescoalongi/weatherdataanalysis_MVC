@@ -4,6 +4,8 @@ function setupFunction(){
     uploadDataModalSetup();
 };
 
+
 $(document).ready(function(){
-    $('.toast').toast('show'); //if any
+    $('#uploadDataToast').toast('show'); //if any
 });
+

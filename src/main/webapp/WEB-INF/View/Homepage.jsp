@@ -12,6 +12,7 @@
     <!-- Custom scripts -->
     <script src="${pageContext.request.contextPath}/Javascript/UploadDataModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/CreateStationModal.js"></script>
+    <script src="${pageContext.request.contextPath}/Javascript/HelperFunctions.js"></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -27,6 +28,10 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 </head>
 <body>
 
@@ -41,7 +46,7 @@
                     <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="retrieveStations()">Upload data</a>
                 </li>
                 <li>
-                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal">Download data</a>
+                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalDownload" onclick="fillDownloadModal()">Download data</a>
                 </li>
                 <li>
                     <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalCreateStation">Create new station</a>
@@ -53,7 +58,7 @@
 
 <% if (request.getAttribute("outcomeUpload") != null) {%>
 <div aria-live="polite" aria-atomic="true" style="position: relative;" >
-    <div class="toast" style="position: absolute; top: 10px; right: 10px" data-delay="4000">
+    <div class="toast"  id="uploadDataToast" data-delay="4000">
         <div class="toast-header">
             <strong class="mr-auto">Upload data </strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -68,6 +73,21 @@
 
 <% }%>
 
+<div aria-live="polite" aria-atomic="true" style="position: relative;" >
+    <div class="toast toast-create-station" id="toastCreateStation" data-delay="4000">
+        <div class="toast-header">
+            <strong class="mr-auto">Create station </strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="toastCreateStationBody">
+
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div id="uploadDataModalContent" class="modal-content">
@@ -78,6 +98,23 @@
                 </button>
             </div>
             <div id="uploadDataModalBody" class="modal-body mx-3">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalDownload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div id="downloadDataModalContent" class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Download data</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="downloadDataModalBody" class="modal-body mx-3">
 
             </div>
         </div>
@@ -149,15 +186,8 @@
 </div>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <h1>Hi</h1>
-        </div>
-    </div>
-</div>
-
-<script src="${pageContext.request.contextPath}/Javascript/WindowSetUp.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>
+<script src="${pageContext.request.contextPath}/Javascript/DownloadDataModal.js"></script>
+<script src="${pageContext.request.contextPath}/Javascript/WindowSetUp.js"></script>
 </body>
 </html>
