@@ -17,6 +17,11 @@
         <servlet-name>InitServlet</servlet-name>
         <servlet-class>Controller.InitServlet</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>DownloadDataServlet</servlet-name>
+        <servlet-class>Controller.DownloadDataServlet</servlet-class>
+    </servlet>
     
     <servlet>
         <servlet-name>LoadStations</servlet-name>
@@ -29,7 +34,7 @@
     </servlet>
     
     <servlet>
-        <servlet-name>CreateStation</servlet-name>
+        <servlet-name>CreateStationServlet</servlet-name>
         <servlet-class>Controller.CreateStationServlet</servlet-class>
     </servlet>
 
@@ -37,6 +42,11 @@
     <servlet-mapping>
         <servlet-name>InitServlet</servlet-name>
         <url-pattern/>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DownloadDataServlet</servlet-name>
+        <url-pattern>/DownloadData</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -50,7 +60,7 @@
     </servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>CreateStation</servlet-name>
+        <servlet-name>CreateStationServlet</servlet-name>
         <url-pattern>/CreateStation</url-pattern>
     </servlet-mapping>
     

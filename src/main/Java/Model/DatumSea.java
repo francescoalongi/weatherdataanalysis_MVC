@@ -22,4 +22,14 @@ public class DatumSea extends Datum {
     public Float getUvRadiation() {
         return uvRadiation;
     }
+
+    @Override
+    public String getFieldsNameAsCSV() {
+        return super.getFieldsNameAsCSV() + "," + "uvRadiation";
+    }
+
+    @Override
+    public String getFieldsAsCSV() {
+        return super.getFieldsAsCSV() + "," + uvRadiation;
+    }
 }

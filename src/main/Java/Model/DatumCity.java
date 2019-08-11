@@ -22,5 +22,17 @@ public class DatumCity extends Datum{
     public Float getPollutionLevel() {
         return pollutionLevel;
     }
+
+    @Override
+    public String getFieldsNameAsCSV() {
+        return super.getFieldsNameAsCSV() + "," + "pollutionLevel";
+    }
+
+    @Override
+    public String getFieldsAsCSV() {
+        return super.getFieldsAsCSV() + "," + pollutionLevel;
+    }
+
+
 }
 

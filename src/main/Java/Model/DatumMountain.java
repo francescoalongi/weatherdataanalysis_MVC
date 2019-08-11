@@ -22,5 +22,15 @@ public class DatumMountain extends Datum{
     public Float getSnowLevel() {
         return snowLevel;
     }
+
+    @Override
+    public String getFieldsNameAsCSV() {
+        return super.getFieldsNameAsCSV() + "," + "snowLevel";
+    }
+
+    @Override
+    public String getFieldsAsCSV() {
+        return super.getFieldsAsCSV() + "," + snowLevel;
+    }
 }
 

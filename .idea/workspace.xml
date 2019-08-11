@@ -6,56 +6,16 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/FastInfoset-1.2.15-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/FastInfoset-1.2.15.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/antlr-2.7.7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.9.10-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/byte-buddy-1.9.10.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/c3p0-0.9.5.3-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/c3p0-0.9.5.3.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/classmate-1.3.4-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/classmate-1.3.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/dom4j-2.1.1-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/dom4j-2.1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/hibernate-c3p0-5.4.2.Final-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/hibernate-c3p0-5.4.2.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/hibernate-commons-annotations-5.1.0.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/hibernate-core-5.4.2.Final-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/hibernate-core-5.4.2.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/istack-commons-runtime-3.0.7-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/istack-commons-runtime-3.0.7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jandex-2.0.5.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javassist-3.24.0-GA-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javassist-3.24.0-GA.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.activation-api-1.2.0-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.activation-api-1.2.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.persistence-api-2.2-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/javax.persistence-api-2.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jaxb-api-2.3.1-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jaxb-api-2.3.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jaxb-runtime-2.3.1-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jaxb-runtime-2.3.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jboss-logging-3.3.2.Final-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jboss-logging-3.3.2.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jboss-transaction-api_1.2_spec-1.1.1.Final-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/jboss-transaction-api_1.2_spec-1.1.1.Final.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/mchange-commons-java-0.2.15-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/mchange-commons-java-0.2.15.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/stax-ex-1.8-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/stax-ex-1.8.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/txw2-2.3.1-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/txw2-2.3.1.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="DownloadDataServlet.java implemented and tested">
+      <change afterPath="$PROJECT_DIR$/.idea/weatherdataanalysis_MVC.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/InitServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/InitServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/Datum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/Datum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumCity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumCity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumCountry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumCountry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumMountain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumMountain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumSea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumSea.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Tests/Controller/PeriodicDataAcquirerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Tests/Controller/PeriodicDataAcquirerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
@@ -79,18 +39,7 @@
     <expand>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="mydb@localhost" type="feb32156:DbDataSourceImpl" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="mydb@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="mydb@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="mydb: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="hibernate.cfg.xml/Hibernate" type="feb32156:DbDataSourceImpl" />
       </path>
     </expand>
     <select />
@@ -128,8 +77,8 @@
         <option value="nicolo.ghielmetti@gmail.com" />
       </list>
     </option>
-    <option name="UPDATE_TYPE" value="MERGE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -160,6 +109,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="JPA.DatabaseSchemaImportDialog" value="a03248ed-7ece-4171-b2e7-47057e86abe0" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="false" />
@@ -167,17 +117,20 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../BSc/III anno/II semestre/Web Technologies/Progetto/crowdsourcingpeak/CrowdSourcingpeak" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/prova.xml" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.27586207" />
-    <property name="settings.editor.selected.configurable" value="database.main" />
+    <property name="project.structure.side.proportion" value="0.30882353" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.osgi.project.settings" />
   </component>
   <component name="RecentsManager">
+    <key name="ImportMappingsDialog.RecentPackages">
+      <recent name="Model" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="Controller" />
     </key>
@@ -332,6 +285,12 @@
       <workItem from="1565338797396" duration="1635000" />
       <workItem from="1565340445571" duration="159000" />
       <workItem from="1565340615654" duration="3611000" />
+      <workItem from="1565366795538" duration="209000" />
+      <workItem from="1565383553184" duration="1996000" />
+      <workItem from="1565388111889" duration="125000" />
+      <workItem from="1565388248294" duration="6520000" />
+      <workItem from="1565447030811" duration="1386000" />
+      <workItem from="1565479561436" duration="4113000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -396,19 +355,15 @@
       <option name="project" value="LOCAL" />
       <updated>1565288770718</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Tested all the functionalities implemented in the last commit.&#10;Removed some warnings concerning the thread pool of hibernate.&#10;PeriodicDataAcquirer.java is now a singleton.">
+      <created>1565366964118</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1565366964118</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
-  </component>
-  <component name="TestHistory">
-    <history-entry file="PeriodicDataAcquirerTest_testPeriodicDataAcquirer - 2019.08.09 at 03h 10m 21s.xml">
-      <configuration name="PeriodicDataAcquirerTest.testPeriodicDataAcquirer" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PeriodicDataAcquirerTest_testPeriodicDataAcquirer - 2019.08.09 at 03h 11m 22s.xml">
-      <configuration name="PeriodicDataAcquirerTest.testPeriodicDataAcquirer" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PeriodicDataAcquirerTest_testPeriodicDataAcquirer - 2019.08.09 at 03h 12m 26s.xml">
-      <configuration name="PeriodicDataAcquirerTest.testPeriodicDataAcquirer" configurationId="JUnit" />
-    </history-entry>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -451,7 +406,9 @@
     <MESSAGE value="Code related to the uploadDataModal has been cleaned up." />
     <MESSAGE value="Front-end part for create station has been completed. Some code clean-up has been done." />
     <MESSAGE value="Some useful functions for insert and select with Hibernate were been &#10;implemented.&#10;Even if it is not in the repository (for the moment) it has also been &#10;created a Python script for reading the file realtime.txt and reupload&#10;it in .csv format ad the same location on the server." />
-    <option name="LAST_COMMIT_MESSAGE" value="Some useful functions for insert and select with Hibernate were been &#10;implemented.&#10;Even if it is not in the repository (for the moment) it has also been &#10;created a Python script for reading the file realtime.txt and reupload&#10;it in .csv format ad the same location on the server." />
+    <MESSAGE value="Tested all the functionalities implemented in the last commit.&#10;Removed some warnings concerning the thread pool of hibernate.&#10;PeriodicDataAcquirer.java is now a singleton." />
+    <MESSAGE value="DownloadDataServlet.java implemented and tested" />
+    <option name="LAST_COMMIT_MESSAGE" value="DownloadDataServlet.java implemented and tested" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -469,14 +426,5 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>request.getParameter(&quot;radios&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
   </component>
 </project>
