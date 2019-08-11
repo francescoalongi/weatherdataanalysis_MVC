@@ -16,12 +16,12 @@ function fillDownloadModal() {
                 var a = document.createElement("a");
                 a.setAttribute("data-toggle", "modal");
                 a.setAttribute("href", "#modalCreateStation");
-                a.setAttribute("onclick", "closeCurrentModal()");
+                a.setAttribute("onclick", "closeCurrentModal(\"modalDownload\")");
                 a.innerText = "here";
                 par1.appendChild(document.createTextNode("No station has been created yet. Click "));
                 par1.appendChild(a);
                 par1.appendChild(document.createTextNode(" to create a new one."));
-                modalBody.appendChild(par)
+                modalBody.appendChild(par1)
 
             } else {
 
@@ -142,6 +142,7 @@ function fillDownloadModal() {
                 if (modalContent.getElementsByClassName("modal-footer").length === 0) {
                     var modalFooter = document.createElement("div");
                     modalFooter.setAttribute("class", "modal-footer d-flex justify-content-center");
+                    modalFooter.setAttribute("id", "downloadDataModalFooter");
                     var downloadButton = document.createElement("button");
                     downloadButton.setAttribute("class", "btn btn-indigo");
                     downloadButton.setAttribute("onclick", "downloadData()");
@@ -159,11 +160,31 @@ function fillDownloadModal() {
 function downloadData() {
 
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    xhr.open('GET', getContextPath() + "/DownloadData");
+    var stationId;
+    var radios = document.getElementsByName("radios");
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) stationId = radios[i].value;
+    }
+    var beginTimestamp = $('#divStartDate').data("DateTimePicker").date().valueOf();
+    var endTimestamp = $('#divEndDate').data("DateTimePicker").date().valueOf();
+
+    xhr.open('GET', getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_timestamp=" + beginTimestamp + "&end_timestamp=" + endTimestamp);
     /*xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
 
         }
     };*/
     xhr.send();
+}
+
+function downloadDataModalSetup() {
+    $('#modalDownload').on('hidden.bs.modal', function (e) {
+        var downloadDataBody = document.getElementById("downloadDataModalBody");
+        downloadDataBody.innerHTML = "";
+
+        //if any, delete footer
+        var footer = document.getElementById("downloadModalFooter");
+        if (footer)
+            footer.parentNode.removeChild(footer);
+    });
 }

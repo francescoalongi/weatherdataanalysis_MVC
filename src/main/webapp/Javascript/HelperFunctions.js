@@ -50,3 +50,8 @@ function insertAlert(divToWhichAppendAlert, text){
         existentDivAlert.innerText = text;
     }
 }
+
+function closeCurrentModal(modalId) {
+    $("#"+ modalId).modal('hide');
+    $('.modal').css('overflow-y', 'auto');
+}

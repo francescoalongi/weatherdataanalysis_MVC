@@ -18,7 +18,7 @@ function retrieveStations() {
                 var a = document.createElement("a");
                 a.setAttribute("data-toggle", "modal");
                 a.setAttribute("href", "#modalCreateStation");
-                a.setAttribute("onclick", "closeCurrentModal()");
+                a.setAttribute("onclick", "closeCurrentModal(\"modalUpload\")");
                 a.innerText = "here";
                 par.appendChild(document.createTextNode("No station has been created yet. Click "));
                 par.appendChild(a);
@@ -129,10 +129,7 @@ function submitForm() {
 }
 
 
-function closeCurrentModal() {
-    $("#modalUpload").modal('hide');
-    $('.modal').css('overflow-y', 'auto');
-}
+
 
 function uploadDataModalSetup() {
     $('#modalUpload').on('hidden.bs.modal', function (e) {

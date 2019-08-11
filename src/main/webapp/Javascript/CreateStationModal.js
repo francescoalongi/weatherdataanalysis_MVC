@@ -50,7 +50,7 @@ function addAdditionalField(JSONObject) {
             JSONObject.unitOfMeasure.pollutionLevel = additionalField;
             break;
         case "Country":
-            JSONObject.unitOfMeasure.dewPoint = additionalField;
+            JSONObject.unitOfMeasure.dewPt = additionalField;
             break;
         case "Mountain":
             JSONObject.unitOfMeasure.snowLevel = additionalField;
