@@ -22,4 +22,14 @@ public class DatumCountry extends Datum {
     public void setDewPoint(Float dewPoint) {
         this.dewPoint = dewPoint;
     }
+
+    @Override
+    public String getFieldsNameAsCSV() {
+        return super.getFieldsNameAsCSV() + "," + "dewPoint";
+    }
+
+    @Override
+    public String getFieldsAsCSV() {
+        return super.getFieldsAsCSV() + "," + dewPoint;
+    }
 }

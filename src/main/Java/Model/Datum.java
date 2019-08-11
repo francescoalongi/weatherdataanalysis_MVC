@@ -1,6 +1,7 @@
 package Model;
 
 import javax.persistence.*;
+import java.lang.reflect.Field;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -103,4 +104,11 @@ public abstract class Datum {
         this.station = station;
     }
 
+    public String getFieldsNameAsCSV() {
+        return "timestamp" + "," + "temperature" + "," + "pressure" + "," + "humidity" + "," + "rain" + "," + "windModule" + "," + "windDirection";
+    }
+
+    public String getFieldsAsCSV() {
+        return timestamp + "," + temperature + "," + pressure + "," + humidity + "," + rain + "," + windModule + "," + windDirection;
+    }
 }

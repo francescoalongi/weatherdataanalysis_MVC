@@ -20,7 +20,7 @@ public class LoadStationsServlet extends HttpServlet {
         //TODO: An error page must be created to redirect users there when they perform illegal actions
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         List results = (List) HibernateUtil.executeSelect("FROM Station", true);
 

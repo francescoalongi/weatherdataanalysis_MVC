@@ -103,6 +103,8 @@ public class InitServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /*PeriodicDataAcquirer.getInstance("http://meteovalmorea.it/ftp/realtime.csv",
+                (Station) HibernateUtil.executeSelect("from Station", false));*/
         resp.sendRedirect(getServletContext().getContextPath() + "/Homepage");
     }
 
