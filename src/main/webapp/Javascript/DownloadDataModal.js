@@ -165,10 +165,10 @@ function downloadData() {
     for (var i = 0; i < radios.length; i++) {
         if (radios[i].checked) stationId = radios[i].value;
     }
-    var beginTimestamp = $('#divStartDate').data("DateTimePicker").date().valueOf();
-    var endTimestamp = $('#divEndDate').data("DateTimePicker").date().valueOf();
+    var beginDate = document.getElementById("startingDate").value;
+    var endDate = document.getElementById("endingDate").value;
 
-    xhr.open('GET', getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_timestamp=" + beginTimestamp + "&end_timestamp=" + endTimestamp);
+    xhr.open('GET', getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_date=" + beginDate + "&end_date=" + endDate);
     /*xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
 
