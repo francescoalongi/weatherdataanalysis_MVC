@@ -1,5 +1,5 @@
 
-function retrieveStations() {
+function fillUploadModal() {
 
     var spinner = generateSpinner("Please wait, stations are being loaded...");
     var modalBody = document.getElementById("uploadDataModalBody");
@@ -34,9 +34,7 @@ function retrieveStations() {
                     modalBody.appendChild(p);
                 }
 
-                var stationList = document.createElement("div");
-                stationList.setAttribute("id", "stationList");
-                modalBody.appendChild(stationList);
+
 
                 var form = document.createElement("form");
                 form.setAttribute("action", getContextPath() + "/UploadData");
@@ -44,7 +42,13 @@ function retrieveStations() {
                 form.setAttribute("enctype", "multipart/form-data");
                 form.setAttribute("id", "uploadDataForm");
 
-                stationList.appendChild(form);
+                modalBody.appendChild(form);
+
+                var stationList = document.createElement("div");
+                stationList.setAttribute("id", "stationList");
+                stationList.setAttribute("class", "mb-3");
+
+                form.appendChild(stationList);
 
                 for (var i = 0; i < JSONArray.length; i++) {
                     var div = document.createElement("div");
@@ -65,7 +69,7 @@ function retrieveStations() {
                     div.appendChild(input);
                     div.appendChild(label);
 
-                    form.appendChild(div);
+                    stationList.appendChild(div);
                 }
 
 
@@ -99,7 +103,6 @@ function retrieveStations() {
 
                 form.appendChild(divInputGroup);
 
-
                 var modalContent = document.getElementById("uploadDataModalContent");
                 if (modalContent.getElementsByClassName("modal-footer").length === 0) {
                     var modalFooter = document.createElement("div");
@@ -127,9 +130,6 @@ function submitForm() {
         insertAlert(divStationList, "It is necessary to select one station and one dataset!");
     }
 }
-
-
-
 
 function uploadDataModalSetup() {
     $('#modalUpload').on('hidden.bs.modal', function (e) {

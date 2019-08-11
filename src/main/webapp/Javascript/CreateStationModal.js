@@ -1,4 +1,4 @@
-function createStation() {
+function sendCreateStationAJAX() {
     var params = {
         name: document.getElementById('createStationName').value,
         latitude: document.getElementById('createStationLatitude').value,
@@ -63,11 +63,11 @@ function addAdditionalField(JSONObject) {
     return JSONObject;
 }
 
-function sendAJAX() {
+function checkCreateStationFieldCorrectness() {
     var divCreateStationModalBody = document.getElementById("createStationModalBody");
     if (checkEveryInputFilled()) {
         if (checkLatLongAltFloat()) {
-            createStation();
+            sendCreateStationAJAX();
         } else {
             insertAlert(divCreateStationModalBody, "Latitude, Longitude and Altitude must be numbers!");
             $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');
@@ -82,7 +82,9 @@ function sendAJAX() {
 }
 
 function checkLatLongAltFloat() {
-
+    return !isNaN(document.getElementById("createStationLatitude").value) &&
+        !isNaN(document.getElementById("createStationLongitude").value) &&
+        !isNaN(document.getElementById("createStationAltitude").value);
 }
 function checkEveryInputFilled() {
     var inputList = document.querySelector('[id^="createStation"]').getElementsByTagName("input");
