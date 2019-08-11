@@ -76,68 +76,67 @@ function fillDownloadModal() {
 
                 divRow.appendChild(divColStartDate);
 
-                var divStartingDateMdForm = document.createElement("div");
-                divStartingDateMdForm.setAttribute("class", "md-form");
+                var divStartingDate = document.createElement("div");
+                divStartingDate.setAttribute("class", "input-group date startdate");
+                divStartingDate.setAttribute("id", "divStartDate");
 
-                divColStartDate.appendChild(divStartingDateMdForm);
+                divColStartDate.appendChild(divStartingDate);
 
                 var inputStartingDatePicker = document.createElement("input");
-                inputStartingDatePicker.setAttribute("placeholder", "Select the starting date");
+                inputStartingDatePicker.setAttribute("placeholder", "Starting date");
                 inputStartingDatePicker.setAttribute("type", "text");
                 inputStartingDatePicker.setAttribute("id", "startingDate");
-                inputStartingDatePicker.setAttribute("class", "form-control datepicker");
+                inputStartingDatePicker.setAttribute("class", "form-control");
 
-                divStartingDateMdForm.appendChild(inputStartingDatePicker);
+                divStartingDate.appendChild(inputStartingDatePicker);
 
                 var divColEndDate = document.createElement("div");
                 divColEndDate.setAttribute("class", "col-md-6 mb-4");
 
                 divRow.appendChild(divColEndDate);
 
-                var divEndingDateMdForm = document.createElement("div");
-                divEndingDateMdForm.setAttribute("class", "md-form");
+                var divEndingDate = document.createElement("div");
+                divEndingDate.setAttribute("class", "input-group date enddate");
+                divEndingDate.setAttribute("id", "divEndDate");
 
-                divColEndDate.appendChild(divEndingDateMdForm);
+                divColEndDate.appendChild(divEndingDate);
 
                 var inputEndingDatePicker = document.createElement("input");
-                inputEndingDatePicker.setAttribute("placeholder", "Select the ending date");
+                inputEndingDatePicker.setAttribute("placeholder", "Ending date");
                 inputEndingDatePicker.setAttribute("type", "text");
                 inputEndingDatePicker.setAttribute("id", "endingDate");
-                inputEndingDatePicker.setAttribute("class", "form-control datepicker");
+                inputEndingDatePicker.setAttribute("class", "form-control");
 
-                divEndingDateMdForm.appendChild(inputEndingDatePicker);
+                divEndingDate.appendChild(inputEndingDatePicker);
 
                 modalBody.appendChild(divContainerDatePicker);
 
-
-                /*var from_input = $('#startingDate').pickadate(),
-                    from_picker = from_input.pickadate('picker');
-                var to_input = $('#endingDate').pickadate(),
-                    to_picker = to_input.pickadate('picker');
-
-                if ( from_picker.get('value') ) {
-                    to_picker.set('min', from_picker.get('select'));
-                }
-                if ( to_picker.get('value') ) {
-                    from_picker.set('max', to_picker.get('select'));
-                }
-
-                from_picker.on('set', function(event) {
-                    if ( event.select ) {
-                        to_picker.set('min', from_picker.get('select'));
-                    }
-                    else if ( 'clear' in event ) {
-                        to_picker.set('min', false);
-                    }
+                $('#divStartDate').datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    useCurrent: false,
+                    keepOpen: true,
+                    allowInputToggle: true,
+                    ignoreReadonly: true,
+                    showTodayButton: true,
+                    viewMode: 'days'
+                }).on('dp.change', function (selected) {
+                    var minDate = new Date(selected.date.valueOf());
+                    $('#divEndDate').data("DateTimePicker").minDate(minDate);
                 });
-                to_picker.on('set', function(event) {
-                    if ( event.select ) {
-                        from_picker.set('max', to_picker.get('select'));
-                    }
-                    else if ( 'clear' in event ) {
-                        from_picker.set('max', false);
-                    }
-                });*/
+
+
+                $('#divEndDate').datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    useCurrent: false,
+                    keepOpen: true,
+                    allowInputToggle: true,
+                    ignoreReadonly: true,
+                    showTodayButton: true,
+                    viewMode: 'days'
+                }).on('dp.change', function (selected) {
+                    var maxDate = new Date(selected.date.valueOf())
+                    $('#divStartDate').data("DateTimePicker").maxDate(maxDate);
+                });
 
                 var modalContent = document.getElementById("downloadDataModalContent");
                 if (modalContent.getElementsByClassName("modal-footer").length === 0) {
@@ -145,9 +144,8 @@ function fillDownloadModal() {
                     modalFooter.setAttribute("class", "modal-footer d-flex justify-content-center");
                     var downloadButton = document.createElement("button");
                     downloadButton.setAttribute("class", "btn btn-indigo");
-                    downloadButton.setAttribute("onclick", "submitForm()");
+                    downloadButton.setAttribute("onclick", "downloadData()");
                     downloadButton.innerText = "Download data";
-
                     modalFooter.appendChild(downloadButton);
                     modalContent.appendChild(modalFooter);
                 }
@@ -156,6 +154,16 @@ function fillDownloadModal() {
     };
     xhr.send();
 
+}
 
+function downloadData() {
 
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    xhr.open('GET', getContextPath() + "/DownloadData");
+    /*xhr.onreadystatechange = function() {
+        if (xhr.readyState > 3 && xhr.status === 200) {
+
+        }
+    };*/
+    xhr.send();
 }
