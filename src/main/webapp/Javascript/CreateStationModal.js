@@ -64,16 +64,27 @@ function addAdditionalField(JSONObject) {
 }
 
 function sendAJAX() {
-    if (everyInputFilled()) {
-        createStation();
+    var divCreateStationModalBody = document.getElementById("createStationModalBody");
+    if (checkEveryInputFilled()) {
+        if (checkLatLongAltFloat()) {
+            createStation();
+        } else {
+            insertAlert(divCreateStationModalBody, "Latitude, Longitude and Altitude must be numbers!");
+            $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');
+            document.getElementById("createStationLatitude").classList.add("is-invalid");
+            document.getElementById("createStationLongitude").classList.add("is-invalid");
+            document.getElementById("createStationAltitude").classList.add("is-invalid");
+        }
     } else{
-        var divCreateStationModalBody = document.getElementById("createStationModalBody");
         insertAlert(divCreateStationModalBody, "It is necessary to fill in every input form!");
         $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');
     }
 }
 
-function everyInputFilled() {
+function checkLatLongAltFloat() {
+
+}
+function checkEveryInputFilled() {
     var inputList = document.querySelector('[id^="createStation"]').getElementsByTagName("input");
     for (var i = 0; i < inputList.length; i++) {
         if (inputList[i].type === "text" && inputList[i].value === "") return false;

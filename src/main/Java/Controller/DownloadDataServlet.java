@@ -33,7 +33,7 @@ public class DownloadDataServlet extends HttpServlet {
         param.put("begin_timestamp", beginTimestamp);
         param.put("end_timestamp", endTimestamp);
         String getDataToDownloadQuery = "where timestamp between :begin_timestamp AND :end_timestamp";
-        switch (station.getType()) {
+        switch (station.getType().toLowerCase()) {
             case "city":
                 getDataToDownloadQuery = "from DatumCity " + getDataToDownloadQuery;
                 break;

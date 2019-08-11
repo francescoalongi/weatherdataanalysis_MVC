@@ -175,6 +175,7 @@ function downloadData() {
         }
     };*/
     xhr.send();
+    closeCurrentModal("modalDownload");
 }
 
 function downloadDataModalSetup() {
