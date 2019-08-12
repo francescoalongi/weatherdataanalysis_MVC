@@ -29,7 +29,7 @@ public class HibernateUtil
         }
     }
 
-    public static SessionFactory getSessionFactory() {
+    private static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
@@ -39,7 +39,6 @@ public class HibernateUtil
     }
 
     public static Object executeSelect(String queryString, boolean isResultList, Map<String, Object> params) {
-        //Params <- null => no parameters
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         Query query = session.createQuery(queryString);

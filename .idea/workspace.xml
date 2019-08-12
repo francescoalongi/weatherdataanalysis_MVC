@@ -6,18 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="DownloadDataServlet.java implemented and tested">
-      <change afterPath="$PROJECT_DIR$/.idea/weatherdataanalysis_MVC.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" afterDir="false" />
+    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/Datum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/Datum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumCity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumCity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumCountry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumCountry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumMountain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumMountain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumSea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumSea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Javascript/DownloadDataModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Javascript/DownloadDataModal.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +34,21 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="hibernate.cfg.xml/Hibernate" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hibernate.cfg.xml/Hibernate" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hibernate.cfg.xml/Hibernate" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="mydb: schema" type="76f4a085:MysqlImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="mydb@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
     </expand>
     <select />
   </component>
@@ -57,23 +65,10 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>d</find>
-      <find>uvRadiation</find>
-      <find>save</find>
-      <find>type</find>
-      <find>hib</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>Sea</replace>
-      <replace>uvRadiation</replace>
-      <replace>UvRadiation</replace>
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="nicolo &lt;nicolo.ghielmetti@gmail.com&gt;" />
         <option value="nicolo.ghielmetti@gmail.com" />
       </list>
     </option>
@@ -251,7 +246,22 @@
     <option name="allServicesViewState">
       <serviceView>
         <treeState>
-          <expand />
+          <expand>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@62f159b8" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4ecf7de0" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+          </expand>
           <select />
         </treeState>
       </serviceView>
@@ -290,7 +300,10 @@
       <workItem from="1565388111889" duration="125000" />
       <workItem from="1565388248294" duration="6520000" />
       <workItem from="1565447030811" duration="1386000" />
-      <workItem from="1565479561436" duration="4113000" />
+      <workItem from="1565479561436" duration="5682000" />
+      <workItem from="1565517018700" duration="4445000" />
+      <workItem from="1565541866838" duration="4335000" />
+      <workItem from="1565623789741" duration="2469000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -362,7 +375,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565366964118</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="DownloadDataServlet.java implemented and tested">
+      <created>1565484273906</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1565484273906</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -424,7 +444,20 @@
           <line>62</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/weatherdataanalysis_MVC$Tomcat_Server.ic" NAME="Tomcat Server Coverage Results" MODIFIED="1565623976827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

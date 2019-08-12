@@ -168,13 +168,7 @@ function downloadData() {
     var beginDate = document.getElementById("startingDate").value;
     var endDate = document.getElementById("endingDate").value;
 
-    xhr.open('GET', getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_date=" + beginDate + "&end_date=" + endDate);
-    /*xhr.onreadystatechange = function() {
-        if (xhr.readyState > 3 && xhr.status === 200) {
-
-        }
-    };*/
-    xhr.send();
+    window.location = getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_date=" + beginDate + "&end_date=" + endDate;
     closeCurrentModal("modalDownload");
 }
 

@@ -10,10 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @WebServlet(name = "DownloadDataServlet")
 public class DownloadDataServlet extends HttpServlet {
@@ -22,8 +20,17 @@ public class DownloadDataServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long beginTimestamp = Long.valueOf(request.getParameter("begin_timestamp")); //1565340900L;
-        Long endTimestamp = Long.valueOf(request.getParameter("end_timestamp"));  //1565343600L;
+        long beginTimestamp = 0L;// = Long.parseLong(request.getParameter("begin_timestamp")) / 1000; //1565340900L;
+        long endTimestamp = 0L;// = Long.parseLong(request.getParameter("end_timestamp")) / 1000;  //1565343600L;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date begin_date = dateFormat.parse(request.getParameter("begin_date"));
+            Date end_date = dateFormat.parse(request.getParameter("end_date"));
+            beginTimestamp = begin_date.getTime() / 1000;
+            endTimestamp = end_date.getTime() / 1000;
+        } catch (Exception e) { //this generic but you can control another types of exception
+            // look the origin of exception
+        }
         Integer stationId = Integer.parseInt(request.getParameter("station_id")); //1;
         Map<String, Object> param = new HashMap<>();
         param.put("idStation", stationId);
@@ -62,8 +69,8 @@ public class DownloadDataServlet extends HttpServlet {
             printWriter.println(((Datum) datum).getFieldsAsCSV());
         printWriter.close();
         //download the file
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + "data_" + beginTimestamp + "-" + endTimestamp + ".csv");
+        response.setContentType("Application/CSV");
+        response.setHeader("Content-Disposition", "attachment; filename=" + "data_" + beginTimestamp + "-" + endTimestamp + ".csv");
         OutputStream out = response.getOutputStream();
         FileInputStream in = new FileInputStream("data_" + beginTimestamp + "-" + endTimestamp + ".csv");
         byte[] buffer = new byte[4096];
