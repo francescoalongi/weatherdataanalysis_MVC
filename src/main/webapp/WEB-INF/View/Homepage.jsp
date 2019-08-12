@@ -54,7 +54,7 @@
         <div class="navbuttons">
             <ul class = "nav navbar-nav navbar-right" id="ulNavBar">
                 <li>
-                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="retrieveStations()">Upload data</a>
+                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="fillUploadModal()">Upload data</a>
                 </li>
                 <li>
                     <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalDownload" onclick="fillDownloadModal()">Download data</a>
@@ -190,7 +190,7 @@
                 <input type="text" id="createStationAdditionalField" class="form-control mb-3" placeholder="Pollution level">
             </div>
             <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-indigo" onclick="sendAJAX()">Create station</button>
+                <button class="btn btn-indigo" onclick="checkCreateStationFieldCorrectness()">Create station</button>
             </div>
         </div>
     </div>

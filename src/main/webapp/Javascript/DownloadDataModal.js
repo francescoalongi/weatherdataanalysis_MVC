@@ -85,7 +85,7 @@ function fillDownloadModal() {
                 var inputStartingDatePicker = document.createElement("input");
                 inputStartingDatePicker.setAttribute("placeholder", "Starting date");
                 inputStartingDatePicker.setAttribute("type", "text");
-                inputStartingDatePicker.setAttribute("id", "startingDate");
+                inputStartingDatePicker.setAttribute("id", "downloadDataStartingDate");
                 inputStartingDatePicker.setAttribute("class", "form-control");
 
                 divStartingDate.appendChild(inputStartingDatePicker);
@@ -104,7 +104,7 @@ function fillDownloadModal() {
                 var inputEndingDatePicker = document.createElement("input");
                 inputEndingDatePicker.setAttribute("placeholder", "Ending date");
                 inputEndingDatePicker.setAttribute("type", "text");
-                inputEndingDatePicker.setAttribute("id", "endingDate");
+                inputEndingDatePicker.setAttribute("id", "downloadDataEndingDate");
                 inputEndingDatePicker.setAttribute("class", "form-control");
 
                 divEndingDate.appendChild(inputEndingDatePicker);
@@ -159,17 +159,24 @@ function fillDownloadModal() {
 
 function downloadData() {
 
-    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var stationId;
-    var radios = document.getElementsByName("radios");
-    for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) stationId = radios[i].value;
-    }
-    var beginDate = document.getElementById("startingDate").value;
-    var endDate = document.getElementById("endingDate").value;
+    if (isOneRadioChecked("radios") && document.getElementById("downloadDataStartingDate").value && document.getElementById("downloadDataEndingDate")) {
+
+        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        var stationId;
+        var radios = document.getElementsByName("radios");
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) stationId = radios[i].value;
+        }
+        var beginDate = document.getElementById("downloadDataStartingDate").value;
+        var endDate = document.getElementById("downloadDataEndingDate").value;
 
     window.location = getContextPath() + "/DownloadData?station_id=" + stationId + "&begin_date=" + beginDate + "&end_date=" + endDate;
     closeCurrentModal("modalDownload");
+    } else {
+        var divDownloadDataModalBody = document.getElementById("downloadDataModalBody");
+        insertAlert(divDownloadDataModalBody, "It is necessary to select one station, a starting date and an end date!");
+        $('#modalDownload').animate({ scrollTop: 0 }, 'slow');
+    }
 }
 
 function downloadDataModalSetup() {
