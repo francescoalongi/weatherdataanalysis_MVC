@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="Model.Station" %><%--
   Created by IntelliJ IDEA.
   User: Francesco Alongi
   Date: 25/07/2019
@@ -17,10 +18,14 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <!-- Custom scripts -->
     <script src="${pageContext.request.contextPath}/Javascript/UploadDataModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/CreateStationModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HelperFunctions.js"></script>
+    <script src="${pageContext.request.contextPath}/Javascript/HomepageHandler.js"></script>
+
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
@@ -194,6 +199,67 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="container-fluid mt-5 ml-3">
+    <div class="row">
+        <div class="col">
+            <div id="plot">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Select a checkbox for each station you want to display and then select the station</p>
+        </div>
+    </div>
+    <%
+        List<Station> stations = (List<Station>) request.getAttribute("stations");
+        for (int i = 0; i < 4; i++) {
+    %>
+    <div class="row justify-content-start mb-2">
+        <div class="col-md-auto">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="checkboxForStation<%=i%>" onclick="handleCheckBehaviour('checkboxForStation<%=i%>', 'selectForStation<%=i%>')">
+                <label class="custom-control-label" for="checkboxForStation<%=i%>"></label>
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <select id="selectForStation<%=i%>" class="browser-default custom-select" onchange="handleSelectBehaviour(event)" disabled>
+                <option selected>Select the station you want to display</option>
+                <%
+                    for (Station station : stations) {
+                %>
+                <option value="<%=station.getIdStation()%>" data-station-type="<%=station.getType()%>"> <%=station.getName()%> </option>
+                <%
+                    }
+                %>
+            </select>
+        </div>
+    </div>
+    <%
+        }
+    %>
+    <div class="row">
+        <div class="col">
+            <p>Select the weather dimension</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-auto">
+            <select id="selectWeatherDimension" class="browser-default custom-select" disabled>
+                <option selected>Select the weather dimension</option>
+                <option>Temperature</option>
+                <option>Pressure</option>
+                <option>Humidity</option>
+                <option>Rain</option>
+                <option>Wind module</option>
+                <option>Wind direction</option>
+            </select>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>

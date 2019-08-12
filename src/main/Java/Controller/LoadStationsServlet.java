@@ -20,15 +20,20 @@ public class LoadStationsServlet extends HttpServlet {
         //TODO: An error page must be created to redirect users there when they perform illegal actions
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         List results = (List) HibernateUtil.executeSelect("FROM Station", true);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(results);
+        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(results);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+        } else {
+            request.setAttribute("stations", results);
+            request.getRequestDispatcher("/Homepage").forward(request, response);
+        }
     }
 }
