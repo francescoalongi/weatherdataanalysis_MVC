@@ -30,7 +30,7 @@ function handleCheckBehaviour(checkboxId, selectId) {
             }
         } else {
             var additionalFieldOpt = document.getElementById("additionalFieldOption");
-            if (typeof additionalFieldOpt !== "undefined")
+            if (additionalFieldOpt)
                 additionalFieldOpt.parentNode.removeChild(additionalFieldOpt);
         }
     }
@@ -65,7 +65,7 @@ function handleSelectBehaviour(event) {
          }
      } else {
          var additionalFieldOpt = document.getElementById("additionalFieldOption");
-         if (typeof additionalFieldOpt !== "undefined")
+         if (additionalFieldOpt)
             additionalFieldOpt.parentNode.removeChild(additionalFieldOpt);
      }
 
@@ -75,17 +75,17 @@ function requestDataForGraph() {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     var queryString = "?";
     var checkboxes = document.querySelectorAll('[id^="checkboxForStation"]');
-    var firstStat = true;
+    var firstPar = true;
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
             var stationNumber = checkboxes[i].id.replace("checkboxForStation", "");
             var selectForStation = document.getElementById("selectForStation" + stationNumber);
             var idSelectedStation = selectForStation.options[selectForStation.selectedIndex].value;
             if (idSelectedStation !== selectForStation.options[0].value) {
-                if (!firstStat) {
+                if (!firstPar) {
                     queryString = queryString.concat("&");
                 } else {
-                    firstStat = false;
+                    firstPar = false;
                 }
                 queryString = queryString.concat("station", i.toString(), "=", idSelectedStation.toString());
             }
@@ -95,26 +95,57 @@ function requestDataForGraph() {
 
     var selectWeatherDimension = document.getElementById("selectWeatherDimension");
     var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text
-    if (weatherDimension !== selectWeatherDimension.options[0].text)
-        queryString = queryString.concat("&weatherDimension=",weatherDimension.toString());
+    if (weatherDimension !== selectWeatherDimension.options[0].text) {
+        if (!firstPar) {
+            queryString = queryString.concat("&");
+        } else {
+            firstPar = false;
+        }
+        queryString = queryString.concat("weatherDimension=",weatherDimension.toString());
+    }
 
     var startDate = document.getElementById("timeFrameStartingDate").value;
     var endDate = document.getElementById("timeFrameEndingDate").value;
 
     if (startDate !== "" && endDate !== "") {
-        queryString = queryString.concat("&startDate=", startDate.toString(), "&endDate=", endDate.toString());
+        if (!firstPar) {
+            queryString = queryString.concat("&");
+        } else {
+            firstPar = false;
+        }
+        queryString = queryString.concat("startDate=", startDate.toString(), "&endDate=", endDate.toString());
     }
 
     var showAverage = document.getElementById("showAvgCheckbox").checked;
-    if (showAverage) queryString = queryString.concat("&showAvg=", showAverage.toString());
+    if (showAverage) {
+        if (!firstPar) {
+            queryString = queryString.concat("&");
+        } else {
+            firstPar = false;
+        }
+        queryString = queryString.concat("showAvg=", showAverage.toString());
+    }
 
     var showVar = document.getElementById("showVarCheckbox").checked;
-    if (showVar) queryString = queryString.concat("&showVar=", showVar.toString());
+    if (showVar) {
+        if (!firstPar) {
+            queryString = queryString.concat("&");
+        }
+        queryString = queryString.concat("showVar=", showVar.toString());
+    }
 
     xhr.open('GET', getContextPath() + "/QueryDataGraph".concat(queryString));
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
+            // code for building the graph
+
+            //sample code to test the animation
+            var plotDiv = document.getElementById("plot");
+            plotDiv.style.backgroundColor = "red";
+            plotDiv.style.height = "300px";
+
+            $('#plot').slideDown("slow");
 
         }
     };
@@ -169,4 +200,6 @@ function homepageDatePickerSetup () {
         var maxDate = new Date(selected.date.valueOf())
         $('#divStartTimeFrame').data("DateTimePicker").maxDate(maxDate);
     });
+
+    $('#plot').hide();
 }
