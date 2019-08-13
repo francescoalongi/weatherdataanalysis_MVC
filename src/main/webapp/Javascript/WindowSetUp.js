@@ -3,8 +3,10 @@ window.addEventListener("load", setupFunction, true);
 function setupFunction(){
     createStationModalSetup();
     uploadDataModalSetup();
-    downloadDataModalSetup()
-};
+    downloadDataModalSetup();
+    homepageDatePickerSetup();
+
+}
 
 
 $(document).ready(function(){

@@ -37,6 +37,11 @@
         <servlet-name>CreateStationServlet</servlet-name>
         <servlet-class>Controller.CreateStationServlet</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>QueryDataGraphServlet</servlet-name>
+        <servlet-class>Controller.QueryDataGraphServlet</servlet-class>
+    </servlet>
 
     <!-- servlet mapping-->
     <servlet-mapping>
@@ -62,6 +67,11 @@
     <servlet-mapping>
         <servlet-name>CreateStationServlet</servlet-name>
         <url-pattern>/CreateStation</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>QueryDataGraphServlet</servlet-name>
+        <url-pattern>/QueryDataGraph</url-pattern>
     </servlet-mapping>
     
     <!--jsp-->

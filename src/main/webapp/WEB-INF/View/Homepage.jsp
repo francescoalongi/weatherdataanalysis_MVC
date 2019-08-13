@@ -246,7 +246,7 @@
             <p>Select the weather dimension</p>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-md-auto">
             <select id="selectWeatherDimension" class="browser-default custom-select" disabled>
                 <option selected>Select the weather dimension</option>
@@ -258,6 +258,47 @@
                 <option>Wind direction</option>
             </select>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>Select the time frame</p>
+        </div>
+    </div>
+
+   <div class="row mb-3">
+       <div class="col-md-auto">
+           <div class="input-group date startdate" id="divStartTimeFrame">
+               <input placeholder="Starting date" type="text" id="timeFrameStartingDate" class="form-control">
+           </div>
+       </div>
+       <div class="col-md-auto">
+           <div class="input-group date enddate" id="divEndTimeFrame">
+               <input placeholder="Ending date" type="text" id="timeFrameEndingDate" class="form-control">
+           </div>
+       </div>
+   </div>
+
+    <div class="row mb-3">
+        <div class="col-md-auto">
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="showAvgCheckbox">
+                <label class="custom-control-label" for="showAvgCheckbox">Show average</label>
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" class="custom-control-input" id="showVarCheckbox">
+                <label class="custom-control-label" for="showVarCheckbox">Show variance</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-auto">
+            <button type="button" class="btn btn-primary" onclick="requestDataForGraph()">Show graph</button>
+        </div>
+
     </div>
 
 </div>
