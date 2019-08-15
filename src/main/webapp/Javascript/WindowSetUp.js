@@ -4,7 +4,7 @@ function setupFunction(){
     createStationModalSetup();
     uploadDataModalSetup();
     downloadDataModalSetup();
-    homepageDatePickerSetup();
+    homepageSetup();
 
 }
 
