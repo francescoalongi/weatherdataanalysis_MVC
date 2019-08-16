@@ -1,5 +1,7 @@
 package Model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.lang.reflect.Field;
 
@@ -20,6 +22,8 @@ public abstract class Datum {
     private Float windModule;
     private String windDirection;
 
+
+    @JsonIgnore //This annotation is added in order to correctly serialize into json object a Station (avoiding circular references)
     @ManyToOne
     @JoinColumn(name="idStation")
     private Station station;

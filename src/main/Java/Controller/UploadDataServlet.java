@@ -79,12 +79,12 @@ public class UploadDataServlet extends HttpServlet {
             }
         } catch (IllegalArgumentException e) {
             request.setAttribute("outcomeUpload", "The .csv file you are trying to upload does not fit for the selected station. Use another one.");
-            request.getRequestDispatcher("/Homepage").forward(request,response);
+            request.getRequestDispatcher("/LoadStations").forward(request,response);
         }
 
         HibernateUtil.executeInsert(dataToUpload);
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
-        request.getRequestDispatcher("/Homepage").forward(request,response);
+        request.getRequestDispatcher("/LoadStations").forward(request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

@@ -18,6 +18,7 @@ import java.util.List;
 public class LoadStationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: An error page must be created to redirect users there when they perform illegal actions
+        doGet(request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

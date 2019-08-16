@@ -8,27 +8,8 @@ function handleSelectBehaviour(event) {
     if (event.currentTarget.selectedOptions[0].innerText === event.currentTarget.options[0].innerText)
         selectedStationsType.delete(selectId);
     else selectedStationsType.set(selectId, stationType);
-    if (checkEveryEntryEqual(selectedStationsType)) {
-        var additionalFieldOption = getAdditionalFieldOption();
-        switch (stationType) {
-            case "City":
-                additionalFieldOption.innerText = "Pollution level";
-                break;
-            case "Country":
-                additionalFieldOption.innerText = "Dew point";
-                break;
-            case "Mountain":
-                additionalFieldOption.innerText = "Snow level";
-                break;
-            case "Sea":
-                additionalFieldOption.innerText = "Uv radiation";
-                break;
-        }
-    } else {
-        var additionalFieldOpt = document.getElementById("additionalFieldOption");
-        if (additionalFieldOpt)
-            additionalFieldOpt.parentNode.removeChild(additionalFieldOpt);
-    }
+
+    setAdditionalFieldOption();
 
     var selectForStation = $('#' + selectId.toString());
     var previousSelection = selectForStation.data('pre');
@@ -144,7 +125,6 @@ function requestDataForGraph() {
 
 
 function checkEveryEntryEqual(map) {
-
     if (map.size > 0) {
         for (let [k, v] of map) {
             if (v !== map.values().next().value) return false
@@ -161,6 +141,32 @@ function getAdditionalFieldOption() {
         document.getElementById("selectWeatherDimension").appendChild(additionalFieldOption);
     }
     return additionalFieldOption;
+}
+
+function setAdditionalFieldOption() {
+    if (checkEveryEntryEqual(selectedStationsType)) {
+        var additionalFieldOption = getAdditionalFieldOption();
+        switch (selectedStationsType.values().next().value) {
+            case "City":
+                additionalFieldOption.innerText = "Pollution level";
+                break;
+            case "Country":
+                additionalFieldOption.innerText = "Dew point";
+                break;
+            case "Mountain":
+                additionalFieldOption.innerText = "Snow level";
+                break;
+            case "Sea":
+                additionalFieldOption.innerText = "Uv radiation";
+                break;
+        }
+    } else {
+        var additionalFieldOpt = document.getElementById("additionalFieldOption");
+        if (additionalFieldOpt)
+            additionalFieldOpt.parentNode.removeChild(additionalFieldOpt);
+    }
+
+
 }
 
 
@@ -311,6 +317,9 @@ function removeSelectFromContainer() {
             else selects[i].options[j].disabled = false;
         }
     }
+
+    selectedStationsType.delete(selectForStation.attr("id"));
+    setAdditionalFieldOption();
 
     var containerSelects = document.getElementById("containerSelects");
     $(containerSelects.lastChild).slideUp("slow", function() {
