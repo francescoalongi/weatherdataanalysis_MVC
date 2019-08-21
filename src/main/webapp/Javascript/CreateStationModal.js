@@ -26,7 +26,7 @@ function sendCreateStationAJAX() {
             //TODO: handle this check at the client side also
             if (JSONResponse.success === "true") {
                 $('#modalCreateStation').modal('hide');
-                document.getElementById("toastCreateStationBody").innerText = JSONResponse.text;
+                document.getElementById("toastCreateStationBody").innerHTML = JSONResponse.text;
                 $('#toastCreateStation').toast('show');
             } else {
                 var createStationModalBody = document.getElementById("createStationModalBody")

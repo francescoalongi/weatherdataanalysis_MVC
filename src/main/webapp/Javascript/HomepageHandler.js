@@ -39,6 +39,7 @@ function handleSelectBehaviour(event) {
 
 }
 
+
 function removeElementFromArray(array, elementToBeRemoved) {
     var index = array.indexOf(elementToBeRemoved);
     if (index > -1) {

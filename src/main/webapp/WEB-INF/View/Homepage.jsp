@@ -1,5 +1,5 @@
-<%@ page import="java.util.List" %>
-<%@ page import="Model.Station" %><%--
+<%@ page import="org.codehaus.jackson.JsonNode" %>
+<%@ page import="org.codehaus.jackson.map.ObjectMapper" %><%--
   Created by IntelliJ IDEA.
   User: Francesco Alongi
   Date: 25/07/2019
@@ -10,7 +10,6 @@
 <html>
 <head>
     <title>Homepage</title>
-
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -27,7 +26,6 @@
     <script src="${pageContext.request.contextPath}/Javascript/CreateStationModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HelperFunctions.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HomepageHandler.js"></script>
-
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
@@ -73,7 +71,6 @@
         </div>
     </div>
 </div>
-
 <% }%>
 
 <div aria-live="polite" aria-atomic="true" style="position: relative;" >
@@ -189,6 +186,11 @@
 </div>
 
 <div class="container-fluid mt-5 ml-3">
+    <%
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree((String) request.getAttribute("stations"));
+        if (jsonNode.getElements().hasNext()) {
+    %>
     <div class="row">
         <div class="col">
             <div id="plot">
@@ -201,10 +203,13 @@
             <p>Select a checkbox for each station you want to display and then select the station</p>
         </div>
     </div>
-    <div id="containerSelects">
+    <div class="row">
+        <div class="col">
+            <div id="containerSelects">
 
+            </div>
+        </div>
     </div>
-
     <div class="row">
         <div class="col">
             <p>Select the weather dimension</p>
@@ -262,9 +267,18 @@
         <div class="col-md-auto">
             <button type="button" class="btn btn-primary" onclick="requestDataForGraph()">Show graph</button>
         </div>
-
     </div>
-
+    <%
+        } else {
+    %>
+    <div class="row">
+        <div class="col">
+            <p>No stations has been created yet. Click <a data-toggle="modal" href="#modalCreateStation">here</a> to create a new one.</p>
+        </div>
+    </div>
+    <%
+        }
+    %>
 </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.7/js/mdb.min.js"></script>

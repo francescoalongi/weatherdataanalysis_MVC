@@ -36,7 +36,7 @@ public class CreateStationServlet extends HttpServlet {
 
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"success\": \"true\", \"text\": \"The new station has been created succesfully.\"}");
+        response.getWriter().write("{\"success\": \"true\", \"text\": \"The new station has been created succesfully. In order to see the modification you must reload the page.\"}");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

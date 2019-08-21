@@ -17,12 +17,14 @@ import java.util.List;
 @WebServlet(name = "LoadStationsServlet")
 public class LoadStationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO: An error page must be created to redirect users there when they perform illegal actions
-        doGet(request,response);
+        processRequest(request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        processRequest(request, response);
+    }
 
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List results = (List) HibernateUtil.executeSelect("FROM Station", true);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(results);
@@ -32,7 +34,9 @@ public class LoadStationsServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(json);
         } else {
+            // this branch is taken only if the request is a non-ajax request, this happens only when we need to reload the Homepage
             request.setAttribute("stations", json);
+            //when the QueryDataGraphServlet will be ready, this servlet must forward to that servlet
             request.getRequestDispatcher("/Homepage").forward(request, response);
         }
     }
