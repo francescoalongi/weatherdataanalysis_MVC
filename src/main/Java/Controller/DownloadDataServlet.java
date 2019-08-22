@@ -36,10 +36,9 @@ public class DownloadDataServlet extends HttpServlet {
         param.put("idStation", stationId);
         Station station = (Station) HibernateUtil.executeSelect(
                 "from Station where idStation = :idStation", false, param);
-        param.clear();
         param.put("begin_timestamp", beginTimestamp);
         param.put("end_timestamp", endTimestamp);
-        String getDataToDownloadQuery = "where timestamp between :begin_timestamp AND :end_timestamp";
+        String getDataToDownloadQuery = "where timestamp between :begin_timestamp AND :end_timestamp AND idStation = :idStation";
         switch (station.getType().toLowerCase()) {
             case "city":
                 getDataToDownloadQuery = "from DatumCity " + getDataToDownloadQuery;
@@ -63,21 +62,20 @@ public class DownloadDataServlet extends HttpServlet {
             return;
         }
         //create the file
-        PrintWriter printWriter = new PrintWriter("data_" + beginTimestamp + "-" + endTimestamp + ".csv");
+        PrintWriter printWriter = new PrintWriter("data_" + request.getParameter("begin_date").replace('/', '-') + "_" + request.getParameter("end_date").replace('/', '-') + ".csv");
         printWriter.println(((Datum) data.get(0)).getFieldsNameAsCSV());
         for (Object datum : data)
             printWriter.println(((Datum) datum).getFieldsAsCSV());
         printWriter.close();
         //download the file
         response.setContentType("Application/CSV");
-        response.setHeader("Content-Disposition", "attachment; filename=" + "data_" + beginTimestamp + "-" + endTimestamp + ".csv");
+        response.setHeader("Content-Disposition", "attachment; filename=" + "data_" + request.getParameter("begin_date").replace('/', '-') + "_" + request.getParameter("end_date").replace('/', '-') + ".csv");
         OutputStream out = response.getOutputStream();
-        FileInputStream in = new FileInputStream("data_" + beginTimestamp + "-" + endTimestamp + ".csv");
+        FileInputStream in = new FileInputStream("data_" + request.getParameter("begin_date").replace('/', '-') + "_" + request.getParameter("end_date").replace('/', '-') + ".csv");
         byte[] buffer = new byte[4096];
         int length;
-        while ((length = in.read(buffer)) > 0) {
+        while ((length = in.read(buffer)) > 0)
             out.write(buffer, 0, length);
-        }
         in.close();
         out.flush();
     }

@@ -111,7 +111,7 @@ function requestDataForGraph() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
             // code for building the graph
-
+            console.debug(xhr.responseText);
             //sample code to test the animation
             var plotDiv = document.getElementById("plot");
             plotDiv.style.backgroundColor = "red";

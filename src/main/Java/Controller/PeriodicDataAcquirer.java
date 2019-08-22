@@ -23,7 +23,7 @@ public class PeriodicDataAcquirer {
     private ScheduledExecutorService scheduler;
     private static PeriodicDataAcquirer instance = null;
 
-    protected PeriodicDataAcquirer(String path, Station station) {
+    private PeriodicDataAcquirer(String path, Station station) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new DownloadDataFromFile(path, station), 0, 5, TimeUnit.MINUTES);
     }

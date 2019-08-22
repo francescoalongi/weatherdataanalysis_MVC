@@ -6,11 +6,17 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
+    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="DownloadDataServlet.java now works.&#10;Note that with an ajax call you cannot start a dialog to download a file&#10;for security reasons. Instead you can change the path using &#10;window.locatio = ... , exactly what I've done to solve the issue.">
+      <change afterPath="$PROJECT_DIR$/src/main/Java/Model/DataForGraph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumForGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/Javascript/DownloadDataModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Javascript/DownloadDataModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Javascript/HomepageHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Javascript/HomepageHandler.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,10 +51,6 @@
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="mydb: schema" type="76f4a085:MysqlImplModel$Schema" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="mydb@localhost" type="feb32156:DbDataSourceImpl" />
-      </path>
     </expand>
     <select />
   </component>
@@ -68,8 +70,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="nicolo &lt;nicolo.ghielmetti@gmail.com&gt;" />
         <option value="nicolo.ghielmetti@gmail.com" />
+        <option value="nicolo &lt;nicolo.ghielmetti@gmail.com&gt;" />
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -249,17 +251,12 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@2f01f58f" type="7427dc5b:ServiceModel$ServiceGroupNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@62f159b8" type="9fbbdea:ServiceModel$ServiceNode" />
-            </path>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c5dd574" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4ecf7de0" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@2f01f58f" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@3f0931ff" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -303,7 +300,17 @@
       <workItem from="1565479561436" duration="5682000" />
       <workItem from="1565517018700" duration="4445000" />
       <workItem from="1565541866838" duration="4335000" />
-      <workItem from="1565623789741" duration="2469000" />
+      <workItem from="1565623789741" duration="4923000" />
+      <workItem from="1565653512183" duration="2643000" />
+      <workItem from="1565685757962" duration="2832000" />
+      <workItem from="1565690328725" duration="1590000" />
+      <workItem from="1565701045371" duration="1484000" />
+      <workItem from="1565802145705" duration="1737000" />
+      <workItem from="1565887956779" duration="8735000" />
+      <workItem from="1565910423261" duration="1604000" />
+      <workItem from="1565994301145" duration="3195000" />
+      <workItem from="1566500292375" duration="2414000" />
+      <workItem from="1566516188116" duration="1699000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -382,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565484273906</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="DownloadDataServlet.java now works.&#10;Note that with an ajax call you cannot start a dialog to download a file&#10;for security reasons. Instead you can change the path using &#10;window.locatio = ... , exactly what I've done to solve the issue.">
+      <created>1565626430558</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1565626430558</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,7 +442,8 @@
     <MESSAGE value="Some useful functions for insert and select with Hibernate were been &#10;implemented.&#10;Even if it is not in the repository (for the moment) it has also been &#10;created a Python script for reading the file realtime.txt and reupload&#10;it in .csv format ad the same location on the server." />
     <MESSAGE value="Tested all the functionalities implemented in the last commit.&#10;Removed some warnings concerning the thread pool of hibernate.&#10;PeriodicDataAcquirer.java is now a singleton." />
     <MESSAGE value="DownloadDataServlet.java implemented and tested" />
-    <option name="LAST_COMMIT_MESSAGE" value="DownloadDataServlet.java implemented and tested" />
+    <MESSAGE value="DownloadDataServlet.java now works.&#10;Note that with an ajax call you cannot start a dialog to download a file&#10;for security reasons. Instead you can change the path using &#10;window.locatio = ... , exactly what I've done to solve the issue." />
+    <option name="LAST_COMMIT_MESSAGE" value="DownloadDataServlet.java now works.&#10;Note that with an ajax call you cannot start a dialog to download a file&#10;for security reasons. Instead you can change the path using &#10;window.locatio = ... , exactly what I've done to solve the issue." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -440,22 +455,17 @@
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java</url>
-          <line>62</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java</url>
           <line>26</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
+        <watch expression="request.getParameter(&quot;station&quot; + id)" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/weatherdataanalysis_MVC$Tomcat_Server.ic" NAME="Tomcat Server Coverage Results" MODIFIED="1565623976827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
