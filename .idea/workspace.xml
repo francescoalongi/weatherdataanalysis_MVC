@@ -6,13 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DataForGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DataForGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumForGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumForGraph.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,8 +62,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="nicolo.ghielmetti@gmail.com" />
         <option value="nicolo &lt;nicolo.ghielmetti@gmail.com&gt;" />
+        <option value="nicolo.ghielmetti@gmail.com" />
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -344,7 +340,7 @@
       <workItem from="1566516188116" duration="3003000" />
       <workItem from="1566561692215" duration="957000" />
       <workItem from="1566608421429" duration="1184000" />
-      <workItem from="1566661623611" duration="6648000" />
+      <workItem from="1566661623611" duration="7455000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -437,7 +433,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566518143232</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="QueryDataGraphServlet.java is now passing the right set of arrays to&#10;js for displaying data on the graph.">
+      <created>1566668491949</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1566668491949</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,7 +488,9 @@
     <MESSAGE value="DownloadDataServlet.java implemented and tested" />
     <MESSAGE value="DownloadDataServlet.java now works.&#10;Note that with an ajax call you cannot start a dialog to download a file&#10;for security reasons. Instead you can change the path using &#10;window.locatio = ... , exactly what I've done to solve the issue." />
     <MESSAGE value="QueryDataGraphServlet.java works: it creates a list of DataForGraph.java&#10;which represents the list of data for each station selected. Note that&#10;DataForGraph.java is composed by the id of the station and a list of&#10;DatumForGraph.java. The result is then converted in json and passed to&#10;the page." />
-    <option name="LAST_COMMIT_MESSAGE" value="QueryDataGraphServlet.java works: it creates a list of DataForGraph.java&#10;which represents the list of data for each station selected. Note that&#10;DataForGraph.java is composed by the id of the station and a list of&#10;DatumForGraph.java. The result is then converted in json and passed to&#10;the page." />
+    <MESSAGE value="QueryDataGraphServlet.java is now passing the right set of arrays to&#10;js for displaying data on the graph." />
+    <MESSAGE value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
+    <option name="LAST_COMMIT_MESSAGE" value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
