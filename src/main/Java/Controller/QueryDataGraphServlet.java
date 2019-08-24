@@ -51,7 +51,7 @@ public class QueryDataGraphServlet extends HttpServlet {
             }
             List<DatumForGraph> dataOfStations = new ArrayList<>();
             for (Integer stationId : stationIds) {
-                Map<String, Object> param = new HashMap<String, Object>();
+                Map<String, Object> param = new HashMap<>();
                 param.put("idStation", stationId);
                 Station station = (Station) HibernateUtil.executeSelect(
                         "from Station where idStation = :idStation", false, param);
@@ -75,7 +75,7 @@ public class QueryDataGraphServlet extends HttpServlet {
                         throw new IllegalArgumentException();
                 }
                 //retrieve the data required
-                String getTimestampQuery = "select timestamp " + getDataToDownloadQuery;
+                String getTimestampQuery = "select timestamp*1000 " + getDataToDownloadQuery;
                 String getMeasurementsQuery = "select " + request.getParameter("weatherDimension").toLowerCase()
                         + " " + getDataToDownloadQuery;
                 List<Float> measurements =
