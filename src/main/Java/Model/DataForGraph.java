@@ -1,26 +1,17 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DataForGraph {
-    private Integer idStation;
-    private List<DatumForGraph> data;
+    List<Long> timestamp;
+    List<DatumForGraph> data;
 
-    public DataForGraph(Integer idStation, List<DatumForGraph> data) {
-        this.idStation = idStation;
-        this.data = data;
+    public List<Long> getTimestamp() {
+        return timestamp;
     }
 
-    public DataForGraph() {
-    }
-
-    public Integer getIdStation() {
-        return idStation;
-    }
-
-    public void setIdStation(Integer idStation) {
-        this.idStation = idStation;
+    public void setTimestamp(List<Long> timestamp) {
+        this.timestamp = timestamp;
     }
 
     public List<DatumForGraph> getData() {
@@ -30,4 +21,13 @@ public class DataForGraph {
     public void setData(List<DatumForGraph> data) {
         this.data = data;
     }
+
+    public DataForGraph(List<Long> timestamp, List<DatumForGraph> data) {
+        this.timestamp = timestamp;
+        this.data = data;
+    }
+
+    public DataForGraph() {
+    }
+
 }

@@ -21,20 +21,10 @@ import java.util.concurrent.TimeUnit;
 public class PeriodicDataAcquirer {
 
     private ScheduledExecutorService scheduler;
-    private static PeriodicDataAcquirer instance = null;
 
     private PeriodicDataAcquirer(String path, Station station) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new DownloadDataFromFile(path, station), 0, 5, TimeUnit.MINUTES);
-    }
-
-    public static PeriodicDataAcquirer getInstance(String path, Station station) {
-        if (instance == null)
-            synchronized (PeriodicDataAcquirer.class) {
-                if (instance == null)
-                    instance = new PeriodicDataAcquirer(path, station);
-            }
-        return instance;
     }
 
     public void close() {
