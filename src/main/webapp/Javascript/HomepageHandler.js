@@ -116,10 +116,18 @@ function requestDataForGraph() {
 
             var data = [];
             for (var i = 0; i < response.length ; i++) {
+                response[i].timestamps.forEach(function(part, index) {
+                    this[index] = new Date(this[index]);
+                }, response[i].timestamps);
+
+                var stationName = response[i].stationName;
+                if (response.length !== 1)
+                    stationName = stationName + " (" + response[i].unitOfMeasure + ")";
+
                 var trace = {
                     type: "scatter",
                     mode: "lines",
-                    name: response[i].stationName,
+                    name: stationName,
                     x: response[i].timestamps,
                     y: response[i].measurements,
                     line: {color: getRandomColor()}
@@ -129,12 +137,26 @@ function requestDataForGraph() {
 
             var selectWeatherDimension = document.getElementById("selectWeatherDimension");
             var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
+
+            if (response.length === 1)
+                weatherDimension = weatherDimension + " (" + response[0].unitOfMeasure + ")";
+
             var layout = {
-                title: weatherDimension,
+                yaxis: {
+                    title: {
+                        text: weatherDimension,
+                    },
+                },
+                xaxis: {
+                    title: {
+                        text: 'Date',
+                    }
+                }
             };
 
             Plotly.newPlot('timeSeriesPlot', data, layout);
 
+            $('#timeSeriesPlot').hide();
             $('#timeSeriesPlot').slideDown("slow");
 
         }
