@@ -66,7 +66,7 @@ function requestDataForGraph() {
     }
 
     var selectWeatherDimension = document.getElementById("selectWeatherDimension");
-    var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text
+    var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
     if (weatherDimension !== selectWeatherDimension.options[0].text) {
         if (!firstPar) {
             queryString = queryString.concat("&");
@@ -111,13 +111,31 @@ function requestDataForGraph() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
             // code for building the graph
-            console.debug(xhr.responseText);
-            //sample code to test the animation
-            var plotDiv = document.getElementById("plot");
-            plotDiv.style.backgroundColor = "red";
-            plotDiv.style.height = "300px";
+            var plotDiv = document.getElementById("timeSeriesPlot");
+            var response = JSON.parse(xhr.responseText);
 
-            $('#plot').slideDown("slow");
+            var data = [];
+            for (var i = 0; i < response.length ; i++) {
+                var trace = {
+                    type: "scatter",
+                    mode: "lines",
+                    name: response[i].stationName,
+                    x: response[i].timestamps,
+                    y: response[i].measurements,
+                    line: {color: getRandomColor()}
+                };
+                data.push(trace);
+            }
+
+            var selectWeatherDimension = document.getElementById("selectWeatherDimension");
+            var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
+            var layout = {
+                title: weatherDimension,
+            };
+
+            Plotly.newPlot('timeSeriesPlot', data, layout);
+
+            $('#timeSeriesPlot').slideDown("slow");
 
         }
     };

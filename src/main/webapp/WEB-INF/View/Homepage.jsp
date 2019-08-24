@@ -193,7 +193,7 @@
     %>
     <div class="row">
         <div class="col">
-            <div id="plot">
+            <div id="timeSeriesPlot">
 
             </div>
         </div>
