@@ -2,6 +2,7 @@ package Controller;
 
 import Model.DatumForGraph;
 import Model.Station;
+import Model.UnitOfMeasure;
 import Utils.HibernateUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -82,7 +84,16 @@ public class QueryDataGraphServlet extends HttpServlet {
                         (List<Float>) HibernateUtil.executeSelect(getMeasurementsQuery, true, param);
                 List<Long> timestamp =
                         (List<Long>) HibernateUtil.executeSelect(getTimestampQuery, true, param);
-                DatumForGraph data = new DatumForGraph(stationId, station.getName(), measurements, timestamp);
+                String weatherDimForReflection = request.getParameter("weatherDimension").substring(0, 1).toUpperCase() +
+                        request.getParameter("weatherDimension").substring(1).toLowerCase();
+                DatumForGraph data = null;
+                UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
+                try {
+                    data = new DatumForGraph(stationId, station.getName(), (String) unitOfMeasure.getClass()
+                            .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
                 dataOfStations.add(data);
             }
             ObjectMapper mapper = new ObjectMapper();
