@@ -42,40 +42,45 @@ public class UploadDataServlet extends HttpServlet {
         Vector<Datum> dataToUpload = new Vector<>();
         try {
             for (CSVRecord record : records) {
-                Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
-                Float temperature = Float.parseFloat(record.get("temperature"));
-                Float pressure = Float.parseFloat(record.get("pressure"));
-                Float humidity = Float.parseFloat(record.get("humidity"));
-                Float rain = Float.parseFloat(record.get("rain"));
-                Float windModule = Float.parseFloat(record.get("windModule"));
-                String windDirection = record.get("windDirection");
-                // Maybe the below line should be an Object instead of a Float?
-                Float additionalField;
-                Datum datum;
+                try {
+                    Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
+                    Float temperature = Float.parseFloat(record.get("temperature"));
+                    Float pressure = Float.parseFloat(record.get("pressure"));
+                    Float humidity = Float.parseFloat(record.get("humidity"));
+                    Float rain = Float.parseFloat(record.get("rain"));
+                    Float windModule = Float.parseFloat(record.get("windModule"));
+                    String windDirection = record.get("windDirection");
 
-                switch (station.getType().toLowerCase()) {
-                    case "city":
-                        additionalField = Float.parseFloat(record.get("pollutionLevel"));
-                        datum = new DatumCity(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
-                        break;
-                    case "country":
-                        additionalField = Float.parseFloat(record.get("dewPoint"));
-                        datum = new DatumCountry(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
-                        break;
-                    case "mountain":
-                        additionalField = Float.parseFloat(record.get("snowLevel"));
-                        datum = new DatumMountain(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
-                        break;
-                    case "sea":
-                        additionalField = Float.parseFloat(record.get("uvRadiation"));
-                        datum = new DatumSea(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
+                    // Maybe the below line should be an Object instead of a Float?
+                    Float additionalField;
+                    Datum datum;
+
+                    switch (station.getType().toLowerCase()) {
+                        case "city":
+                            additionalField = Float.parseFloat(record.get("pollutionLevel"));
+                            datum = new DatumCity(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            break;
+                        case "country":
+                            additionalField = Float.parseFloat(record.get("dewPoint"));
+                            datum = new DatumCountry(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            break;
+                        case "mountain":
+                            additionalField = Float.parseFloat(record.get("snowLevel"));
+                            datum = new DatumMountain(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            break;
+                        case "sea":
+                            additionalField = Float.parseFloat(record.get("uvRadiation"));
+                            datum = new DatumSea(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            break;
+                        default:
+                            throw new IllegalArgumentException();
+                    }
+                    datum.setStation(station);
+                    dataToUpload.add(datum);
+                } catch (NumberFormatException e) {
+                    // if a datum contains an invalid field, skip it
+                    continue;
                 }
-                datum.setStation(station);
-                dataToUpload.add(datum);
-
             }
         } catch (IllegalArgumentException e) {
             request.setAttribute("outcomeUpload", "The .csv file you are trying to upload does not fit for the selected station. Use another one.");

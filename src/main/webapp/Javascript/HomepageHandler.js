@@ -112,6 +112,7 @@ function requestDataForGraph() {
         if (xhr.readyState > 3 && xhr.status === 200) {
             // code for building the graph
             var plotDiv = document.getElementById("timeSeriesPlot");
+            plotDiv.innerHTML = ""; // delete spinner
             var response = JSON.parse(xhr.responseText);
 
             var data = [];
@@ -155,13 +156,15 @@ function requestDataForGraph() {
             };
 
             Plotly.newPlot('timeSeriesPlot', data, layout);
-
             $('#timeSeriesPlot').hide();
             $('#timeSeriesPlot').slideDown("slow");
-
         }
     };
     xhr.send();
+    document.getElementById("timeSeriesPlot").appendChild(generateSpinner("Please wait..."));
+    $('#timeSeriesPlot').hide();
+    $('#timeSeriesPlot').slideDown("slow");
+
 }
 
 
