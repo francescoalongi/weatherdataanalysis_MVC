@@ -54,28 +54,31 @@ public class UploadDataServlet extends HttpServlet {
                     // Maybe the below line should be an Object instead of a Float?
                     Float additionalField;
                     Datum datum;
-
+                    DatumPK datumPK;
                     switch (station.getType().toLowerCase()) {
                         case "city":
                             additionalField = Float.parseFloat(record.get("pollutionLevel"));
-                            datum = new DatumCity(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            datumPK = new DatumPK(timestamp, station);
+                            datum = new DatumCity(datumPK,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                             break;
                         case "country":
                             additionalField = Float.parseFloat(record.get("dewPoint"));
-                            datum = new DatumCountry(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            datumPK = new DatumPK(timestamp, station);
+                            datum = new DatumCountry(datumPK,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                             break;
                         case "mountain":
                             additionalField = Float.parseFloat(record.get("snowLevel"));
-                            datum = new DatumMountain(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            datumPK = new DatumPK(timestamp, station);
+                            datum = new DatumMountain(datumPK,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                             break;
                         case "sea":
                             additionalField = Float.parseFloat(record.get("uvRadiation"));
-                            datum = new DatumSea(timestamp,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                            datumPK = new DatumPK(timestamp, station);
+                            datum = new DatumSea(datumPK,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
                             break;
                         default:
                             throw new IllegalArgumentException();
                     }
-                    datum.setStation(station);
                     dataToUpload.add(datum);
                 } catch (NumberFormatException e) {
                     // if a datum contains an invalid field, skip it

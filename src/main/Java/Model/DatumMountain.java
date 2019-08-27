@@ -10,8 +10,8 @@ public class DatumMountain extends Datum{
 
     public DatumMountain() {}
 
-    public DatumMountain(Long timestamp, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float snowLevel) {
-        super(timestamp,temperature,pressure,humidity,rain,windModule,windDirection);
+    public DatumMountain(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float snowLevel) {
+        super(datumPK,temperature,pressure,humidity,rain,windModule,windDirection);
         this.snowLevel = snowLevel;
     }
 

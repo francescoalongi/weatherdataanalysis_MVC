@@ -10,8 +10,8 @@ public class DatumSea extends Datum {
 
     public DatumSea() {}
 
-    public DatumSea(Long timestamp, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
-        super(timestamp,temperature,pressure,humidity,rain,windModule,windDirection);
+    public DatumSea(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
+        super(datumPK,temperature,pressure,humidity,rain,windModule,windDirection);
         this.uvRadiation = uvRadiation;
     }
 
