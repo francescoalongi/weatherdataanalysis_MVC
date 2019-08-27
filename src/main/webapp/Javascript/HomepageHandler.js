@@ -110,63 +110,67 @@ function requestDataForGraph() {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
-            // code for building the graph
-            var plotDiv = document.getElementById("timeSeriesPlot");
-            plotDiv.innerHTML = ""; // delete spinner
-            var response = JSON.parse(xhr.responseText);
+            var JSONResponse = JSON.parse(xhr.responseText);
+            if (JSONResponse.success === "true") {
+                var plotDiv = document.getElementById("timeSeriesPlot");
+                plotDiv.innerHTML = ""; // delete spinner
+                var dataForGraph = JSONResponse.text;
 
-            var data = [];
-            for (var i = 0; i < response.length ; i++) {
-                response[i].timestamps.forEach(function(part, index) {
-                    this[index] = new Date(this[index]);
-                }, response[i].timestamps);
+                var data = [];
+                for (var i = 0; i < dataForGraph.length; i++) {
+                    dataForGraph[i].timestamps.forEach(function (part, index) {
+                        this[index] = new Date(this[index]);
+                    }, dataForGraph[i].timestamps);
 
-                var stationName = response[i].stationName;
-                if (response.length !== 1)
-                    stationName = stationName + " (" + response[i].unitOfMeasure + ")";
+                    var stationName = dataForGraph[i].stationName;
+                    if (dataForGraph.length !== 1)
+                        stationName = stationName + " (" + dataForGraph[i].unitOfMeasure + ")";
 
-                var trace = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: stationName,
-                    x: response[i].timestamps,
-                    y: response[i].measurements,
-                    line: {color: getRandomColor()}
+                    var trace = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: stationName,
+                        x: dataForGraph[i].timestamps,
+                        y: dataForGraph[i].measurements,
+                        line: {color: getRandomColor()}
+                    };
+                    data.push(trace);
+                }
+
+                var selectWeatherDimension = document.getElementById("selectWeatherDimension");
+                var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
+
+                if (dataForGraph.length === 1)
+                    weatherDimension = weatherDimension + " (" + dataForGraph[0].unitOfMeasure + ")";
+
+                var layout = {
+                    yaxis: {
+                        title: {
+                            text: weatherDimension,
+                        },
+                    },
+                    xaxis: {
+                        title: {
+                            text: 'Date',
+                        }
+                    }
                 };
-                data.push(trace);
+
+                Plotly.newPlot('timeSeriesPlot', data, layout);
+                $('#timeSeriesPlot').hide();
+                $('#timeSeriesPlot').slideDown("slow");
+            } else {
+                var divTimeSeriesPlot = document.getElementById("timeSeriesPlot");
+                insertAlert(divTimeSeriesPlot, JSONResponse.text);
+
             }
 
-            var selectWeatherDimension = document.getElementById("selectWeatherDimension");
-            var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
-
-            if (response.length === 1)
-                weatherDimension = weatherDimension + " (" + response[0].unitOfMeasure + ")";
-
-            var layout = {
-                yaxis: {
-                    title: {
-                        text: weatherDimension,
-                    },
-                },
-                xaxis: {
-                    title: {
-                        text: 'Date',
-                    }
-                }
-            };
-
-            Plotly.newPlot('timeSeriesPlot', data, layout);
-            $('#timeSeriesPlot').hide();
-            $('#timeSeriesPlot').slideDown("slow");
         }
     };
     xhr.send();
     var divTimeSeriesPlot = document.getElementById("timeSeriesPlot");
     divTimeSeriesPlot.innerHTML = "";
     divTimeSeriesPlot.appendChild(generateSpinner("Please wait..."));
-    $('#timeSeriesPlot').hide();
-    $('#timeSeriesPlot').slideDown("slow");
-
 }
 
 

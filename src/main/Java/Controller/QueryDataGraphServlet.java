@@ -32,7 +32,7 @@ public class QueryDataGraphServlet extends HttpServlet {
         //check parameters
         if (request.getParameter("station0").isEmpty() || request.getParameter("weatherDimension").isEmpty() ||
                 request.getParameter("startDate").isEmpty() || request.getParameter("endDate").isEmpty()) {
-            response.setContentType("text/plain");
+            response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"success\": \"false\", \"text\": \"You have to fill all the form to get a result.\"}");
         } else {
@@ -101,7 +101,7 @@ public class QueryDataGraphServlet extends HttpServlet {
             String json = mapper.writeValueAsString(dataOfStations);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(json);
+            response.getWriter().write("{\"success\": \"true\", \"text\":" + json + "}");
         }
     }
 }
