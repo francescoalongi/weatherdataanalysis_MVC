@@ -26,6 +26,8 @@
     <script src="${pageContext.request.contextPath}/Javascript/CreateStationModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HelperFunctions.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HomepageHandler.js"></script>
+    <script src="${pageContext.request.contextPath}/Javascript/RegisterStationModal.js"></script>
+
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
@@ -44,10 +46,13 @@
         <div class="navbuttons">
             <ul class = "nav navbar-nav navbar-right" id="ulNavBar">
                 <li>
-                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="fillUploadModal()">Upload data</a>
+                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalRegisterStation" onclick="fillModal(this)">Register station</a>
                 </li>
                 <li>
-                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalDownload" onclick="fillDownloadModal()">Download data</a>
+                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="fillModal(this)">Upload data</a>
+                </li>
+                <li>
+                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalDownload" onclick="fillModal(this)">Download data</a>
                 </li>
                 <li>
                     <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalCreateStation">Create new station</a>
@@ -76,7 +81,7 @@
 <div aria-live="polite" aria-atomic="true" style="position: relative;" >
     <div class="toast toast-create-station" id="toastCreateStation" data-delay="4000">
         <div class="toast-header">
-            <strong class="mr-auto">Create station </strong>
+            <strong class="mr-auto">Create station</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -87,17 +92,46 @@
     </div>
 </div>
 
+<div aria-live="polite" aria-atomic="true" style="position: relative;" >
+    <div class="toast toast-create-station" id="toastRegisterStation" data-delay="4000">
+        <div class="toast-header">
+            <strong class="mr-auto">Register station</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="toastRegisterStationBody">
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalRegisterStation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div id="modalRegisterStationContent" class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Register a station to download data automatically</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="modalRegisterStationBody" class="modal-body mx-3">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div id="uploadDataModalContent" class="modal-content">
+        <div id="modalUploadContent" class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold">Upload data</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="uploadDataModalBody" class="modal-body mx-3">
+            <div id="modalUploadBody" class="modal-body mx-3">
 
             </div>
         </div>
@@ -107,14 +141,14 @@
 
 <div class="modal fade" id="modalDownload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div id="downloadDataModalContent" class="modal-content">
+        <div id="modalDownloadContent" class="modal-content">
             <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold">Download data</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="downloadDataModalBody" class="modal-body mx-3">
+            <div id="modalDownloadBody" class="modal-body mx-3">
 
             </div>
         </div>

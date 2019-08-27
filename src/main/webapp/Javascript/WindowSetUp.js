@@ -2,9 +2,10 @@ window.addEventListener("load", setupFunction, true);
 
 function setupFunction(){
     createStationModalSetup();
-    uploadDataModalSetup();
-    downloadDataModalSetup();
     homepageSetup();
+    modalSetup("modalRegisterStation");
+    modalSetup("modalUpload");
+    modalSetup("modalDownload")
 
 }
 

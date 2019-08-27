@@ -29,7 +29,7 @@ public class UploadDataServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String hql = "FROM Station WHERE idStation = :idStation";
-        String idStation = request.getParameter("radios"); // Why radios?
+        String idStation = request.getParameter("idStation");
 
         Map<String, Object> param = new HashMap<>();
         param.put("idStation", Integer.parseInt(idStation));

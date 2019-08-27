@@ -1,4 +1,4 @@
-function sendCreateStationAJAX() {
+function createStation() {
     var params = {
         name: document.getElementById('createStationName').value,
         latitude: document.getElementById('createStationLatitude').value,
@@ -23,7 +23,6 @@ function sendCreateStationAJAX() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
             var JSONResponse = JSON.parse(xhr.responseText);
-            //TODO: handle this check at the client side also
             if (JSONResponse.success === "true") {
                 $('#modalCreateStation').modal('hide');
                 document.getElementById("toastCreateStationBody").innerHTML = JSONResponse.text;
@@ -67,7 +66,7 @@ function checkCreateStationFieldCorrectness() {
     var divCreateStationModalBody = document.getElementById("createStationModalBody");
     if (checkEveryInputFilled()) {
         if (checkLatLongAltFloat()) {
-            sendCreateStationAJAX();
+            createStation();
         } else {
             insertAlert(divCreateStationModalBody, "Latitude, Longitude and Altitude must be numbers!");
             $('#modalCreateStation').animate({ scrollTop: 0 }, 'slow');

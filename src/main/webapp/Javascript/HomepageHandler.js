@@ -161,7 +161,9 @@ function requestDataForGraph() {
         }
     };
     xhr.send();
-    document.getElementById("timeSeriesPlot").appendChild(generateSpinner("Please wait..."));
+    var divTimeSeriesPlot = document.getElementById("timeSeriesPlot");
+    divTimeSeriesPlot.innerHTML = "";
+    divTimeSeriesPlot.appendChild(generateSpinner("Please wait..."));
     $('#timeSeriesPlot').hide();
     $('#timeSeriesPlot').slideDown("slow");
 
@@ -209,7 +211,6 @@ function setAdditionalFieldOption() {
         if (additionalFieldOpt)
             additionalFieldOpt.parentNode.removeChild(additionalFieldOpt);
     }
-
 
 }
 
