@@ -43,7 +43,7 @@ public class UploadDataServlet extends HttpServlet {
         try {
             for (CSVRecord record : records) {
                 try {
-                    Long timestamp = Long.parseLong(record.get("\uFEFFtimestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
+                    Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
                     Float temperature = Float.parseFloat(record.get("temperature"));
                     Float pressure = Float.parseFloat(record.get("pressure"));
                     Float humidity = Float.parseFloat(record.get("humidity"));

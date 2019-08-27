@@ -13,7 +13,7 @@ public class DatumPK implements Serializable {
 
     private Long timestamp;
 
-    @JsonIgnore//This annotation is added in order to correctly serialize into json object a Station (avoiding circular references)
+    //@JsonIgnore//This annotation is added in order to correctly serialize into json object a Station (avoiding circular references)
     @ManyToOne
     @JoinColumn(name="idStation")
     private Station station;

@@ -94,7 +94,7 @@ public class HibernateUtil
         int batchSize = Integer.parseInt(new Configuration().configure().getProperty("hibernate.jdbc.batch_size"));
         for (Object datum : data) {
             i++;
-            session.persist(datum);
+            session.save(datum);
             if (i % batchSize == 0) {
                 session.flush();
                 session.clear();
