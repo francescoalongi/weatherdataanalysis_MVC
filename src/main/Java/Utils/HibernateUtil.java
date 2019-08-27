@@ -91,7 +91,7 @@ public class HibernateUtil
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tr = session.beginTransaction();
         int i = 0;
-        Integer batchSize = Integer.parseInt(new Configuration().configure().getProperty("hibernate.jdbc.batch_size"));
+        int batchSize = Integer.parseInt(new Configuration().configure().getProperty("hibernate.jdbc.batch_size"));
         for (Object datum : data) {
             i++;
             session.persist(datum);

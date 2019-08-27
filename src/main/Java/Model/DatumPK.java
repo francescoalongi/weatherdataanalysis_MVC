@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 public class DatumPK implements Serializable {
@@ -38,5 +39,19 @@ public class DatumPK implements Serializable {
 
     public void setStation(Station station) {
         this.station = station;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DatumPK datumPK = (DatumPK) o;
+        return timestamp.equals(datumPK.timestamp) &&
+                station.equals(datumPK.station);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timestamp, station);
     }
 }

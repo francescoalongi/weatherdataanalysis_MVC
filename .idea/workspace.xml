@@ -8,9 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DataForGraph.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumForGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumForGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumPK.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumPK.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -250,7 +252,17 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@6c291bc9" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@2b5a1bcf" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@112838e3" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -307,7 +319,11 @@
       <workItem from="1566516188116" duration="3003000" />
       <workItem from="1566561692215" duration="957000" />
       <workItem from="1566608421429" duration="1184000" />
-      <workItem from="1566661623611" duration="10397000" />
+      <workItem from="1566661623611" duration="13459000" />
+      <workItem from="1566776396238" duration="280000" />
+      <workItem from="1566778706647" duration="3662000" />
+      <workItem from="1566832038774" duration="8376000" />
+      <workItem from="1566865448297" duration="3864000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -414,7 +430,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566669640314</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension.">
+      <created>1566676621117</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1566676621117</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -464,7 +487,8 @@
     <MESSAGE value="QueryDataGraphServlet.java works: it creates a list of DataForGraph.java&#10;which represents the list of data for each station selected. Note that&#10;DataForGraph.java is composed by the id of the station and a list of&#10;DatumForGraph.java. The result is then converted in json and passed to&#10;the page." />
     <MESSAGE value="QueryDataGraphServlet.java is now passing the right set of arrays to&#10;js for displaying data on the graph." />
     <MESSAGE value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
-    <option name="LAST_COMMIT_MESSAGE" value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
+    <MESSAGE value="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension." />
+    <option name="LAST_COMMIT_MESSAGE" value="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -476,9 +500,9 @@
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java</url>
-          <line>91</line>
-          <option name="timeStamp" value="20" />
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

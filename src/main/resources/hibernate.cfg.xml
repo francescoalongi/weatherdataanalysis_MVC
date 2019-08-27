@@ -12,14 +12,14 @@
 
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
-        <property name="hibernate.jdbc.batch_size">50</property>
+        <property name="hibernate.jdbc.batch_size">20</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
-        <property name="use_sql_comments">true</property>
         <property name="hibernate.order_inserts">true</property>
         <property name="hibernate.order_updates">true</property>
         <property name="hibernate.jdbc.batch_versioned_data">true</property>
+        <property name="use_sql_comments">true</property>
 
         <mapping class="Model.Datum"/>
         <mapping class="Model.DatumCountry"/>

@@ -1,12 +1,10 @@
-/*package Controller;
+package Controller;
 
 import Model.*;
 import Utils.HibernateUtil;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,30 +61,30 @@ class DownloadDataFromFile implements Runnable {
             String windDirection = records.get(0).get("direction (sector)");
             Float additionalField;
             Datum datum;
+            DatumPK pk = new DatumPK(Long.parseLong(timestamp), station);
             switch (station.getType().toLowerCase()) {
                 case "city":
                     additionalField = Float.parseFloat(records.get(0).get("pollutionLevel"));
-                    datum = new DatumCity(Long.parseLong(timestamp), temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
+                    datum = new DatumCity(pk, temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
                     break;
                 case "country":
                     additionalField = Float.parseFloat(records.get(0).get("dew point"));
-                    datum = new DatumCountry(Long.parseLong(timestamp), temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
+                    datum = new DatumCountry(pk, temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
                     break;
                 case "mountain":
                     additionalField = Float.parseFloat(records.get(0).get("snowLevel"));
-                    datum = new DatumMountain(Long.parseLong(timestamp), temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
+                    datum = new DatumMountain(pk, temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
                     break;
                 case "sea":
                     additionalField = Float.parseFloat(records.get(0).get("uvRadiation"));
-                    datum = new DatumSea(Long.parseLong(timestamp), temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
+                    datum = new DatumSea(pk, temperature, pressure, humidity, rain, windModule, windDirection, additionalField);
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
-            datum.setStation(station);
             HibernateUtil.executeInsert(datum);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-}*/
+}
