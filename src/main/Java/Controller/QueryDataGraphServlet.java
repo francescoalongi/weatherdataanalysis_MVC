@@ -38,8 +38,8 @@ public class QueryDataGraphServlet extends HttpServlet {
         } else {
             ArrayList<Integer> stationIds = new ArrayList<>();
             int id = 0;
-            Long beginTimestamp = 0L;
-            Long endTimestamp = 0L;
+            long beginTimestamp = 0L;
+            long endTimestamp = 0L;
             while (request.getParameter("station" + id) != null && !request.getParameter("station" + id).isEmpty())
                 stationIds.add(Integer.valueOf(request.getParameter("station" + id++)));
             try {
@@ -59,7 +59,8 @@ public class QueryDataGraphServlet extends HttpServlet {
                         "from Station where idStation = :idStation", false, param);
                 param.put("begin_timestamp", beginTimestamp);
                 param.put("end_timestamp", endTimestamp);
-                String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp AND d.datumPK.station.id = :idStation";
+                String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp " +
+                        "AND d.datumPK.station.id = :idStation";
                 switch (station.getType().toLowerCase()) {
                     case "city":
                         getDataToDownloadQuery = "from DatumCity as d " + getDataToDownloadQuery;

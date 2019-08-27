@@ -43,6 +43,12 @@
         <servlet-class>Controller.QueryDataGraphServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>RegisterStationServlet</servlet-name>
+        <servlet-class>Controller.RegisterStationServlet</servlet-class>
+    </servlet>
+
+
     <!-- servlet mapping-->
     <servlet-mapping>
         <servlet-name>InitServlet</servlet-name>
@@ -52,6 +58,11 @@
     <servlet-mapping>
         <servlet-name>DownloadDataServlet</servlet-name>
         <url-pattern>/DownloadData</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>RegisterStationServlet</servlet-name>
+        <url-pattern>/RegisterStation</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

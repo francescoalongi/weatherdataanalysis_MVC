@@ -38,19 +38,19 @@ public class DownloadDataServlet extends HttpServlet {
                 "from Station where idStation = :idStation", false, param);
         param.put("begin_timestamp", beginTimestamp);
         param.put("end_timestamp", endTimestamp);
-        String getDataToDownloadQuery = "where timestamp between :begin_timestamp AND :end_timestamp AND idStation = :idStation";
+        String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp AND d.datumPK.station.id = :idStation";
         switch (station.getType().toLowerCase()) {
             case "city":
-                getDataToDownloadQuery = "from DatumCity " + getDataToDownloadQuery;
+                getDataToDownloadQuery = "from DatumCity as d " + getDataToDownloadQuery;
                 break;
             case "country":
-                getDataToDownloadQuery = "from DatumCountry " + getDataToDownloadQuery;
+                getDataToDownloadQuery = "from DatumCountry as d " + getDataToDownloadQuery;
                 break;
             case "mountain":
-                getDataToDownloadQuery = "from DatumMountain " + getDataToDownloadQuery;
+                getDataToDownloadQuery = "from DatumMountain as d " + getDataToDownloadQuery;
                 break;
             case "sea":
-                getDataToDownloadQuery = "from DatumSea " + getDataToDownloadQuery;
+                getDataToDownloadQuery = "from DatumSea as d " + getDataToDownloadQuery;
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -58,7 +58,9 @@ public class DownloadDataServlet extends HttpServlet {
         //retrieve the data required
         List data = (List) HibernateUtil.executeSelect(getDataToDownloadQuery, true, param);
         if (data.size() == 0) {
-            //@TODO: handle this case: exit and notify the user that the range selected produced zero results
+            /* @TODO: handle this case: exit and notify the user that the range selected produced zero results
+             * forward to error.jsp
+             */
             return;
         }
         //create the file

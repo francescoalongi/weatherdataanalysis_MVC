@@ -20,9 +20,9 @@ public class PeriodicDataAcquirer {
 
     private ScheduledExecutorService scheduler;
 
-    private PeriodicDataAcquirer(String path, Station station) {
+    PeriodicDataAcquirer(String path, Station station, int min) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new DownloadDataFromFile(path, station), 0, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(new DownloadDataFromFile(path, station), 0, min, TimeUnit.MINUTES);
     }
 
     public void close() {

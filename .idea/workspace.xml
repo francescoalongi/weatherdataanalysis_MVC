@@ -7,12 +7,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/Java/Model/MinimizedStation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/Java/Controller/RegisterStationServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -324,7 +325,8 @@
       <workItem from="1566778706647" duration="3662000" />
       <workItem from="1566832038774" duration="8376000" />
       <workItem from="1566865448297" duration="6555000" />
-      <workItem from="1566907552899" duration="13718000" />
+      <workItem from="1566907552899" duration="13875000" />
+      <workItem from="1566931190993" duration="5343000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -445,7 +447,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566869488015</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Updated QueryDataGraphServlet.java considering new DatumPK class as primary key">
+      <created>1566921613762</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1566921613763</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -497,7 +506,8 @@
     <MESSAGE value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
     <MESSAGE value="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension." />
     <MESSAGE value="Now UploadDataServlet.java exploits batch to upload data to db.&#10;All meteovalmorea db takes about 63s to insert all tuples (order of &#10;1mln)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now UploadDataServlet.java exploits batch to upload data to db.&#10;All meteovalmorea db takes about 63s to insert all tuples (order of &#10;1mln)" />
+    <MESSAGE value="Updated QueryDataGraphServlet.java considering new DatumPK class as primary key" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated QueryDataGraphServlet.java considering new DatumPK class as primary key" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -515,22 +525,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java</url>
-          <line>80</line>
+          <line>81</line>
           <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/RegisterStationServlet.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js</url>
-          <line>12</line>
-          <properties lambdaOrdinal="-1" />
+          <line>5</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
-        <watch expression="request.getParameter(&quot;station&quot; + id)" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/weatherdataanalysis_MVC$Tomcat_Server.ic" NAME="Tomcat Server Coverage Results" MODIFIED="1565623976827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
