@@ -45,6 +45,8 @@ function insertAlert(divToWhichAppendAlert, text){
         divAlert.innerText = text;
 
         divToWhichAppendAlert.insertBefore(divAlert, divToWhichAppendAlert.firstChild);
+        $('#divAlert').hide();
+        $('#divAlert').slideDown("slow");
     } else {
         var existentDivAlert = document.getElementById("divAlert");
         existentDivAlert.innerText = text;
