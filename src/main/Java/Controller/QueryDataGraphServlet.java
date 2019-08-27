@@ -38,8 +38,8 @@ public class QueryDataGraphServlet extends HttpServlet {
         } else {
             ArrayList<Integer> stationIds = new ArrayList<>();
             int id = 0;
-            long beginTimestamp = 0L;
-            long endTimestamp = 0L;
+            Long beginTimestamp = 0L;
+            Long endTimestamp = 0L;
             while (request.getParameter("station" + id) != null && !request.getParameter("station" + id).isEmpty())
                 stationIds.add(Integer.valueOf(request.getParameter("station" + id++)));
             try {
@@ -59,25 +59,25 @@ public class QueryDataGraphServlet extends HttpServlet {
                         "from Station where idStation = :idStation", false, param);
                 param.put("begin_timestamp", beginTimestamp);
                 param.put("end_timestamp", endTimestamp);
-                String getDataToDownloadQuery = "where timestamp between :begin_timestamp AND :end_timestamp AND idStation = :idStation";
+                String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp AND d.datumPK.station.id = :idStation";
                 switch (station.getType().toLowerCase()) {
                     case "city":
-                        getDataToDownloadQuery = "from DatumCity " + getDataToDownloadQuery;
+                        getDataToDownloadQuery = "from DatumCity as d " + getDataToDownloadQuery;
                         break;
                     case "country":
-                        getDataToDownloadQuery = "from DatumCountry " + getDataToDownloadQuery;
+                        getDataToDownloadQuery = "from DatumCountry as d " + getDataToDownloadQuery;
                         break;
                     case "mountain":
-                        getDataToDownloadQuery = "from DatumMountain " + getDataToDownloadQuery;
+                        getDataToDownloadQuery = "from DatumMountain as d " + getDataToDownloadQuery;
                         break;
                     case "sea":
-                        getDataToDownloadQuery = "from DatumSea " + getDataToDownloadQuery;
+                        getDataToDownloadQuery = "from DatumSea as d " + getDataToDownloadQuery;
                         break;
                     default:
                         throw new IllegalArgumentException();
                 }
                 //retrieve the data required
-                String getTimestampQuery = "select timestamp*1000 " + getDataToDownloadQuery;
+                String getTimestampQuery = "select d.datumPK.timestamp*1000 " + getDataToDownloadQuery;
                 String getMeasurementsQuery = "select " + request.getParameter("weatherDimension").toLowerCase()
                         + " " + getDataToDownloadQuery;
                 List<Float> measurements =

@@ -51,7 +51,7 @@ public class HibernateUtil
                 query.setParameter(entry.getKey(), entry.getValue());
         Object results;
         if (isResultList)
-            results = query.list();
+            results = query.getResultList();
         else
             results = query.getSingleResult();
         try {

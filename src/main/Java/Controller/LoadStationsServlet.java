@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.MinimizedStation;
 import Model.Station;
 import Utils.HibernateUtil;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,7 +26,7 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List results = (List) HibernateUtil.executeSelect("FROM Station", true);
+        List<MinimizedStation> results = (List<MinimizedStation>) HibernateUtil.executeSelect("SELECT new Model.MinimizedStation(idStation,name,type) FROM Station", true);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(results);
 

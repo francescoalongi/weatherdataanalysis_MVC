@@ -53,12 +53,12 @@ function fillUploadModal() {
 
                 for (var i = 0; i < JSONArray.length; i++) {
                     var div = document.createElement("div");
-                    div.setAttribute("class", "custom-control custom-radio")
+                    div.setAttribute("class", "custom-control custom-radio");
                     var input = document.createElement("input");
                     input.setAttribute("type", "radio");
                     input.setAttribute("class", "custom-control-input");
                     input.setAttribute("name", "radios");
-                    input.setAttribute("value", JSONArray[i].idStation)
+                    input.setAttribute("value", JSONArray[i].idStation);
                     input.setAttribute("id", "defaultGroup" + i);
 
                     var label = document.createElement("label");

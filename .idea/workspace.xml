@@ -7,12 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6618841b-b8ee-4682-a1b9-22fa22161ea6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/Java/Model/MinimizedStation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/PeriodicDataAcquirer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Java/Model/DatumPK.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Model/DatumPK.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/LoadStationsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Java/Utils/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -252,17 +252,17 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@55d6bbac" type="7427dc5b:ServiceModel$ServiceGroupNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@2b5a1bcf" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@55d6bbac" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4d6f5deb" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@8157ccc" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@112838e3" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@55d6bbac" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@37963b8f" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -323,7 +323,8 @@
       <workItem from="1566776396238" duration="280000" />
       <workItem from="1566778706647" duration="3662000" />
       <workItem from="1566832038774" duration="8376000" />
-      <workItem from="1566865448297" duration="3864000" />
+      <workItem from="1566865448297" duration="6555000" />
+      <workItem from="1566907552899" duration="13718000" />
     </task>
     <task id="LOCAL-00001" summary="Added classes related to the Model. I'm trying to figure out how to create @OneToMany relationship with a super abstract class (this would be done in order to have one single @OneToMany relationship from Station to Datum, instead of having four different @OneToMany from Station to DatumCountry, from Station to DatumCity...).">
       <created>1558479783526</created>
@@ -437,7 +438,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566676621117</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Now UploadDataServlet.java exploits batch to upload data to db.&#10;All meteovalmorea db takes about 63s to insert all tuples (order of &#10;1mln)">
+      <created>1566869488015</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1566869488015</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -488,21 +496,33 @@
     <MESSAGE value="QueryDataGraphServlet.java is now passing the right set of arrays to&#10;js for displaying data on the graph." />
     <MESSAGE value="QueryDataGraphServlet.java is now passing the timestamp array in js&#10;format." />
     <MESSAGE value="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension." />
-    <option name="LAST_COMMIT_MESSAGE" value="QueryDataGraphServlet.java is now passing also the unit of measure of &#10;the weather dimension." />
+    <MESSAGE value="Now UploadDataServlet.java exploits batch to upload data to db.&#10;All meteovalmorea db takes about 63s to insert all tuples (order of &#10;1mln)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now UploadDataServlet.java exploits batch to upload data to db.&#10;All meteovalmorea db takes about 63s to insert all tuples (order of &#10;1mln)" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Java/Controller/DownloadDataServlet.java</url>
-          <line>26</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/Java/Controller/UploadDataServlet.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="13" />
+          <line>33</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Java/Controller/QueryDataGraphServlet.java</url>
+          <line>80</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/main/webapp/Javascript/UploadDataModal.js</url>
+          <line>12</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
