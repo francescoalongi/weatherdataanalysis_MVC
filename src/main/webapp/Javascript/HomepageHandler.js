@@ -102,17 +102,6 @@ function requestDataForGraph() {
         queryString = queryString.concat("showAvg=", showAverage.toString());
     }
 
-    var showVar = document.getElementById("showVarCheckbox").checked;
-    if (showVar) {
-        if (!firstPar) {
-            queryString = queryString.concat("&");
-        } else {
-            queryString = queryString.concat("?");
-            firstPar = false;
-        }
-        queryString = queryString.concat("showVar=", showVar.toString());
-    }
-
     xhr.open('GET', getContextPath() + "/QueryDataGraph".concat(queryString));
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.onreadystatechange = function() {
