@@ -289,12 +289,6 @@
                 <label class="custom-control-label" for="showAvgCheckbox">Show average</label>
             </div>
         </div>
-        <div class="col-md-auto">
-            <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" class="custom-control-input" id="showVarCheckbox">
-                <label class="custom-control-label" for="showVarCheckbox">Show variance</label>
-            </div>
-        </div>
     </div>
 
     <div class="row">
