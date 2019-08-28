@@ -49,7 +49,7 @@ function removeElementFromArray(array, elementToBeRemoved) {
 
 function requestDataForGraph() {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var queryString = "?";
+    var queryString = "";
     var selects = document.querySelectorAll('[id^="selectForStation"]');
     var firstPar = true;
     for (var i = 0, j = 0; i < selects.length; i++) {
@@ -59,6 +59,7 @@ function requestDataForGraph() {
                     queryString = queryString.concat("&");
                 } else {
                     firstPar = false;
+                    queryString = queryString.concat("?");
                 }
                 queryString = queryString.concat("station", j.toString(), "=", idSelectedStation.toString());
                 j++;
@@ -72,6 +73,7 @@ function requestDataForGraph() {
             queryString = queryString.concat("&");
         } else {
             firstPar = false;
+            queryString = queryString.concat("?");
         }
         queryString = queryString.concat("weatherDimension=",weatherDimension.toString());
     }
@@ -84,6 +86,7 @@ function requestDataForGraph() {
             queryString = queryString.concat("&");
         } else {
             firstPar = false;
+            queryString = queryString.concat("?");
         }
         queryString = queryString.concat("startDate=", startDate.toString(), "&endDate=", endDate.toString());
     }
@@ -94,6 +97,7 @@ function requestDataForGraph() {
             queryString = queryString.concat("&");
         } else {
             firstPar = false;
+            queryString = queryString.concat("?");
         }
         queryString = queryString.concat("showAvg=", showAverage.toString());
     }
@@ -102,6 +106,9 @@ function requestDataForGraph() {
     if (showVar) {
         if (!firstPar) {
             queryString = queryString.concat("&");
+        } else {
+            queryString = queryString.concat("?");
+            firstPar = false;
         }
         queryString = queryString.concat("showVar=", showVar.toString());
     }
@@ -111,37 +118,10 @@ function requestDataForGraph() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState > 3 && xhr.status === 200) {
             var JSONResponse = JSON.parse(xhr.responseText);
+            var plotDiv = document.getElementById("timeSeriesPlot");
+            plotDiv.innerHTML = ""; // delete spinner
             if (JSONResponse.success === "true") {
-                var plotDiv = document.getElementById("timeSeriesPlot");
-                plotDiv.innerHTML = ""; // delete spinner
                 var dataForGraph = JSONResponse.text;
-
-                var data = [];
-                for (var i = 0; i < dataForGraph.length; i++) {
-                    dataForGraph[i].timestamps.forEach(function (part, index) {
-                        this[index] = new Date(this[index]);
-                    }, dataForGraph[i].timestamps);
-
-                    var stationName = dataForGraph[i].stationName;
-                    if (dataForGraph.length !== 1)
-                        stationName = stationName + " (" + dataForGraph[i].unitOfMeasure + ")";
-
-                    var trace = {
-                        type: "scatter",
-                        mode: "lines",
-                        name: stationName,
-                        x: dataForGraph[i].timestamps,
-                        y: dataForGraph[i].measurements,
-                        line: {color: getRandomColor()}
-                    };
-                    data.push(trace);
-                }
-
-                var selectWeatherDimension = document.getElementById("selectWeatherDimension");
-                var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
-
-                if (dataForGraph.length === 1)
-                    weatherDimension = weatherDimension + " (" + dataForGraph[0].unitOfMeasure + ")";
 
                 var layout = {
                     yaxis: {
@@ -153,16 +133,56 @@ function requestDataForGraph() {
                         title: {
                             text: 'Date',
                         }
-                    }
+                    },
+                    shapes: []
                 };
+                var data = [];
+                for (var i = 0; i < dataForGraph.length; i++) {
+                    dataForGraph[i].timestamps.forEach(function (part, index) {
+                        this[index] = new Date(this[index]);
+                    }, dataForGraph[i].timestamps);
+
+                    var stationName = dataForGraph[i].stationName;
+                    if (dataForGraph.length !== 1)
+                        stationName = stationName + " (" + dataForGraph[i].unitOfMeasure + ")";
+
+                    var colorGenerated = getRandomColor();
+                    var trace = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: stationName,
+                        x: dataForGraph[i].timestamps,
+                        y: dataForGraph[i].measurements,
+                        line: {color: colorGenerated}
+                    };
+
+                    if (dataForGraph[i].avg) {
+
+                        var avgTrace = {
+                            type: 'line',
+                            xref: 'paper',
+                            x0: 0,
+                            y0: dataForGraph[i].avg,
+                            x1: 1,
+                            y1: dataForGraph[i].avg,
+                            line:{color: colorGenerated}
+                        };
+                        layout.shapes.push(avgTrace)
+                    }
+                    data.push(trace);
+                }
+
+                var selectWeatherDimension = document.getElementById("selectWeatherDimension");
+                var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
+
+                if (dataForGraph.length === 1)
+                    weatherDimension = weatherDimension + " (" + dataForGraph[0].unitOfMeasure + ")";
 
                 Plotly.newPlot('timeSeriesPlot', data, layout);
                 $('#timeSeriesPlot').hide();
                 $('#timeSeriesPlot').slideDown("slow");
             } else {
-                var divTimeSeriesPlot = document.getElementById("timeSeriesPlot");
-                insertAlert(divTimeSeriesPlot, JSONResponse.text);
-
+                insertAlert(plotDiv, JSONResponse.text);
             }
 
         }
