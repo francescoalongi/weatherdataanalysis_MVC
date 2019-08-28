@@ -31,8 +31,10 @@ public class QueryDataGraphServlet extends HttpServlet {
         // where the right-hand side of the stations parameter is the id of the station.
         // If a parameter is missing from the query string, it means that the user has not selected it.
         //check parameters
-        if (request.getParameter("station0").isEmpty() || request.getParameter("weatherDimension").isEmpty() ||
-                request.getParameter("startDate").isEmpty() || request.getParameter("endDate").isEmpty()) {
+        if (request.getParameter("station0") == null || request.getParameter("station0").isEmpty() ||
+                request.getParameter("weatherDimension") == null || request.getParameter("weatherDimension").isEmpty() ||
+                request.getParameter("startDate") == null || request.getParameter("startDate").isEmpty() ||
+                request.getParameter("endDate") == null || request.getParameter("endDate").isEmpty()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"success\": \"false\", \"text\": \"You have to fill all the form to get a result.\"}");
