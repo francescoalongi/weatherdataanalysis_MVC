@@ -27,8 +27,7 @@ public class RegisterStationServlet extends HttpServlet {
 
         Map<String, Object> param = new HashMap<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-        String json = br.readLine();
-        JSONObject data = new JSONObject(json);
+        JSONObject data = new JSONObject(br.readLine());
         URL url;
         try {
              url = new URL(data.getString("URL"));
@@ -51,6 +50,7 @@ public class RegisterStationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setAttribute("Error", "Error! GET request not supported");
+        getServletContext().getRequestDispatcher("/Error").forward(request, response);
     }
 }

@@ -91,10 +91,20 @@
         <jsp-file>/WEB-INF/View/Homepage.jsp</jsp-file>
     </servlet>
 
+    <servlet>
+        <servlet-name>Error</servlet-name>
+        <jsp-file>/WEB-INF/View/Error.jsp</jsp-file>
+    </servlet>
+
     <!--jsp mapping-->
     <servlet-mapping>
         <servlet-name>Homepage</servlet-name>
         <url-pattern>/Homepage</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Error</servlet-name>
+        <url-pattern>/Error</url-pattern>
     </servlet-mapping>
 
 </web-app>

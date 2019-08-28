@@ -39,6 +39,7 @@ public class CreateStationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setAttribute("Error", "Error! GET request not supported!");
+        getServletContext().getRequestDispatcher("/Error").forward(request, response);
     }
 }

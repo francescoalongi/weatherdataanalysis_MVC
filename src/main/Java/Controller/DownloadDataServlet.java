@@ -16,7 +16,8 @@ import java.util.*;
 @WebServlet(name = "DownloadDataServlet")
 public class DownloadDataServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setAttribute("Error", "Error! POST request not supported");
+        getServletContext().getRequestDispatcher("/Error").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,9 +59,8 @@ public class DownloadDataServlet extends HttpServlet {
         //retrieve the data required
         List data = (List) HibernateUtil.executeSelect(getDataToDownloadQuery, true, param);
         if (data.size() == 0) {
-            /* @TODO: handle this case: exit and notify the user that the range selected produced zero results
-             * forward to error.jsp
-             */
+            request.setAttribute("Error", "The csv file generated is empty! Please redo the procedure selecting other dates");
+            getServletContext().getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         //create the file

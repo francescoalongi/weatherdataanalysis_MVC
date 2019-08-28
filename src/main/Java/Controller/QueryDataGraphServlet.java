@@ -19,7 +19,8 @@ import java.util.*;
 @WebServlet(name = "QueryDataGraphServlet")
 public class QueryDataGraphServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setAttribute("Error", "Error! POST request not supported");
+        getServletContext().getRequestDispatcher("/Error").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,6 +37,9 @@ public class QueryDataGraphServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"success\": \"false\", \"text\": \"You have to fill all the form to get a result.\"}");
         } else {
+            boolean isAvgRequired = false;
+            if (request.getParameter("showAvg") != null && request.getParameter("showAvg").equals("true"))
+                isAvgRequired = true;
             ArrayList<Integer> stationIds = new ArrayList<>();
             int id = 0;
             long beginTimestamp = 0L;
@@ -78,6 +82,12 @@ public class QueryDataGraphServlet extends HttpServlet {
                         throw new IllegalArgumentException();
                 }
                 //retrieve the data required
+                Double avg = null;
+                if (isAvgRequired) {
+                    String getAvg = "select avg(d." + request.getParameter("weatherDimension").toLowerCase() + ") " +
+                            getDataToDownloadQuery;
+                    avg = (Double) HibernateUtil.executeSelect(getAvg, false, param);
+                }
                 String getTimestampQuery = "select d.datumPK.timestamp*1000 " + getDataToDownloadQuery;
                 String getMeasurementsQuery = "select " + request.getParameter("weatherDimension").toLowerCase()
                         + " " + getDataToDownloadQuery;
@@ -91,7 +101,7 @@ public class QueryDataGraphServlet extends HttpServlet {
                 UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
                 try {
                     data = new DatumForGraph(stationId, station.getName(), (String) unitOfMeasure.getClass()
-                            .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp);
+                            .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp, avg);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();
                 }

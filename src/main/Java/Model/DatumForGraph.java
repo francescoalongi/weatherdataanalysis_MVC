@@ -9,13 +9,23 @@ public class DatumForGraph {
     private String unitOfMeasure;
     private List<Float> measurements;
     private List<Long> timestamps;
+    private Double avg;
 
-    public DatumForGraph(Integer idStation, String stationName, String unitOfMeasure, List<Float> measurements, List<Long> timestamps) {
+    public DatumForGraph(Integer idStation, String stationName, String unitOfMeasure, List<Float> measurements, List<Long> timestamps, Double avg) {
         this.idStation = idStation;
         this.stationName = stationName;
         this.unitOfMeasure = unitOfMeasure;
         this.measurements = measurements;
         this.timestamps = timestamps;
+        this.avg = avg;
+    }
+
+    public Double getAvg() {
+        return avg;
+    }
+
+    public void setAvg(Double avg) {
+        this.avg = avg;
     }
 
     public String getUnitOfMeasure() {

@@ -94,7 +94,8 @@ public class UploadDataServlet extends HttpServlet {
         request.getRequestDispatcher("/LoadStations").forward(request,response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        //TODO: An error page must be created to redirect users there when they perform illegal actions
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("Error", "Error! GET request not supported");
+        getServletContext().getRequestDispatcher("/Error").forward(request, response);
     }
 }

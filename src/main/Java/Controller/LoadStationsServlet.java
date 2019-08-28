@@ -18,14 +18,10 @@ import java.util.List;
 @WebServlet(name = "LoadStationsServlet")
 public class LoadStationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request,response);
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        processRequest(request, response);
-    }
-
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<MinimizedStation> results = (List<MinimizedStation>) HibernateUtil.executeSelect("SELECT new Model.MinimizedStation(idStation,name,type) FROM Station", true);
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(results);
