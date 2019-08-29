@@ -219,7 +219,7 @@
     </div>
 </div>
 
-<div class="container-fluid mt-5 ml-3">
+<div class="container-fluid mt-4">
     <%
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree((String) request.getAttribute("stations"));
@@ -272,12 +272,12 @@
    <div class="row mb-3">
        <div class="col-md-auto">
            <div class="input-group date startdate" id="divStartTimeFrame">
-               <input placeholder="Starting date" type="text" id="timeFrameStartingDate" class="form-control">
+               <input placeholder="Starting date" type="text" id="timeFrameStartingDate" class="form-control js-datetimepicker">
            </div>
        </div>
        <div class="col-md-auto">
            <div class="input-group date enddate" id="divEndTimeFrame">
-               <input placeholder="Ending date" type="text" id="timeFrameEndingDate" class="form-control">
+               <input placeholder="Ending date" type="text" id="timeFrameEndingDate" class="form-control js-datetimepicker">
            </div>
        </div>
    </div>

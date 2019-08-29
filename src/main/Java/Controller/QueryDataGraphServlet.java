@@ -57,6 +57,7 @@ public class QueryDataGraphServlet extends HttpServlet {
             } catch (Exception e) { //this generic but you can control another types of exception
                 // look the origin of exception
             }
+
             List<DatumForGraph> dataOfStations = new ArrayList<>();
             for (Integer stationId : stationIds) {
                 Map<String, Object> param = new HashMap<>();
@@ -99,21 +100,28 @@ public class QueryDataGraphServlet extends HttpServlet {
                         (List<Long>) HibernateUtil.executeSelect(getTimestampQuery, true, param);
                 String weatherDimForReflection = request.getParameter("weatherDimension").substring(0, 1).toUpperCase() +
                         request.getParameter("weatherDimension").substring(1).toLowerCase();
-                DatumForGraph data = null;
-                UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
-                try {
-                    data = new DatumForGraph(stationId, station.getName(), (String) unitOfMeasure.getClass()
-                            .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp, avg);
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
+                if (!measurements.isEmpty()) {
+                    DatumForGraph data = null;
+                    UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
+                    try {
+                        data = new DatumForGraph(stationId, station.getName(), (String) unitOfMeasure.getClass()
+                                .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp, avg);
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                    dataOfStations.add(data);
                 }
-                dataOfStations.add(data);
             }
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(dataOfStations);
+
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"success\": \"true\", \"text\":" + json + "}");
+            if (dataOfStations.isEmpty()) {
+                response.getWriter().write("{\"success\": \"false\", \"text\": \"There are no data for the selected station in the selected time frame. Try to change the request parameter or to upload some data.\"}");
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(dataOfStations);
+                response.getWriter().write("{\"success\": \"true\", \"text\":" + json + "}");
+            }
         }
     }
 }
