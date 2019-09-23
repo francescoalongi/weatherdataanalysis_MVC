@@ -1,4 +1,4 @@
-# Weather Data Analisys
+# Weather Data Analysis
 This project is a web application developed using the MVC pattern which is intended to store weather data into a database and provide statistical analysis based on them.
 
 ## Class diagram
