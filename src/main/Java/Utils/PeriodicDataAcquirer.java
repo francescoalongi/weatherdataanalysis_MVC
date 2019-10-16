@@ -1,7 +1,6 @@
-package Controller;
+package Utils;
 
 import Model.*;
-import Utils.HibernateUtil;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -20,7 +19,7 @@ public class PeriodicDataAcquirer {
 
     private ScheduledExecutorService scheduler;
 
-    PeriodicDataAcquirer(String path, Station station, int min) {
+    public PeriodicDataAcquirer(String path, Station station, int min) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new DownloadDataFromFile(path, station), 0, min, TimeUnit.MINUTES);
     }

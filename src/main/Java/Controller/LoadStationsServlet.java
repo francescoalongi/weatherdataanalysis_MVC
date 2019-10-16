@@ -1,11 +1,8 @@
 package Controller;
 
 import Model.MinimizedStation;
-import Model.Station;
 import Utils.HibernateUtil;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

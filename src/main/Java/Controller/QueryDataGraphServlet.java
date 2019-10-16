@@ -92,14 +92,24 @@ public class QueryDataGraphServlet extends HttpServlet {
                     avg = (Double) HibernateUtil.executeSelect(getAvg, false, param);
                 }
                 String getTimestampQuery = "select d.datumPK.timestamp*1000 " + getDataToDownloadQuery;
-                String getMeasurementsQuery = "select " + request.getParameter("weatherDimension").toLowerCase()
+
+
+                String[] splittedWeatherDimension = request.getParameter("weatherDimension").toLowerCase().split(" ");
+                String compliantWeatherDimension = splittedWeatherDimension[0].toLowerCase();
+                for (int i = 1; i < splittedWeatherDimension.length; i++) {
+                    char[] chars = splittedWeatherDimension[i].toCharArray();
+                    chars[0] = Character.toUpperCase(chars[0]);
+                    compliantWeatherDimension = compliantWeatherDimension.concat(String.valueOf(chars));
+                }
+
+                String getMeasurementsQuery = "select " + compliantWeatherDimension
                         + " " + getDataToDownloadQuery;
                 List<Float> measurements =
                         (List<Float>) HibernateUtil.executeSelect(getMeasurementsQuery, true, param);
                 List<Long> timestamp =
                         (List<Long>) HibernateUtil.executeSelect(getTimestampQuery, true, param);
-                String weatherDimForReflection = request.getParameter("weatherDimension").substring(0, 1).toUpperCase() +
-                        request.getParameter("weatherDimension").substring(1).toLowerCase();
+                String weatherDimForReflection = compliantWeatherDimension.substring(0, 1).toUpperCase() +
+                        compliantWeatherDimension.substring(1);
                 if (!measurements.isEmpty()) {
                     DatumForGraph data = null;
                     UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();

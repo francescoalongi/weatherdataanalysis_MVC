@@ -258,7 +258,6 @@
                 <option>Humidity</option>
                 <option>Rain</option>
                 <option>Wind module</option>
-                <option>Wind direction</option>
             </select>
         </div>
     </div>

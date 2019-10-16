@@ -1,7 +1,5 @@
 package Model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
