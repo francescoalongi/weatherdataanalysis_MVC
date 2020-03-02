@@ -1,13 +1,7 @@
 package Model;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name="UnitOfMeasure")
 public class UnitOfMeasure {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUnitOfMeasure;
     private String temperature;
     private String pressure;

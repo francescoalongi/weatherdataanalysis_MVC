@@ -1,7 +1,8 @@
 package Controller;
 
 import Model.MinimizedStation;
-import Utils.HibernateUtil;
+import Utils.Neo4jUtil;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -10,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "LoadStationsServlet")
 public class LoadStationsServlet extends HttpServlet {
@@ -19,9 +23,14 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<MinimizedStation> results = (List<MinimizedStation>) HibernateUtil.executeSelect("SELECT new Model.MinimizedStation(idStation,name,type) FROM Station", true);
+        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN S", true);
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(results);
+        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        List<MinimizedStation> list = new ArrayList<>();
+        for (Map<String, Object> map : results) {
+            list.add(mapper.convertValue(map, MinimizedStation.class));
+        }
+        String json = mapper.writeValueAsString(list);
 
         if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
             response.setContentType("application/json");

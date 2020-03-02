@@ -1,17 +1,22 @@
 package Model;
 
-import javax.persistence.*;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-@Entity
-@Table(name = "DatumSea")
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl=DatumSea.class)
 public class DatumSea extends Datum {
 
     private Float uvRadiation;
 
     public DatumSea() {}
 
-    public DatumSea(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
-        super(datumPK,temperature,pressure,humidity,rain,windModule,windDirection);
+    public DatumSea(//DatumPK datumPK,
+                    Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
+        super(timestamp,idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.uvRadiation = uvRadiation;
     }
 
@@ -32,4 +37,5 @@ public class DatumSea extends Datum {
     public String getFieldsAsCSV() {
         return super.getFieldsAsCSV() + "," + uvRadiation;
     }
+
 }

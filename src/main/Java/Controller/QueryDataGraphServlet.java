@@ -3,7 +3,7 @@ package Controller;
 import Model.DatumForGraph;
 import Model.Station;
 import Model.UnitOfMeasure;
-import Utils.HibernateUtil;
+import Utils.Neo4jUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -60,39 +60,6 @@ public class QueryDataGraphServlet extends HttpServlet {
 
             List<DatumForGraph> dataOfStations = new ArrayList<>();
             for (Integer stationId : stationIds) {
-                Map<String, Object> param = new HashMap<>();
-                param.put("idStation", stationId);
-                Station station = (Station) HibernateUtil.executeSelect(
-                        "from Station where idStation = :idStation", false, param);
-                param.put("begin_timestamp", beginTimestamp);
-                param.put("end_timestamp", endTimestamp);
-                String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp " +
-                        "AND d.datumPK.station.id = :idStation";
-                switch (station.getType().toLowerCase()) {
-                    case "city":
-                        getDataToDownloadQuery = "from DatumCity as d " + getDataToDownloadQuery;
-                        break;
-                    case "country":
-                        getDataToDownloadQuery = "from DatumCountry as d " + getDataToDownloadQuery;
-                        break;
-                    case "mountain":
-                        getDataToDownloadQuery = "from DatumMountain as d " + getDataToDownloadQuery;
-                        break;
-                    case "sea":
-                        getDataToDownloadQuery = "from DatumSea as d " + getDataToDownloadQuery;
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-                //retrieve the data required
-                Double avg = null;
-                if (isAvgRequired) {
-                    String getAvg = "select avg(d." + request.getParameter("weatherDimension").toLowerCase() + ") " +
-                            getDataToDownloadQuery;
-                    avg = (Double) HibernateUtil.executeSelect(getAvg, false, param);
-                }
-                String getTimestampQuery = "select d.datumPK.timestamp*1000 " + getDataToDownloadQuery;
-
 
                 String[] splittedWeatherDimension = request.getParameter("weatherDimension").toLowerCase().split(" ");
                 String compliantWeatherDimension = splittedWeatherDimension[0].toLowerCase();
@@ -102,23 +69,92 @@ public class QueryDataGraphServlet extends HttpServlet {
                     compliantWeatherDimension = compliantWeatherDimension.concat(String.valueOf(chars));
                 }
 
-                String getMeasurementsQuery = "select " + compliantWeatherDimension
-                        + " " + getDataToDownloadQuery;
-                List<Float> measurements =
-                        (List<Float>) HibernateUtil.executeSelect(getMeasurementsQuery, true, param);
-                List<Long> timestamp =
-                        (List<Long>) HibernateUtil.executeSelect(getTimestampQuery, true, param);
-                String weatherDimForReflection = compliantWeatherDimension.substring(0, 1).toUpperCase() +
-                        compliantWeatherDimension.substring(1);
+                Map<String, Object> param = new HashMap<>();
+                param.put("idStation", stationId);
+                String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
+                        "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN ";
+
+                String stationInfoQueryString = "MATCH (n:Station), (n)-[:MEASURED_USING]->(m) WHERE id(n) = $idStation RETURN ";
+
+                param.put("beginTimestamp", beginTimestamp);
+                param.put("endTimestamp", endTimestamp);
+
+                String avgQueryString = queryString;
+                queryString += "timestamp(m.datetime) AS timestamp,";
+                switch (compliantWeatherDimension) {
+                    case "temperature":
+                        if (isAvgRequired) avgQueryString += "avg(m.temperature) AS avg";
+                        queryString += "m.temperature AS measurement";
+                        stationInfoQueryString += "m.temperature AS unitOfMeasure";
+                        break;
+                    case "pressure":
+                        if (isAvgRequired) avgQueryString += "avg(m.pressure) AS avg";
+                        queryString += "m.pressure AS measurement";
+                        stationInfoQueryString += "m.pressure AS unitOfMeasure";
+                        break;
+                    case "humidity":
+                        if (isAvgRequired) avgQueryString += "avg(m.humidity) AS avg";
+                        queryString += "m.humidity AS measurement";
+                        stationInfoQueryString += "m.humidity AS unitOfMeasure";
+                        break;
+                    case "rain":
+                        if (isAvgRequired) avgQueryString += "avg(m.rain) AS avg";
+                        queryString += "m.rain AS measurement";
+                        stationInfoQueryString += "m.rain AS unitOfMeasure";
+                        break;
+                    case "windModule":
+                        if (isAvgRequired) avgQueryString += "avg(m.windModule) AS avg";
+                        queryString += "m.windModule AS measurement";
+                        stationInfoQueryString += "m.windModule AS unitOfMeasure";
+                        break;
+                    case "dewPoint":
+                        if (isAvgRequired) avgQueryString += "avg(m.dewPoint) AS avg";
+                        queryString += "m.dewPoint AS measurement";
+                        stationInfoQueryString += "m.dewPoint AS unitOfMeasure";
+                        break;
+                    case "snowLevel":
+                        if (isAvgRequired) avgQueryString += "avg(m.snowLevel) AS avg";
+                        queryString += "m.snowLevel AS measurement";
+                        stationInfoQueryString += "m.snowLevel AS unitOfMeasure";
+                        break;
+                    case "uvRadiation":
+                        if (isAvgRequired) avgQueryString += "avg(m.uvRadiation) AS avg";
+                        queryString += "m.uvRadiation AS measurement";
+                        stationInfoQueryString += "m.uvRadiation AS unitOfMeasure";
+                        break;
+                    case "pollutionLevel":
+                        if (isAvgRequired) avgQueryString += "avg(m.pollutionLevel) AS avg";
+                        queryString += "m.pollutionLevel AS measurement";
+                        stationInfoQueryString += "m.pollutionLevel AS unitOfMeasure";
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+                queryString += " ORDER BY timestamp";
+                stationInfoQueryString += ", n.name AS name";
+
+                Map<String, Object> stationInfo = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, true, param);
+                String stationName = (String) stationInfo.get("name");
+                String unitOfMeasure = (String) stationInfo.get("unitOfMeasure");
+
+                Double avg = null;
+                if (isAvgRequired) {
+                    Map<String, Object> avgResult = (Map<String, Object>) Neo4jUtil.executeSelect(avgQueryString, false, true, param);
+                    avg = (Double) avgResult.get("avg");
+                }
+                List<Map<String,Object>> mainResults = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, true,  param);
+
+                List<Double> measurements = new ArrayList<>();
+                List<Long> timestamps = new ArrayList<>();
+
+                for (Map<String, Object> map : mainResults) {
+                    measurements.add((Double) map.get("measurement"));
+                    timestamps.add((Long) map.get("timestamp"));
+                }
+
                 if (!measurements.isEmpty()) {
                     DatumForGraph data = null;
-                    UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
-                    try {
-                        data = new DatumForGraph(stationId, station.getName(), (String) unitOfMeasure.getClass()
-                                .getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure), measurements, timestamp, avg);
-                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
+                    data = new DatumForGraph(stationId, stationName, unitOfMeasure , measurements, timestamps , avg);
                     dataOfStations.add(data);
                 }
             }

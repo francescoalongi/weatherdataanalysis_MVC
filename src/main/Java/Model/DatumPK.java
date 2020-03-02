@@ -1,19 +1,14 @@
 package Model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable
 public class DatumPK implements Serializable {
 
     private Long timestamp;
 
     //@JsonIgnore//This annotation is added in order to correctly serialize into json object a Station (avoiding circular references)
-    @ManyToOne
-    @JoinColumn(name="idStation")
     private Station station;
 
     public DatumPK() {}

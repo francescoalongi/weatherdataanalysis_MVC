@@ -1,17 +1,21 @@
 package Model;
 
-import javax.persistence.*;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-@Entity
-@Table(name = "DatumCity")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl=DatumCity.class)
 public class DatumCity extends Datum{
 
     private Float pollutionLevel;
 
     public DatumCity() {}
 
-    public DatumCity(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float pollutionLevel) {
-        super(datumPK,temperature,pressure,humidity,rain,windModule,windDirection);
+    public DatumCity(//DatumPK datumPK,
+                     Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float pollutionLevel) {
+        super(timestamp, idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.pollutionLevel = pollutionLevel;
     }
 

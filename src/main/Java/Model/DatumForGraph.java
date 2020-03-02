@@ -6,11 +6,11 @@ public class DatumForGraph {
     private Integer idStation;
     private String stationName;
     private String unitOfMeasure;
-    private List<Float> measurements;
+    private List<Double> measurements;
     private List<Long> timestamps;
     private Double avg;
 
-    public DatumForGraph(Integer idStation, String stationName, String unitOfMeasure, List<Float> measurements, List<Long> timestamps, Double avg) {
+    public DatumForGraph(Integer idStation, String stationName, String unitOfMeasure, List<Double> measurements, List<Long> timestamps, Double avg) {
         this.idStation = idStation;
         this.stationName = stationName;
         this.unitOfMeasure = unitOfMeasure;
@@ -51,11 +51,11 @@ public class DatumForGraph {
         this.stationName = stationName;
     }
 
-    public List<Float> getMeasurements() {
+    public List<Double> getMeasurements() {
         return measurements;
     }
 
-    public void setMeasurements(List<Float> measurements) {
+    public void setMeasurements(List<Double> measurements) {
         this.measurements = measurements;
     }
 

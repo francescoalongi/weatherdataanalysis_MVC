@@ -1,8 +1,8 @@
 package Controller;
 
-import Model.Datum;
-import Model.Station;
-import Utils.HibernateUtil;
+import Model.*;
+import Utils.Neo4jUtil;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @WebServlet(name = "DownloadDataServlet")
@@ -32,32 +35,50 @@ public class DownloadDataServlet extends HttpServlet {
         } catch (Exception e) { //this generic but you can control another types of exception
             // look the origin of exception
         }
-        Integer stationId = Integer.parseInt(request.getParameter("station_id")); //1;
+        Integer idStation = Integer.parseInt(request.getParameter("station_id"));
+
         Map<String, Object> param = new HashMap<>();
-        param.put("idStation", stationId);
-        Station station = (Station) HibernateUtil.executeSelect(
-                "from Station where idStation = :idStation", false, param);
-        param.put("begin_timestamp", beginTimestamp);
-        param.put("end_timestamp", endTimestamp);
-        String getDataToDownloadQuery = "where d.datumPK.timestamp between :begin_timestamp AND :end_timestamp AND d.datumPK.station.id = :idStation";
-        switch (station.getType().toLowerCase()) {
-            case "city":
-                getDataToDownloadQuery = "from DatumCity as d " + getDataToDownloadQuery;
-                break;
-            case "country":
-                getDataToDownloadQuery = "from DatumCountry as d " + getDataToDownloadQuery;
-                break;
-            case "mountain":
-                getDataToDownloadQuery = "from DatumMountain as d " + getDataToDownloadQuery;
-                break;
-            case "sea":
-                getDataToDownloadQuery = "from DatumSea as d " + getDataToDownloadQuery;
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
+        param.put("idStation", idStation);
+
+        String stationInfoQueryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, false, param);
+        Station station = mapper.convertValue(result, Station.class);
+
+        param.put("beginTimestamp", beginTimestamp);
+        param.put("endTimestamp", endTimestamp);
+
+        String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
+                "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN m";
+
         //retrieve the data required
-        List data = (List) HibernateUtil.executeSelect(getDataToDownloadQuery, true, param);
+        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, false, param);
+
+        List data = new ArrayList<>();
+        for (Map<String, Object> map : results) {
+            ZonedDateTime datetime = (ZonedDateTime) map.get("datetime");
+            map.remove("datetime");
+            map.put("idStation", map.get("id"));
+            map.remove("id");
+            map.put("type", "Datum"+station.getType());
+            map.put("timestamp", datetime.toEpochSecond());
+            //map.put("", mapper.convertValue(station, Map.class));
+            data.add(mapper.convertValue(map, Datum.class));
+
+//            switch (station.getType().toLowerCase()) {
+//                case "country":
+//                    data.add(mapper.convertValue(map, DatumCountry.class));
+//                    break;
+//                case "city":
+//                    data.add(mapper.convertValue(map, DatumCity.class));
+//                    break;
+//                default:
+//                    throw new IllegalArgumentException();
+//
+//
+//            }
+        }
+
         if (data.size() == 0) {
             request.setAttribute("Error", "The csv file generated is empty! Please redo the procedure selecting other dates");
             getServletContext().getRequestDispatcher("/Error").forward(request, response);

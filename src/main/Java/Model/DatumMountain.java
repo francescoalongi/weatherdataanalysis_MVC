@@ -1,17 +1,21 @@
 package Model;
 
-import javax.persistence.*;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-@Entity
-@Table(name = "DatumMountain")
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type",
+        defaultImpl=DatumMountain.class)
 public class DatumMountain extends Datum{
 
     private Float snowLevel;
 
     public DatumMountain() {}
 
-    public DatumMountain(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float snowLevel) {
-        super(datumPK,temperature,pressure,humidity,rain,windModule,windDirection);
+    public DatumMountain(//DatumPK datumPK,
+                         Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float snowLevel) {
+        super(timestamp,idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.snowLevel = snowLevel;
     }
 
@@ -32,5 +36,7 @@ public class DatumMountain extends Datum{
     public String getFieldsAsCSV() {
         return super.getFieldsAsCSV() + "," + snowLevel;
     }
+
+
 }
 

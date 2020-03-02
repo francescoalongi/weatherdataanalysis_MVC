@@ -26,7 +26,6 @@
     <script src="${pageContext.request.contextPath}/Javascript/CreateStationModal.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HelperFunctions.js"></script>
     <script src="${pageContext.request.contextPath}/Javascript/HomepageHandler.js"></script>
-    <script src="${pageContext.request.contextPath}/Javascript/RegisterStationModal.js"></script>
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
@@ -45,9 +44,6 @@
         </div>
         <div class="navbuttons">
             <ul class = "nav navbar-nav navbar-right" id="ulNavBar">
-                <li>
-                    <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalRegisterStation" onclick="fillModal(this)">Register station</a>
-                </li>
                 <li>
                     <a href="" class="btn btn-default" data-toggle="modal" data-target="#modalUpload" onclick="fillModal(this)">Upload data</a>
                 </li>
@@ -106,21 +102,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalRegisterStation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div id="modalRegisterStationContent" class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold">Register a station to download data automatically</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div id="modalRegisterStationBody" class="modal-body mx-3">
-
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

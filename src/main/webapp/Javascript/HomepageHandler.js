@@ -111,7 +111,11 @@ function requestDataForGraph() {
             plotDiv.innerHTML = ""; // delete spinner
             if (JSONResponse.success === "true") {
                 var dataForGraph = JSONResponse.text;
+                var selectWeatherDimension = document.getElementById("selectWeatherDimension");
+                var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
 
+                if (dataForGraph.length === 1)
+                    weatherDimension = weatherDimension + " (" + dataForGraph[0].unitOfMeasure + ")";
                 var layout = {
                     yaxis: {
                         title: {
@@ -160,12 +164,6 @@ function requestDataForGraph() {
                     }
                     data.push(trace);
                 }
-
-                var selectWeatherDimension = document.getElementById("selectWeatherDimension");
-                var weatherDimension = selectWeatherDimension.options[selectWeatherDimension.selectedIndex].text;
-
-                if (dataForGraph.length === 1)
-                    weatherDimension = weatherDimension + " (" + dataForGraph[0].unitOfMeasure + ")";
 
                 Plotly.newPlot('timeSeriesPlot', data, layout);
                 $('#timeSeriesPlot').hide();
@@ -298,7 +296,7 @@ function appendSelectToContainer () {
 
     for (var i = 0; i < stationListJSON.length; i++) {
         var option = document.createElement("option");
-        option.setAttribute("value", stationListJSON[i].idStation);
+        option.setAttribute("value", stationListJSON[i].id);
         option.setAttribute("data-station-type", stationListJSON[i].type);
         option.innerText = stationListJSON[i].name;
         selectStation.appendChild(option);

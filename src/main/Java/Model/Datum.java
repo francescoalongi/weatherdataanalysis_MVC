@@ -1,18 +1,25 @@
 package Model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 
-import javax.persistence.*;
-import java.lang.reflect.Field;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DatumCountry.class, name = "DatumCountry"),
+        @JsonSubTypes.Type(value = DatumCity.class, name = "DatumCity"),
+        @JsonSubTypes.Type(value = DatumSea.class, name = "DatumSea"),
+        @JsonSubTypes.Type(value = DatumMountain.class, name = "DatumMountain")
+})
 public abstract class Datum {
 
-    @EmbeddedId
-    private DatumPK datumPK;
-
+    //private DatumPK datumPK;
+    private Long timestamp;
+    private Integer idStation;
     private Float temperature;
     private Float pressure;
     private Float humidity;
@@ -20,17 +27,35 @@ public abstract class Datum {
     private Float windModule;
     private String windDirection;
 
-
     public Datum() {}
 
-    public Datum(DatumPK datumPK, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
-        this.datumPK = datumPK;
+    public Datum(//DatumPK datumPK,
+                 Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
+        //this.datumPK = datumPK;
+        this.timestamp = timestamp;
+        this.idStation = idStation;
         this.temperature = temperature;
         this.pressure = pressure;
         this.humidity = humidity;
         this.rain = rain;
         this.windModule = windModule;
         this.windDirection = windDirection;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Integer getIdStation() {
+        return idStation;
+    }
+
+    public void setIdStation(Integer idStation) {
+        this.idStation = idStation;
     }
 
     public Float getTemperature() {
@@ -86,7 +111,8 @@ public abstract class Datum {
     }
 
     public String getFieldsAsCSV() {
-        return this.datumPK.getTimestamp() + "," + temperature + "," + pressure + "," + humidity + "," + rain + "," + windModule + "," + windDirection;
+        return this.getTimestamp() + "," + temperature + "," + pressure + "," + humidity + "," + rain + "," + windModule + "," + windDirection;
 
     }
+
 }

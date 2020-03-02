@@ -73,7 +73,7 @@ function createStationListRadio(appendTo, JSONArray) {
         input.setAttribute("type", "radio");
         input.setAttribute("class", "custom-control-input");
         input.setAttribute("name", "idStation");
-        input.setAttribute("value", JSONArray[i].idStation);
+        input.setAttribute("value", JSONArray[i].id);
         input.setAttribute("id", "defaultGroup" + i);
 
         var label = document.createElement("label");

@@ -3,21 +3,14 @@ package Model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name="Station")
+
 public class Station {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    private Integer idStation;
+    private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="idUnitOfMeasure")
     private UnitOfMeasure unitOfMeasure;
 
     private String name;
@@ -29,7 +22,6 @@ public class Station {
 
     @JsonIgnore
     //Cascade is here necessary because otherwise the statement session.save(station) will just insert the station (without its inner field)
-    @OneToMany(fetch= FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "datumPK.station")
     private Set<Datum> datumSet = new HashSet<Datum>();
 
     public Set<Datum> getDatumSet() {
@@ -55,7 +47,7 @@ public class Station {
     }
 
     public Integer getIdStation() {
-        return idStation;
+        return id;
     }
 
     public UnitOfMeasure getUnitOfMeasure() {
