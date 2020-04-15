@@ -1,18 +1,27 @@
 package Controller;
 
 import Model.DatumForGraph;
+
 import Model.Station;
-import Model.UnitOfMeasure;
-import Utils.Neo4jUtil;
+import Utils.Collections;
+import Utils.MongoDBUtil;
+import com.mongodb.Mongo;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.print.Doc;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -42,12 +51,12 @@ public class QueryDataGraphServlet extends HttpServlet {
             boolean isAvgRequired = false;
             if (request.getParameter("showAvg") != null && request.getParameter("showAvg").equals("true"))
                 isAvgRequired = true;
-            ArrayList<Integer> stationIds = new ArrayList<>();
+            ArrayList<String> stationIds = new ArrayList<>();
             int id = 0;
             long beginTimestamp = 0L;
             long endTimestamp = 0L;
             while (request.getParameter("station" + id) != null && !request.getParameter("station" + id).isEmpty())
-                stationIds.add(Integer.valueOf(request.getParameter("station" + id++)));
+                stationIds.add(request.getParameter("station" + id++));
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date begin_date = dateFormat.parse(request.getParameter("startDate"));
@@ -59,7 +68,12 @@ public class QueryDataGraphServlet extends HttpServlet {
             }
 
             List<DatumForGraph> dataOfStations = new ArrayList<>();
-            for (Integer stationId : stationIds) {
+            FindIterable<Document> results;
+            Document filter = new Document();
+            for (String stationId : stationIds) {
+                filter.append("_id", new ObjectId(stationId));
+                results = MongoDBUtil.executeSelect(filter, Collections.STATIONS);
+                Document station = results.first();
 
                 String[] splittedWeatherDimension = request.getParameter("weatherDimension").toLowerCase().split(" ");
                 String compliantWeatherDimension = splittedWeatherDimension[0].toLowerCase();
@@ -68,88 +82,32 @@ public class QueryDataGraphServlet extends HttpServlet {
                     chars[0] = Character.toUpperCase(chars[0]);
                     compliantWeatherDimension = compliantWeatherDimension.concat(String.valueOf(chars));
                 }
+                String stationName = (String) station.get("name");
+                String unitOfMeasure = (String) ((Document)station.get("unitOfMeasure")).get(compliantWeatherDimension);
 
-                Map<String, Object> param = new HashMap<>();
-                param.put("idStation", stationId);
-                String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
-                        "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN ";
-
-                String stationInfoQueryString = "MATCH (n:Station), (n)-[:MEASURED_USING]->(m) WHERE id(n) = $idStation RETURN ";
-
-                param.put("beginTimestamp", beginTimestamp);
-                param.put("endTimestamp", endTimestamp);
-
-                String avgQueryString = queryString;
-                queryString += "timestamp(m.datetime) AS timestamp,";
-                switch (compliantWeatherDimension) {
-                    case "temperature":
-                        if (isAvgRequired) avgQueryString += "avg(m.temperature) AS avg";
-                        queryString += "m.temperature AS measurement";
-                        stationInfoQueryString += "m.temperature AS unitOfMeasure";
-                        break;
-                    case "pressure":
-                        if (isAvgRequired) avgQueryString += "avg(m.pressure) AS avg";
-                        queryString += "m.pressure AS measurement";
-                        stationInfoQueryString += "m.pressure AS unitOfMeasure";
-                        break;
-                    case "humidity":
-                        if (isAvgRequired) avgQueryString += "avg(m.humidity) AS avg";
-                        queryString += "m.humidity AS measurement";
-                        stationInfoQueryString += "m.humidity AS unitOfMeasure";
-                        break;
-                    case "rain":
-                        if (isAvgRequired) avgQueryString += "avg(m.rain) AS avg";
-                        queryString += "m.rain AS measurement";
-                        stationInfoQueryString += "m.rain AS unitOfMeasure";
-                        break;
-                    case "windModule":
-                        if (isAvgRequired) avgQueryString += "avg(m.windModule) AS avg";
-                        queryString += "m.windModule AS measurement";
-                        stationInfoQueryString += "m.windModule AS unitOfMeasure";
-                        break;
-                    case "dewPoint":
-                        if (isAvgRequired) avgQueryString += "avg(m.dewPoint) AS avg";
-                        queryString += "m.dewPoint AS measurement";
-                        stationInfoQueryString += "m.dewPoint AS unitOfMeasure";
-                        break;
-                    case "snowLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.snowLevel) AS avg";
-                        queryString += "m.snowLevel AS measurement";
-                        stationInfoQueryString += "m.snowLevel AS unitOfMeasure";
-                        break;
-                    case "uvRadiation":
-                        if (isAvgRequired) avgQueryString += "avg(m.uvRadiation) AS avg";
-                        queryString += "m.uvRadiation AS measurement";
-                        stationInfoQueryString += "m.uvRadiation AS unitOfMeasure";
-                        break;
-                    case "pollutionLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.pollutionLevel) AS avg";
-                        queryString += "m.pollutionLevel AS measurement";
-                        stationInfoQueryString += "m.pollutionLevel AS unitOfMeasure";
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-                queryString += " ORDER BY timestamp";
-                stationInfoQueryString += ", n.name AS name";
-
-                Map<String, Object> stationInfo = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, true, param);
-                String stationName = (String) stationInfo.get("name");
-                String unitOfMeasure = (String) stationInfo.get("unitOfMeasure");
-
-                Double avg = null;
-                if (isAvgRequired) {
-                    Map<String, Object> avgResult = (Map<String, Object>) Neo4jUtil.executeSelect(avgQueryString, false, true, param);
-                    avg = (Double) avgResult.get("avg");
-                }
-                List<Map<String,Object>> mainResults = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, true,  param);
+                filter.clear();
+                filter.append("idStation", stationId);
+                filter.append("timestamp", new Document("$gte", beginTimestamp).append("$lt", endTimestamp));
+                results = MongoDBUtil.executeSelect(filter, Collections.DATA);
 
                 List<Double> measurements = new ArrayList<>();
                 List<Long> timestamps = new ArrayList<>();
 
-                for (Map<String, Object> map : mainResults) {
-                    measurements.add((Double) map.get("measurement"));
-                    timestamps.add((Long) map.get("timestamp"));
+                for (Document doc : results) {
+                    measurements.add((Double) doc.get(compliantWeatherDimension));
+                    timestamps.add((Long) doc.get("timestamp"));
+                }
+
+                Double avg = null;
+                if (isAvgRequired) {
+                    List<Bson> aggFilter = Arrays.asList(
+                            Aggregates.match(filter),
+                            Aggregates.group(null, Accumulators.avg("avg",
+                                    "$" + compliantWeatherDimension))
+                    );
+
+                    AggregateIterable<Document> avgResult = MongoDBUtil.executeAggregate(aggFilter, Collections.DATA);
+                    avg = (Double)avgResult.first().get("avg");
                 }
 
                 if (!measurements.isEmpty()) {

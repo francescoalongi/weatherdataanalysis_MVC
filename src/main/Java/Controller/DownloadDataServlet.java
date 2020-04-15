@@ -1,7 +1,11 @@
 package Controller;
 
 import Model.*;
-import Utils.Neo4jUtil;
+import Utils.Collections;
+import Utils.MongoDBUtil;
+import com.mongodb.client.FindIterable;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -35,49 +39,36 @@ public class DownloadDataServlet extends HttpServlet {
         } catch (Exception e) { //this generic but you can control another types of exception
             // look the origin of exception
         }
-        Integer idStation = Integer.parseInt(request.getParameter("station_id"));
+        String idStation = request.getParameter("station_id");
+        Document filter = new Document();
+        filter.append("_id", new ObjectId(idStation));
+        FindIterable<Document>  results = MongoDBUtil.executeSelect(filter, Collections.STATIONS);
+        Document station = results.first();
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("idStation", idStation);
+        filter.clear();
+        filter.append("idStation", idStation);
+        filter.append("timestamp", new Document("$gte", beginTimestamp).append("$lt", endTimestamp));
+        results = MongoDBUtil.executeSelect(filter, Collections.DATA);
 
-        String stationInfoQueryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, false, param);
-        Station station = mapper.convertValue(result, Station.class);
-
-        param.put("beginTimestamp", beginTimestamp);
-        param.put("endTimestamp", endTimestamp);
-
-        String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
-                "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN m";
-
-        //retrieve the data required
-        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, false, param);
-
-        List data = new ArrayList<>();
-        for (Map<String, Object> map : results) {
-            ZonedDateTime datetime = (ZonedDateTime) map.get("datetime");
-            map.remove("datetime");
-            map.put("idStation", map.get("id"));
-            map.remove("id");
-            map.put("type", "Datum"+station.getType());
-            map.put("timestamp", datetime.toEpochSecond());
-            //map.put("", mapper.convertValue(station, Map.class));
-            data.add(mapper.convertValue(map, Datum.class));
-
-//            switch (station.getType().toLowerCase()) {
-//                case "country":
-//                    data.add(mapper.convertValue(map, DatumCountry.class));
-//                    break;
-//                case "city":
-//                    data.add(mapper.convertValue(map, DatumCity.class));
-//                    break;
-//                default:
-//                    throw new IllegalArgumentException();
-//
-//
-//            }
+        List<Datum> data = new ArrayList<>();
+        for (Document doc : results) {
+            doc.remove("_id");
+            data.add(mapper.convertValue(doc, Datum.class));
         }
+
+//        for (Map<String, Object> map : results) {
+//            ZonedDateTime datetime = (ZonedDateTime) map.get("datetime");
+//            map.remove("datetime");
+//            map.put("idStation", map.get("id"));
+//            map.remove("id");
+//            map.put("type", "Datum"+station.getType());
+//            map.put("timestamp", datetime.toEpochSecond());
+//            //map.put("", mapper.convertValue(station, Map.class));
+//            data.add(mapper.convertValue(map, Datum.class));
+//
+//        }
+//
 
         if (data.size() == 0) {
             request.setAttribute("Error", "The csv file generated is empty! Please redo the procedure selecting other dates");

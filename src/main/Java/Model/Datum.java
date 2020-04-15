@@ -19,7 +19,7 @@ public abstract class Datum {
 
     //private DatumPK datumPK;
     private Long timestamp;
-    private Integer idStation;
+    private String idStation;
     private Float temperature;
     private Float pressure;
     private Float humidity;
@@ -30,7 +30,7 @@ public abstract class Datum {
     public Datum() {}
 
     public Datum(//DatumPK datumPK,
-                 Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
+                 Long timestamp, String idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
         //this.datumPK = datumPK;
         this.timestamp = timestamp;
         this.idStation = idStation;
@@ -50,11 +50,11 @@ public abstract class Datum {
         this.timestamp = timestamp;
     }
 
-    public Integer getIdStation() {
+    public String getIdStation() {
         return idStation;
     }
 
-    public void setIdStation(Integer idStation) {
+    public void setIdStation(String idStation) {
         this.idStation = idStation;
     }
 
@@ -106,10 +106,12 @@ public abstract class Datum {
         this.windDirection = windDirection;
     }
 
+    @JsonIgnore
     public String getFieldsNameAsCSV() {
         return "timestamp" + "," + "temperature" + "," + "pressure" + "," + "humidity" + "," + "rain" + "," + "windModule" + "," + "windDirection";
     }
 
+    @JsonIgnore
     public String getFieldsAsCSV() {
         return this.getTimestamp() + "," + temperature + "," + pressure + "," + humidity + "," + rain + "," + windModule + "," + windDirection;
 

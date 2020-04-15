@@ -3,14 +3,14 @@ package Model;
 import java.util.List;
 
 public class DatumForGraph {
-    private Integer idStation;
+    private String idStation;
     private String stationName;
     private String unitOfMeasure;
     private List<Double> measurements;
     private List<Long> timestamps;
     private Double avg;
 
-    public DatumForGraph(Integer idStation, String stationName, String unitOfMeasure, List<Double> measurements, List<Long> timestamps, Double avg) {
+    public DatumForGraph(String idStation, String stationName, String unitOfMeasure, List<Double> measurements, List<Long> timestamps, Double avg) {
         this.idStation = idStation;
         this.stationName = stationName;
         this.unitOfMeasure = unitOfMeasure;
@@ -35,11 +35,11 @@ public class DatumForGraph {
         this.unitOfMeasure = unitOfMeasure;
     }
 
-    public Integer getIdStation() {
+    public String getIdStation() {
         return idStation;
     }
 
-    public void setIdStation(Integer idStation) {
+    public void setIdStation(String idStation) {
         this.idStation = idStation;
     }
 

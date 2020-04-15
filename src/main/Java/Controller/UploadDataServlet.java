@@ -1,10 +1,16 @@
 package Controller;
 
 import Model.*;
-import Utils.Neo4jUtil;
+
+import Utils.Collections;
+import Utils.MongoDBUtil;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -16,9 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 @WebServlet(name = "UploadDataServlet")
 @MultipartConfig
@@ -27,56 +31,68 @@ public class UploadDataServlet extends HttpServlet {
 
         String idStation = request.getParameter("idStation");
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("idStation", Integer.parseInt(idStation));
+        Document filter = new Document("_id", new ObjectId(idStation));
 
-        String queryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(queryString, false, false, param);
-        Station station = mapper.convertValue(result, Station.class);
+        FindIterable<Document> result = (FindIterable<Document>) MongoDBUtil.executeSelect(filter, Collections.STATIONS);
+        Document doc = result.first();
+        doc.append("_id", doc.get("_id").toString());
+        Station station = mapper.convertValue(doc, Station.class);
 
         Part filePart = request.getPart("newData");
         InputStream fileContent = filePart.getInputStream();
         Reader in = new InputStreamReader(fileContent, StandardCharsets.UTF_8);
-        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        Iterable<CSVRecord> records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(in);
 
-        File file = new File("test.csv");
-        String currentFilePath = file.getAbsolutePath();
-        file.delete();
+        List<Document> docs = new ArrayList<>();
+        Integer insertionCount = 0;
+        for (CSVRecord record : records) {
+            try {
+                Long timestamp = Long.parseLong(record.get("timestamp"));
+                Float temperature = Float.parseFloat(record.get("temperature"));
+                Float pressure = Float.parseFloat(record.get("pressure"));
+                Float humidity = Float.parseFloat(record.get("humidity"));
+                Float rain = Float.parseFloat(record.get("rain"));
+                Float windModule = Float.parseFloat(record.get("windModule"));
+                String windDirection = record.get("windDirection");
 
-        currentFilePath = currentFilePath.replace("\\", "\\\\");
-        currentFilePath = currentFilePath.replace(" ", "%20");
+                Float additionalField;
+                Datum datum;
+                switch (station.getType().toLowerCase()) {
+                    case "city":
+                        additionalField = Float.parseFloat(record.get("pollutionLevel"));
+                        datum = new DatumCity(timestamp,idStation,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                        break;
+                    case "country":
+                        additionalField = Float.parseFloat(record.get("dewPoint"));
+                        datum = new DatumCountry(timestamp, idStation,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                        break;
+                    case "mountain":
+                        additionalField = Float.parseFloat(record.get("snowLevel"));
+                        datum = new DatumMountain(timestamp, idStation,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                        break;
+                    case "sea":
+                        additionalField = Float.parseFloat(record.get("uvRadiation"));
+                        datum = new DatumSea(timestamp, idStation,temperature,pressure,humidity, rain, windModule, windDirection, additionalField);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
 
-        FileWriter writer = new FileWriter("test.csv");
-        CSVPrinter csvPrinter = CSVFormat.EXCEL.withFirstRecordAsHeader().print(writer);
-        csvPrinter.printRecords(records);
-        csvPrinter.close();
+                Document newDoc = new Document(mapper.convertValue(datum, HashMap.class));
+                docs.add(newDoc);
+                insertionCount++;
+                if (insertionCount % 500 == 0 || !records.iterator().hasNext()) {
+                    MongoDBUtil.executeInsert(docs, Collections.DATA);
+                    docs.clear();
+                    insertionCount = 0;
+                }
 
-        queryString = "USING PERIODIC COMMIT 500 LOAD CSV WITH HEADERS FROM 'file:/" + currentFilePath + "' AS row " +
-                "MATCH (s:Station) WHERE id(s) = $idStation CREATE (n:Datum{datetime:datetime({epochSeconds: toInteger(row.timestamp)}), temperature:toFloat(row.temperature), " +
-                "humidity:toFloat(row.humidity), windModule:toFloat(row.windModule), windDirection:row.windDirection, " +
-                "pressure: toFloat(row.pressure), rain:toFloat(row.rain), ";
-        switch (station.getType().toLowerCase()) {
-            case "city":
-                queryString += "pollutionLevel:toFloat(row.pollutionLevel)";
-                break;
-            case "country":
-                queryString += "dewPoint:toFloat(row.dewPoint)";
-                break;
-            case "mountain":
-                queryString += "snowLevel:toFloat(row.snowLevel)";
-                break;
-            case "sea":
-                queryString += "uvRadiation:toFloat(row.uvRadiation)";
-                break;
-            default:
-                throw new IllegalArgumentException();
+            } catch (NumberFormatException e) {
+                // if a datum contains an invalid field, skip it
+            }
         }
 
-
-        queryString += "}), (s)-[:HAS_ACQUIRED]->(n)";
-
-        Neo4jUtil.executeInsert(queryString, param, true);
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
         request.getRequestDispatcher("/LoadStations").forward(request,response);
     }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Station {
 
-    private Integer id;
+    private String _id;
 
     private UnitOfMeasure unitOfMeasure;
 
@@ -46,8 +46,12 @@ public class Station {
         //this.datumCountrySet = datumCountrySet;
     }
 
-    public Integer getIdStation() {
-        return id;
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public UnitOfMeasure getUnitOfMeasure() {

@@ -1,7 +1,10 @@
 package Controller;
 
 import Model.MinimizedStation;
-import Utils.Neo4jUtil;
+import Utils.Collections;
+import Utils.MongoDBUtil;
+import com.mongodb.client.FindIterable;
+import org.bson.Document;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -12,9 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet(name = "LoadStationsServlet")
 public class LoadStationsServlet extends HttpServlet {
@@ -23,12 +24,16 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN S", true);
+        FindIterable<Document> results = (FindIterable<Document>) MongoDBUtil.executeSelect(new Document(), Collections.STATIONS);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
-        for (Map<String, Object> map : results) {
-            list.add(mapper.convertValue(map, MinimizedStation.class));
+        for (Document doc : results) {
+            // transform the ObjectId object into a plain String containing the id, used in order to correctly map the
+            // json object to the POJO class
+            doc.append("_id", doc.get("_id").toString());
+
+            list.add(mapper.convertValue(doc, MinimizedStation.class));
         }
         String json = mapper.writeValueAsString(list);
 

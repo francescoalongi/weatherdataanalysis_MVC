@@ -1,8 +1,10 @@
 package Controller;
 
 import Model.Station;
+import Utils.Collections;
 import Utils.Maps;
-import Utils.Neo4jUtil;
+import Utils.MongoDBUtil;
+import org.bson.Document;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -29,25 +31,7 @@ public class CreateStationServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Map<String, Object> params = mapper.readValue(json, HashMap.class);
-            String queryString = "CREATE (n:Station {name: $name, type: $type, latitude: $latitude, longitude: $longitude, altitude: $altitude}), " +
-                    " (m:UnitOfMeasure {temperature: $temperature, pressure: $pressure, humidity: $humidity, rain: $rain, windModule: $windModule, " +
-                    "windDirection: $windDirection, ";
-            switch ((String)params.get("type")) {
-                case "Country":
-                    queryString += "dewPoint: $dewPoint})";
-                    break;
-                case "City":
-                    queryString += "pollutionLevel: $pollutionLevel})";
-                    break;
-                case "Mountain":
-                    queryString += "snowLevel: $snowLevel})";
-                    break;
-                case "Sea":
-                    queryString += "uvRadiation: $uvRadiation})";
-            }
-            queryString += ", (n)-[:MEASURED_USING]->(m)";
-            Map<String, Object> t_params = asFlattendMap(params);
-            Neo4jUtil.executeInsert(queryString, t_params, false);
+            MongoDBUtil.executeInsert(new Document(params), Collections.STATIONS);
         } catch (JsonMappingException e) {
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
