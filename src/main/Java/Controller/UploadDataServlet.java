@@ -4,10 +4,8 @@ import Model.*;
 
 import Utils.Collections;
 import Utils.MongoDBUtil;
-import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -34,7 +32,7 @@ public class UploadDataServlet extends HttpServlet {
         Document filter = new Document("_id", new ObjectId(idStation));
 
         ObjectMapper mapper = new ObjectMapper();
-        FindIterable<Document> result = (FindIterable<Document>) MongoDBUtil.executeSelect(filter, Collections.STATIONS);
+        FindIterable<Document> result = MongoDBUtil.executeSelect(filter, Collections.STATIONS);
         Document doc = result.first();
         doc.append("_id", doc.get("_id").toString());
         Station station = mapper.convertValue(doc, Station.class);

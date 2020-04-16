@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 @WebServlet(name = "DownloadDataServlet")
@@ -56,19 +53,6 @@ public class DownloadDataServlet extends HttpServlet {
             doc.remove("_id");
             data.add(mapper.convertValue(doc, Datum.class));
         }
-
-//        for (Map<String, Object> map : results) {
-//            ZonedDateTime datetime = (ZonedDateTime) map.get("datetime");
-//            map.remove("datetime");
-//            map.put("idStation", map.get("id"));
-//            map.remove("id");
-//            map.put("type", "Datum"+station.getType());
-//            map.put("timestamp", datetime.toEpochSecond());
-//            //map.put("", mapper.convertValue(station, Map.class));
-//            data.add(mapper.convertValue(map, Datum.class));
-//
-//        }
-//
 
         if (data.size() == 0) {
             request.setAttribute("Error", "The csv file generated is empty! Please redo the procedure selecting other dates");

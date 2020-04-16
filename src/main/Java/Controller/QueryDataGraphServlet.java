@@ -2,10 +2,8 @@ package Controller;
 
 import Model.DatumForGraph;
 
-import Model.Station;
 import Utils.Collections;
 import Utils.MongoDBUtil;
-import com.mongodb.Mongo;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Accumulators;
@@ -15,7 +13,6 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import javax.print.Doc;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -95,7 +92,7 @@ public class QueryDataGraphServlet extends HttpServlet {
 
                 for (Document doc : results) {
                     measurements.add((Double) doc.get(compliantWeatherDimension));
-                    timestamps.add((Long) doc.get("timestamp"));
+                    timestamps.add(((Long) doc.get("timestamp"))*1000);
                 }
 
                 Double avg = null;
@@ -107,7 +104,8 @@ public class QueryDataGraphServlet extends HttpServlet {
                     );
 
                     AggregateIterable<Document> avgResult = MongoDBUtil.executeAggregate(aggFilter, Collections.DATA);
-                    avg = (Double)avgResult.first().get("avg");
+                    if (avgResult.first() != null)
+                        avg = (Double)avgResult.first().get("avg");
                 }
 
                 if (!measurements.isEmpty()) {

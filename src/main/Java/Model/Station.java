@@ -21,7 +21,6 @@ public class Station {
 
 
     @JsonIgnore
-    //Cascade is here necessary because otherwise the statement session.save(station) will just insert the station (without its inner field)
     private Set<Datum> datumSet = new HashSet<Datum>();
 
     public Set<Datum> getDatumSet() {

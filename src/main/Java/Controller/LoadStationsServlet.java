@@ -24,7 +24,7 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        FindIterable<Document> results = (FindIterable<Document>) MongoDBUtil.executeSelect(new Document(), Collections.STATIONS);
+        FindIterable<Document> results = MongoDBUtil.executeSelect(new Document(), Collections.STATIONS);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
@@ -32,7 +32,6 @@ public class LoadStationsServlet extends HttpServlet {
             // transform the ObjectId object into a plain String containing the id, used in order to correctly map the
             // json object to the POJO class
             doc.append("_id", doc.get("_id").toString());
-
             list.add(mapper.convertValue(doc, MinimizedStation.class));
         }
         String json = mapper.writeValueAsString(list);

@@ -10,7 +10,7 @@ import org.bson.conversions.Bson;
 
 import java.util.List;
 
-public class MongoDBUtil implements AutoCloseable{
+public class MongoDBUtil {
     private static final MongoDatabase mongoDB = initMongo();
 
     private static MongoDatabase initMongo() {
@@ -38,10 +38,5 @@ public class MongoDBUtil implements AutoCloseable{
     public static AggregateIterable<Document> executeAggregate(List<Bson> agg, Collections collectionName) {
         MongoCollection<Document> collection = mongoDB.getCollection(collectionName.toString().toLowerCase());
         return collection.aggregate(agg);
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

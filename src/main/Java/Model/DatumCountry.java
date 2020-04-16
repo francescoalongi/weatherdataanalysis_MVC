@@ -13,8 +13,7 @@ public class DatumCountry extends Datum {
 
     public DatumCountry() {}
 
-    public DatumCountry(//DatumPK datumPK,
-                        Long timestamp, String idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float dewPoint) {
+    public DatumCountry(Long timestamp, String idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float dewPoint) {
         super(timestamp, idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.dewPoint = dewPoint;
     }

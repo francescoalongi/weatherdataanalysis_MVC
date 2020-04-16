@@ -3,7 +3,7 @@ package Utils;
 import java.io.*;
 import java.util.Properties;
 
-public class Configuration {
+class Configuration {
 
     private Properties properties;
 
