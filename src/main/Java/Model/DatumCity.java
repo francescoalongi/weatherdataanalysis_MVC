@@ -13,8 +13,7 @@ public class DatumCity extends Datum{
 
     public DatumCity() {}
 
-    public DatumCity(//DatumPK datumPK,
-                     Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float pollutionLevel) {
+    public DatumCity(Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float pollutionLevel) {
         super(timestamp, idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.pollutionLevel = pollutionLevel;
     }

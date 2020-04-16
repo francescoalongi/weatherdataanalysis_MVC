@@ -17,7 +17,6 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 })
 public abstract class Datum {
 
-    //private DatumPK datumPK;
     private Long timestamp;
     private Integer idStation;
     private Float temperature;
@@ -29,9 +28,7 @@ public abstract class Datum {
 
     public Datum() {}
 
-    public Datum(//DatumPK datumPK,
-                 Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
-        //this.datumPK = datumPK;
+    public Datum(Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection) {
         this.timestamp = timestamp;
         this.idStation = idStation;
         this.temperature = temperature;

@@ -18,7 +18,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 @WebServlet(name = "UploadDataServlet")
 @MultipartConfig
@@ -40,19 +39,20 @@ public class UploadDataServlet extends HttpServlet {
         Reader in = new InputStreamReader(fileContent, StandardCharsets.UTF_8);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
 
-        File file = new File("test.csv");
-        String currentFilePath = file.getAbsolutePath();
-        file.delete();
+//        File file = new File("test.csv");
+//        String currentFilePath = file.getAbsolutePath();
+//        file.delete();
+//
+//        currentFilePath = currentFilePath.replace("\\", "\\\\");
+//        currentFilePath = currentFilePath.replace(" ", "%20");
 
-        currentFilePath = currentFilePath.replace("\\", "\\\\");
-        currentFilePath = currentFilePath.replace(" ", "%20");
-
-        FileWriter writer = new FileWriter("test.csv");
+        String tempFilePath = Neo4jUtil.neo4jPath + "/import/temp.csv";
+        FileWriter writer = new FileWriter(tempFilePath);
         CSVPrinter csvPrinter = CSVFormat.EXCEL.withFirstRecordAsHeader().print(writer);
         csvPrinter.printRecords(records);
         csvPrinter.close();
 
-        queryString = "USING PERIODIC COMMIT 500 LOAD CSV WITH HEADERS FROM 'file:/" + currentFilePath + "' AS row " +
+        queryString = "USING PERIODIC COMMIT 500 LOAD CSV WITH HEADERS FROM 'file:///temp.csv' AS row " +
                 "MATCH (s:Station) WHERE id(s) = $idStation CREATE (n:Datum{datetime:datetime({epochSeconds: toInteger(row.timestamp)}), temperature:toFloat(row.temperature), " +
                 "humidity:toFloat(row.humidity), windModule:toFloat(row.windModule), windDirection:row.windDirection, " +
                 "pressure: toFloat(row.pressure), rain:toFloat(row.rain), ";
@@ -77,6 +77,9 @@ public class UploadDataServlet extends HttpServlet {
         queryString += "}), (s)-[:HAS_ACQUIRED]->(n)";
 
         Neo4jUtil.executeInsert(queryString, param, true);
+        File file = new File(tempFilePath);
+        file.delete();
+
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
         request.getRequestDispatcher("/LoadStations").forward(request,response);
     }

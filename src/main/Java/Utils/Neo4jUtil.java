@@ -1,17 +1,16 @@
 package Utils;
 
-import org.neo4j.driver.internal.InternalRecord;
-import org.neo4j.driver.v1.*;
-
+import org.neo4j.driver.*;
 
 import java.util.*;
 
 public class Neo4jUtil implements AutoCloseable{
     private static final Driver driver = buildDriver();
-
+    public static String neo4jPath;
 
     private static Driver buildDriver() {
         Configuration configuration = new Configuration("neo4j.properties");
+        neo4jPath = configuration.getProperty("neo4j.path");
         return GraphDatabase.driver(configuration.getProperty("neo4j.url"), AuthTokens.basic(configuration.getProperty("neo4j.username"),
                 configuration.getProperty("neo4j.password")));
     }
@@ -19,12 +18,14 @@ public class Neo4jUtil implements AutoCloseable{
     public static Object executeSelect(final String queryString, final boolean isResultList, boolean isReturningPropertyKey, final Map<String, Object> params) {
         try ( Session session = driver.session() )
         {
+
             return session.readTransaction( new TransactionWork<Object>()
             {
                 @Override
                 public Object execute( Transaction tx )
                 {
-                    StatementResult statementResult = tx.run(queryString, params);
+
+                    Result statementResult = tx.run(queryString, params);
                     if (isResultList) {
                         List<Map<String, Object>> result = new ArrayList<>();
 
@@ -57,7 +58,7 @@ public class Neo4jUtil implements AutoCloseable{
                 @Override
                 public Object execute( Transaction tx )
                 {
-                    StatementResult statementResult = tx.run(queryString);
+                    Result statementResult = tx.run(queryString);
                     if (isResultList) {
                         List<Map<String,Object>> result = new ArrayList<>();
 
@@ -82,7 +83,7 @@ public class Neo4jUtil implements AutoCloseable{
                 session.writeTransaction(new TransactionWork<Object>() {
                     @Override
                     public Object execute(Transaction tx) {
-                        StatementResult statementResult = tx.run(queryString, params);
+                        Result statementResult = tx.run(queryString, params);
                         return 0;
                     }
                 });
@@ -98,55 +99,13 @@ public class Neo4jUtil implements AutoCloseable{
                 session.writeTransaction(new TransactionWork<Object>() {
                     @Override
                     public Object execute(Transaction tx) {
-                        StatementResult statementResult = tx.run(queryString);
+                        Result statementResult = tx.run(queryString);
                         return 0;
                     }
                 });
             }
         }
     }
-
-
-//    public static void executeInsert(Collection<?> data) {
-//        if (!data.iterator().next().getClass().getPackage().getName().equals("Model"))
-//            throw new IllegalArgumentException();
-//        Session session = Neo4jUtil.getSessionFactory().openSession();
-//        Transaction tr = session.beginTransaction();
-//        int i = 0;
-//        int batchSize = Integer.parseInt(new OgmConfiguration().configure().getProperty("hibernate.jdbc.batch_size"));
-//        for (Object datum : data) {
-//            i++;
-//            session.save(datum);
-//            if (i % batchSize == 0) {
-//                session.flush();
-//                session.clear();
-//            }
-//        }
-//        try {
-//            tr.commit();
-//        } catch (RollbackException e) {
-//            System.err.println(e.getMessage());
-//            tr.rollback();
-//        } finally {
-//            session.close();
-//        }
-//    }
-//
-//    public static void executeInsert(Object data) {
-//        if (!data.getClass().getPackage().getName().equals("Model"))
-//            throw new IllegalArgumentException();
-//        Session session = Neo4jUtil.getSessionFactory().openSession();
-//        Transaction tr = session.beginTransaction();
-//        session.save(data);
-//        try {
-//            tr.commit();
-//        } catch (RollbackException e) {
-//            System.err.println(e.getMessage());
-//            tr.rollback();
-//        } finally {
-//            session.close();
-//        }
-//    }
 
     @Override
     public void close() throws Exception {

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -62,21 +60,7 @@ public class DownloadDataServlet extends HttpServlet {
             map.remove("id");
             map.put("type", "Datum"+station.getType());
             map.put("timestamp", datetime.toEpochSecond());
-            //map.put("", mapper.convertValue(station, Map.class));
             data.add(mapper.convertValue(map, Datum.class));
-
-//            switch (station.getType().toLowerCase()) {
-//                case "country":
-//                    data.add(mapper.convertValue(map, DatumCountry.class));
-//                    break;
-//                case "city":
-//                    data.add(mapper.convertValue(map, DatumCity.class));
-//                    break;
-//                default:
-//                    throw new IllegalArgumentException();
-//
-//
-//            }
         }
 
         if (data.size() == 0) {
