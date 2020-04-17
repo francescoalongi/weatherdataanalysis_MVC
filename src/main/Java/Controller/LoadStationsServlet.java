@@ -3,10 +3,10 @@ package Controller;
 import Model.MinimizedStation;
 import Utils.Collections;
 import Utils.MongoDBUtil;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +26,7 @@ public class LoadStationsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         FindIterable<Document> results = MongoDBUtil.executeSelect(new Document(), Collections.STATIONS);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
         for (Document doc : results) {
             // transform the ObjectId object into a plain String containing the id, used in order to correctly map the

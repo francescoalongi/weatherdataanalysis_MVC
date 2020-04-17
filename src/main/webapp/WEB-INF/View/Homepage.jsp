@@ -1,5 +1,5 @@
-<%@ page import="org.codehaus.jackson.JsonNode" %>
-<%@ page import="org.codehaus.jackson.map.ObjectMapper" %><%--
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
+<%@ page import="com.fasterxml.jackson.databind.JsonNode" %><%--
   Created by IntelliJ IDEA.
   User: Francesco Alongi
   Date: 25/07/2019
@@ -204,7 +204,7 @@
     <%
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree((String) request.getAttribute("stations"));
-        if (jsonNode.getElements().hasNext()) {
+        if (jsonNode.elements().hasNext()) {
     %>
     <div class="row">
         <div class="col">
