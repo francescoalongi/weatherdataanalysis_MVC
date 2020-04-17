@@ -4,6 +4,7 @@ import Model.MinimizedStation;
 import Utils.Neo4jUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.neo4j.driver.Record;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet(name = "LoadStationsServlet")
 public class LoadStationsServlet extends HttpServlet {
@@ -22,12 +22,12 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN S", true);
+        List<Record> results = (List<Record>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN {id:id(S), name:S.name, type:S.type}", true);
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
-        for (Map<String, Object> map : results) {
-            list.add(mapper.convertValue(map, MinimizedStation.class));
+        for (Record record : results) {
+            list.add(mapper.convertValue(record.get(0).asMap(), MinimizedStation.class));
         }
         String json = mapper.writeValueAsString(list);
 

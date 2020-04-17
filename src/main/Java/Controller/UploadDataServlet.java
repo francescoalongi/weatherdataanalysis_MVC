@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.neo4j.driver.Record;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,10 +30,10 @@ public class UploadDataServlet extends HttpServlet {
         Map<String, Object> param = new HashMap<>();
         param.put("idStation", Integer.parseInt(idStation));
 
-        String queryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
+        String queryString = "MATCH (n:Station) WHERE id(n) = 0 RETURN {name:n.name, altitude:n.altitude, latitude:n.latitude, longitude:n.longitude, type:n.type}";
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(queryString, false, false, param);
-        Station station = mapper.convertValue(result, Station.class);
+        Record result = (Record) Neo4jUtil.executeSelect(queryString, false, param);
+        Station station = mapper.convertValue(result.get(0).asMap(), Station.class);
 
         Part filePart = request.getPart("newData");
         InputStream fileContent = filePart.getInputStream();
@@ -68,8 +69,10 @@ public class UploadDataServlet extends HttpServlet {
 
 
         queryString += "}), (s)-[:HAS_ACQUIRED]->(n)";
-
+        long bTime = System.currentTimeMillis();
         Neo4jUtil.executeInsert(queryString, param, true);
+        long eTime = System.currentTimeMillis();
+        System.out.println(queryString + " --> " + (eTime - bTime));
         File file = new File(tempFilePath);
         file.delete();
 

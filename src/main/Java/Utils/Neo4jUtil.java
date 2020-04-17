@@ -1,8 +1,10 @@
 package Utils;
 
 import org.neo4j.driver.*;
+import org.neo4j.driver.summary.ResultSummary;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Neo4jUtil implements AutoCloseable{
     private static final Driver driver = buildDriver();
@@ -15,36 +17,17 @@ public class Neo4jUtil implements AutoCloseable{
                 configuration.getProperty("neo4j.password")));
     }
 
-    public static Object executeSelect(final String queryString, final boolean isResultList, boolean isReturningPropertyKey, final Map<String, Object> params) {
+    public static Object executeSelect(final String queryString, final boolean isResultList, final Map<String, Object> params) {
         try ( Session session = driver.session() )
         {
-
             return session.readTransaction( new TransactionWork<Object>()
             {
                 @Override
                 public Object execute( Transaction tx )
                 {
-
                     Result statementResult = tx.run(queryString, params);
-                    if (isResultList) {
-                        List<Map<String, Object>> result = new ArrayList<>();
-
-                        for (Record record : statementResult.list()) {
-                            Map<String, Object> map = null;
-                            if (isReturningPropertyKey) {
-                                map = new HashMap<>(record.asMap());
-                            } else {
-                                map = new HashMap<>(record.fields().get(0).value().asNode().asMap());
-                                map.put("id", record.fields().get(0).value().asNode().id());
-                            }
-                            result.add(map);
-                        }
-                        return result;
-                    } else {
-                        if (isReturningPropertyKey)
-                            return statementResult.single().asMap();
-                        else return statementResult.single().fields().get(0).value().asNode().asMap();
-                    }
+                    if (isResultList) return statementResult.list();
+                    else return statementResult.single();
                 }
             } );
         }
@@ -59,16 +42,8 @@ public class Neo4jUtil implements AutoCloseable{
                 public Object execute( Transaction tx )
                 {
                     Result statementResult = tx.run(queryString);
-                    if (isResultList) {
-                        List<Map<String,Object>> result = new ArrayList<>();
-
-                        for (Record record : statementResult.list()) {
-                            Map<String,Object> map = new HashMap<>(record.fields().get(0).value().asNode().asMap());
-                            map.put("id", record.fields().get(0).value().asNode().id());
-                            result.add(map);
-                        }
-                        return result;
-                    } else return statementResult.single().fields().get(0).value().asNode().asMap();
+                    if (isResultList) return statementResult.list();
+                    else return statementResult.single();
                 }
             } );
         }
@@ -83,11 +58,12 @@ public class Neo4jUtil implements AutoCloseable{
                 session.writeTransaction(new TransactionWork<Object>() {
                     @Override
                     public Object execute(Transaction tx) {
-                        Result statementResult = tx.run(queryString, params);
+                        tx.run(queryString, params);
                         return 0;
                     }
                 });
             }
+
         }
     }
 
@@ -99,11 +75,12 @@ public class Neo4jUtil implements AutoCloseable{
                 session.writeTransaction(new TransactionWork<Object>() {
                     @Override
                     public Object execute(Transaction tx) {
-                        Result statementResult = tx.run(queryString);
+                        tx.run(queryString);
                         return 0;
                     }
                 });
             }
+
         }
     }
 

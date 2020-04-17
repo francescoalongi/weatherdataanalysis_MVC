@@ -3,6 +3,7 @@ package Controller;
 import Model.DatumForGraph;
 import Utils.Neo4jUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.neo4j.driver.Record;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -71,82 +72,38 @@ public class QueryDataGraphServlet extends HttpServlet {
                 String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
                         "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN ";
 
-                String stationInfoQueryString = "MATCH (n:Station), (n)-[:MEASURED_USING]->(m) WHERE id(n) = $idStation RETURN ";
+                String avgQueryString = queryString;
+
+                queryString += "timestamp(m.datetime) AS timestamp, m." + compliantWeatherDimension + " AS measurement ORDER BY timestamp";
+
+                String stationInfoQueryString = "MATCH (n:Station), (n)-[:MEASURED_USING]->(m) WHERE id(n) = $idStation " +
+                        "RETURN m." + compliantWeatherDimension + " AS unitOfMeasure, n.name AS name";
 
                 param.put("beginTimestamp", beginTimestamp);
                 param.put("endTimestamp", endTimestamp);
 
-                String avgQueryString = queryString;
-                queryString += "timestamp(m.datetime) AS timestamp,";
-                switch (compliantWeatherDimension) {
-                    case "temperature":
-                        if (isAvgRequired) avgQueryString += "avg(m.temperature) AS avg";
-                        queryString += "m.temperature AS measurement";
-                        stationInfoQueryString += "m.temperature AS unitOfMeasure";
-                        break;
-                    case "pressure":
-                        if (isAvgRequired) avgQueryString += "avg(m.pressure) AS avg";
-                        queryString += "m.pressure AS measurement";
-                        stationInfoQueryString += "m.pressure AS unitOfMeasure";
-                        break;
-                    case "humidity":
-                        if (isAvgRequired) avgQueryString += "avg(m.humidity) AS avg";
-                        queryString += "m.humidity AS measurement";
-                        stationInfoQueryString += "m.humidity AS unitOfMeasure";
-                        break;
-                    case "rain":
-                        if (isAvgRequired) avgQueryString += "avg(m.rain) AS avg";
-                        queryString += "m.rain AS measurement";
-                        stationInfoQueryString += "m.rain AS unitOfMeasure";
-                        break;
-                    case "windModule":
-                        if (isAvgRequired) avgQueryString += "avg(m.windModule) AS avg";
-                        queryString += "m.windModule AS measurement";
-                        stationInfoQueryString += "m.windModule AS unitOfMeasure";
-                        break;
-                    case "dewPoint":
-                        if (isAvgRequired) avgQueryString += "avg(m.dewPoint) AS avg";
-                        queryString += "m.dewPoint AS measurement";
-                        stationInfoQueryString += "m.dewPoint AS unitOfMeasure";
-                        break;
-                    case "snowLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.snowLevel) AS avg";
-                        queryString += "m.snowLevel AS measurement";
-                        stationInfoQueryString += "m.snowLevel AS unitOfMeasure";
-                        break;
-                    case "uvRadiation":
-                        if (isAvgRequired) avgQueryString += "avg(m.uvRadiation) AS avg";
-                        queryString += "m.uvRadiation AS measurement";
-                        stationInfoQueryString += "m.uvRadiation AS unitOfMeasure";
-                        break;
-                    case "pollutionLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.pollutionLevel) AS avg";
-                        queryString += "m.pollutionLevel AS measurement";
-                        stationInfoQueryString += "m.pollutionLevel AS unitOfMeasure";
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-                queryString += " ORDER BY timestamp";
-                stationInfoQueryString += ", n.name AS name";
-
-                Map<String, Object> stationInfo = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, true, param);
+                Map<String, Object> stationInfo = ((Record) Neo4jUtil.executeSelect(stationInfoQueryString, false, param)).asMap();
                 String stationName = (String) stationInfo.get("name");
                 String unitOfMeasure = (String) stationInfo.get("unitOfMeasure");
 
                 Double avg = null;
                 if (isAvgRequired) {
-                    Map<String, Object> avgResult = (Map<String, Object>) Neo4jUtil.executeSelect(avgQueryString, false, true, param);
+                    avgQueryString += "avg(m." + compliantWeatherDimension + ") AS avg";
+                    Map<String, Object> avgResult = ((Record) Neo4jUtil.executeSelect(avgQueryString, false, param)).asMap();
                     avg = (Double) avgResult.get("avg");
                 }
-                List<Map<String,Object>> mainResults = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, true,  param);
+
+                long bTime = System.currentTimeMillis();
+                List<Record> mainResults = (List<Record>) Neo4jUtil.executeSelect(queryString, true, param);
+                long eTime = System.currentTimeMillis();
+                System.out.println(queryString + " --> " + (eTime - bTime));
 
                 List<Double> measurements = new ArrayList<>();
                 List<Long> timestamps = new ArrayList<>();
 
-                for (Map<String, Object> map : mainResults) {
-                    measurements.add((Double) map.get("measurement"));
-                    timestamps.add((Long) map.get("timestamp"));
+                for (Record record : mainResults) {
+                    measurements.add((Double) record.asMap().get("measurement"));
+                    timestamps.add((Long) record.asMap().get("timestamp"));
                 }
 
                 if (!measurements.isEmpty()) {
