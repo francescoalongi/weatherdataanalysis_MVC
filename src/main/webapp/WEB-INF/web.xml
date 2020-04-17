@@ -6,11 +6,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-
-  <!--<welcome-file-list>
-    <welcome-file>InitServlet</welcome-file>
-  </welcome-file-list>-->
-    
     
     <!--servlet-->
     <servlet>
@@ -43,11 +38,6 @@
         <servlet-class>Controller.QueryDataGraphServlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>RegisterStationServlet</servlet-name>
-        <servlet-class>Controller.RegisterStationServlet</servlet-class>
-    </servlet>
-
 
     <!-- servlet mapping-->
     <servlet-mapping>
@@ -58,11 +48,6 @@
     <servlet-mapping>
         <servlet-name>DownloadDataServlet</servlet-name>
         <url-pattern>/DownloadData</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RegisterStationServlet</servlet-name>
-        <url-pattern>/RegisterStation</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

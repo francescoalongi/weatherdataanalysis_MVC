@@ -44,6 +44,9 @@ public class UploadDataServlet extends HttpServlet {
 
         List<Document> docs = new ArrayList<>();
         Integer insertionCount = 0;
+
+        long executionTime = 0;
+
         for (CSVRecord record : records) {
             try {
                 Long timestamp = Long.parseLong(record.get("timestamp"));
@@ -81,7 +84,10 @@ public class UploadDataServlet extends HttpServlet {
                 docs.add(newDoc);
                 insertionCount++;
                 if (insertionCount % 500 == 0 || !records.iterator().hasNext()) {
+                    long bTime = System.currentTimeMillis();
                     MongoDBUtil.executeInsert(docs, Collections.DATA);
+                    long eTime = System.currentTimeMillis();
+                    executionTime += eTime - bTime;
                     docs.clear();
                     insertionCount = 0;
                 }
@@ -91,6 +97,7 @@ public class UploadDataServlet extends HttpServlet {
             }
         }
 
+        System.out.println("Write execution time: " + executionTime);
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
         request.getRequestDispatcher("/LoadStations").forward(request,response);
     }

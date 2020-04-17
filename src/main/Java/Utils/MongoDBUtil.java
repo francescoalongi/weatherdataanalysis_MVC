@@ -17,7 +17,6 @@ public class MongoDBUtil {
         Configuration configuration = new Configuration("mongoDB.properties");
         MongoClient mongoClient = new MongoClient(configuration.getProperty("mongoDB.host"), Integer.parseInt(configuration.getProperty("mongoDB.port")));
         return mongoClient.getDatabase(configuration.getProperty("mongoDB.name"));
-
     }
 
     public static FindIterable<Document> executeSelect(Document filter, Collections collectionName) {

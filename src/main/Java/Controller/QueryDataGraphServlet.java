@@ -82,14 +82,14 @@ public class QueryDataGraphServlet extends HttpServlet {
                 String stationName = (String) station.get("name");
                 String unitOfMeasure = (String) ((Document)station.get("unitOfMeasure")).get(compliantWeatherDimension);
 
+                List<Double> measurements = new ArrayList<>();
+                List<Long> timestamps = new ArrayList<>();
+
                 filter.clear();
                 filter.append("idStation", stationId);
                 filter.append("timestamp", new Document("$gte", beginTimestamp).append("$lt", endTimestamp));
                 results = MongoDBUtil.executeSelect(filter, Collections.DATA);
-
-                List<Double> measurements = new ArrayList<>();
-                List<Long> timestamps = new ArrayList<>();
-
+                System.out.println(filter);
                 for (Document doc : results) {
                     measurements.add((Double) doc.get(compliantWeatherDimension));
                     timestamps.add(((Long) doc.get("timestamp"))*1000);
