@@ -4,7 +4,7 @@ import Model.DatumForGraph;
 import Model.Station;
 import Model.UnitOfMeasure;
 import Utils.HibernateUtil;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

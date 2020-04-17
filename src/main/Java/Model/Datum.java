@@ -1,10 +1,6 @@
 package Model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import java.lang.reflect.Field;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

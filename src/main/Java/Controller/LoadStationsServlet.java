@@ -2,7 +2,7 @@ package Controller;
 
 import Model.MinimizedStation;
 import Utils.HibernateUtil;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
