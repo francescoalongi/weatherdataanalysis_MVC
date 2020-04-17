@@ -5,5 +5,5 @@ This version of the project has the same functionalities shown in the master bra
 
 ## Built With
 
-* [MySQL](https://www.mysql.com) - Database used
+* [MySQL](https://www.mysql.com) - RDBMS used
 * [Maven](https://maven.apache.org/) - Dependency Management
