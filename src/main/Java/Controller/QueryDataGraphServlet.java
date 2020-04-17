@@ -1,10 +1,11 @@
 package Controller;
 
+import Model.DatumCountry;
 import Model.DatumForGraph;
 import Model.Station;
 import Model.UnitOfMeasure;
-import Utils.Neo4jUtil;
-import org.codehaus.jackson.map.ObjectMapper;
+import Utils.MySQLUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -61,6 +66,27 @@ public class QueryDataGraphServlet extends HttpServlet {
             List<DatumForGraph> dataOfStations = new ArrayList<>();
             for (Integer stationId : stationIds) {
 
+                String stationQuery = "SELECT * FROM station AS s WHERE s.idStation = ?";
+                String unitOfMeasureQuery = "SELECT * FROM unitofmeasure AS u WHERE u.idUnitOfMeasure = ?";
+                List<Map<String,Object>> results = new ArrayList<>();
+                try (Connection connection = MySQLUtil.getConnection();
+                     PreparedStatement preparedStatementSta = connection.prepareStatement(stationQuery);
+                     PreparedStatement preparedStatementUOM = connection.prepareStatement(unitOfMeasureQuery)) {
+                    preparedStatementSta.setInt(1, stationId);
+                    ResultSet rs = preparedStatementSta.executeQuery();
+                    results = MySQLUtil.resultSetToArrayList(rs);
+                    preparedStatementUOM.setInt(1, (Integer) results.get(0).get("idUnitOfMeasure"));
+                    rs = preparedStatementUOM.executeQuery();
+                    results.get(0).put("unitOfMeasure", MySQLUtil.resultSetToArrayList(rs).get(0));
+                    results.get(0).remove("idUnitOfMeasure");
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                ObjectMapper mapper = new ObjectMapper();
+                Station station = mapper.convertValue(results.get(0), Station.class);
+
                 String[] splittedWeatherDimension = request.getParameter("weatherDimension").toLowerCase().split(" ");
                 String compliantWeatherDimension = splittedWeatherDimension[0].toLowerCase();
                 for (int i = 1; i < splittedWeatherDimension.length; i++) {
@@ -69,92 +95,77 @@ public class QueryDataGraphServlet extends HttpServlet {
                     compliantWeatherDimension = compliantWeatherDimension.concat(String.valueOf(chars));
                 }
 
-                Map<String, Object> param = new HashMap<>();
-                param.put("idStation", stationId);
-                String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
-                        "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN ";
+                String table = "";
 
-                String stationInfoQueryString = "MATCH (n:Station), (n)-[:MEASURED_USING]->(m) WHERE id(n) = $idStation RETURN ";
-
-                param.put("beginTimestamp", beginTimestamp);
-                param.put("endTimestamp", endTimestamp);
-
-                String avgQueryString = queryString;
-                queryString += "timestamp(m.datetime) AS timestamp,";
-                switch (compliantWeatherDimension) {
-                    case "temperature":
-                        if (isAvgRequired) avgQueryString += "avg(m.temperature) AS avg";
-                        queryString += "m.temperature AS measurement";
-                        stationInfoQueryString += "m.temperature AS unitOfMeasure";
+                switch (station.getType().toLowerCase()) {
+                    case "country":
+                        table = "DatumCountry";
                         break;
-                    case "pressure":
-                        if (isAvgRequired) avgQueryString += "avg(m.pressure) AS avg";
-                        queryString += "m.pressure AS measurement";
-                        stationInfoQueryString += "m.pressure AS unitOfMeasure";
+                    case "city":
+                        table = "DatumCity";
                         break;
-                    case "humidity":
-                        if (isAvgRequired) avgQueryString += "avg(m.humidity) AS avg";
-                        queryString += "m.humidity AS measurement";
-                        stationInfoQueryString += "m.humidity AS unitOfMeasure";
+                    case "mountain":
+                        table = "DatumMountain";
                         break;
-                    case "rain":
-                        if (isAvgRequired) avgQueryString += "avg(m.rain) AS avg";
-                        queryString += "m.rain AS measurement";
-                        stationInfoQueryString += "m.rain AS unitOfMeasure";
+                    case "sea":
+                        table = "DatumSea";
                         break;
-                    case "windModule":
-                        if (isAvgRequired) avgQueryString += "avg(m.windModule) AS avg";
-                        queryString += "m.windModule AS measurement";
-                        stationInfoQueryString += "m.windModule AS unitOfMeasure";
-                        break;
-                    case "dewPoint":
-                        if (isAvgRequired) avgQueryString += "avg(m.dewPoint) AS avg";
-                        queryString += "m.dewPoint AS measurement";
-                        stationInfoQueryString += "m.dewPoint AS unitOfMeasure";
-                        break;
-                    case "snowLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.snowLevel) AS avg";
-                        queryString += "m.snowLevel AS measurement";
-                        stationInfoQueryString += "m.snowLevel AS unitOfMeasure";
-                        break;
-                    case "uvRadiation":
-                        if (isAvgRequired) avgQueryString += "avg(m.uvRadiation) AS avg";
-                        queryString += "m.uvRadiation AS measurement";
-                        stationInfoQueryString += "m.uvRadiation AS unitOfMeasure";
-                        break;
-                    case "pollutionLevel":
-                        if (isAvgRequired) avgQueryString += "avg(m.pollutionLevel) AS avg";
-                        queryString += "m.pollutionLevel AS measurement";
-                        stationInfoQueryString += "m.pollutionLevel AS unitOfMeasure";
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
                 }
-                queryString += " ORDER BY timestamp";
-                stationInfoQueryString += ", n.name AS name";
 
-                Map<String, Object> stationInfo = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, true, param);
-                String stationName = (String) stationInfo.get("name");
-                String unitOfMeasure = (String) stationInfo.get("unitOfMeasure");
+                String selectionQuery = "SELECT timestamp, " + compliantWeatherDimension + " AS measurement";
+                selectionQuery += " FROM " + table + " WHERE idStation = ? AND timestamp >= ? AND timestamp <= ?";
+
+                try (Connection connection = MySQLUtil.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(selectionQuery)) {
+                    preparedStatement.setInt(1, stationId);
+                    preparedStatement.setLong(2, beginTimestamp);
+                    preparedStatement.setLong(3, endTimestamp);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    results = MySQLUtil.resultSetToArrayList(rs);
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                String stationName = station.getName();
+                String weatherDimForReflection = compliantWeatherDimension.substring(0, 1).toUpperCase() +
+                        compliantWeatherDimension.substring(1);
+                UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
+                String unit = "";
+                try {
+                    unit = (String) unitOfMeasure.getClass().getMethod("get" + weatherDimForReflection).invoke(unitOfMeasure);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+
+                List<Float> measurements = new ArrayList<>();
+                List<Long> timestamps = new ArrayList<>();
+
+                for (Map<String, Object> map : results) {
+                    measurements.add((Float) map.get("measurement"));
+                    timestamps.add((((Number)map.get("timestamp")).longValue())*1000);
+                }
 
                 Double avg = null;
                 if (isAvgRequired) {
-                    Map<String, Object> avgResult = (Map<String, Object>) Neo4jUtil.executeSelect(avgQueryString, false, true, param);
-                    avg = (Double) avgResult.get("avg");
-                }
-                List<Map<String,Object>> mainResults = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, true,  param);
-
-                List<Double> measurements = new ArrayList<>();
-                List<Long> timestamps = new ArrayList<>();
-
-                for (Map<String, Object> map : mainResults) {
-                    measurements.add((Double) map.get("measurement"));
-                    timestamps.add((Long) map.get("timestamp"));
+                    String avgQuery = "SELECT avg(" + compliantWeatherDimension + ") FROM " + table + " WHERE idStation = ? AND timestamp >= ? AND timestamp <= ?";
+                    try (Connection connection = MySQLUtil.getConnection();
+                         PreparedStatement preparedStatement = connection.prepareStatement(avgQuery)) {
+                        preparedStatement.setInt(1, stationId);
+                        preparedStatement.setLong(2, beginTimestamp);
+                        preparedStatement.setLong(3, endTimestamp);
+                        ResultSet rs = preparedStatement.executeQuery();
+                        results = MySQLUtil.resultSetToArrayList(rs);
+                        rs.close();
+                        avg = (Double) results.get(0).get("avg(" + compliantWeatherDimension + ")");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (!measurements.isEmpty()) {
                     DatumForGraph data = null;
-                    data = new DatumForGraph(stationId, stationName, unitOfMeasure , measurements, timestamps , avg);
+                    data = new DatumForGraph(stationId, stationName, unit , measurements, timestamps , avg);
                     dataOfStations.add(data);
                 }
             }

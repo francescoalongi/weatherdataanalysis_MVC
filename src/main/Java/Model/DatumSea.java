@@ -1,6 +1,6 @@
 package Model;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 
 @JsonTypeInfo(
@@ -14,8 +14,7 @@ public class DatumSea extends Datum {
 
     public DatumSea() {}
 
-    public DatumSea(//DatumPK datumPK,
-                    Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
+    public DatumSea(Long timestamp, Integer idStation, Float temperature, Float pressure, Float humidity, Float rain, Float windModule, String windDirection, Float uvRadiation) {
         super(timestamp,idStation,temperature,pressure,humidity,rain,windModule,windDirection);
         this.uvRadiation = uvRadiation;
     }

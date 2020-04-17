@@ -1,23 +1,23 @@
 package Model;
 
 public class MinimizedStation {
-    public Integer getId() {
-        return id;
+    public Integer getIdStation() {
+        return idStation;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdStation(Integer idStation) {
+        this.idStation = idStation;
     }
 
-    private Integer id;
+    private Integer idStation;
     private String name;
     private String type;
 
     public MinimizedStation() {
     }
 
-    public MinimizedStation(Integer id, String name, String type) {
-        this.id = id;
+    public MinimizedStation(Integer idStation, String name, String type) {
+        this.idStation = idStation;
         this.name = name;
         this.type = type;
     }

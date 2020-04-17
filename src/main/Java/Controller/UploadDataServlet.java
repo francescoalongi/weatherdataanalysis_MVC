@@ -1,11 +1,11 @@
 package Controller;
 
 import Model.*;
-import Utils.Neo4jUtil;
+import Utils.MySQLUtil;
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -16,9 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.sql.*;
+import java.util.*;
 
 @WebServlet(name = "UploadDataServlet")
 @MultipartConfig
@@ -27,56 +26,75 @@ public class UploadDataServlet extends HttpServlet {
 
         String idStation = request.getParameter("idStation");
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("idStation", Integer.parseInt(idStation));
+        String stationQuery = "SELECT * FROM station AS s WHERE s.idStation = ?";
+        String unitOfMeasureQuery = "SELECT * FROM unitofmeasure AS u WHERE u.idUnitOfMeasure = ?";
+        List<Map<String,Object>> results = new ArrayList<>();
+        try (Connection connection = MySQLUtil.getConnection();
+             PreparedStatement preparedStatementSta = connection.prepareStatement(stationQuery);
+             PreparedStatement preparedStatementUOM = connection.prepareStatement(unitOfMeasureQuery)) {
+            preparedStatementSta.setInt(1, Integer.parseInt(idStation));
+            ResultSet rs = preparedStatementSta.executeQuery();
+            results = MySQLUtil.resultSetToArrayList(rs);
+            preparedStatementUOM.setInt(1, (Integer) results.get(0).get("idUnitOfMeasure"));
+            rs = preparedStatementUOM.executeQuery();
+            results.get(0).put("unitOfMeasure", MySQLUtil.resultSetToArrayList(rs).get(0));
+            results.get(0).remove("idUnitOfMeasure");
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        String queryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(queryString, false, false, param);
-        Station station = mapper.convertValue(result, Station.class);
+        Station station = mapper.convertValue(results.get(0), Station.class);
 
+        String insertQuery = "INSERT INTO ";
         Part filePart = request.getPart("newData");
         InputStream fileContent = filePart.getInputStream();
         Reader in = new InputStreamReader(fileContent, StandardCharsets.UTF_8);
-        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+        Iterable<CSVRecord> records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(in);
+        try {
+            switch (station.getType().toLowerCase()) {
+                case "city":
+                    insertQuery += "DatumCity VALUES (?,?,?,?,?,?,?,?,?)";
+                    try {
+                        parseCSV(insertQuery, "pollutionLevel", records, Integer.parseInt(idStation));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "country":
+                    insertQuery += "DatumCountry VALUES (?,?,?,?,?,?,?,?,?)";
+                    try {
+                        parseCSV(insertQuery, "dewPoint", records, Integer.parseInt(idStation));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "mountain":
+                    insertQuery += "DatumMountain VALUES (?,?,?,?,?,?,?,?,?)";
+                    try {
+                        parseCSV(insertQuery, "snowLevel", records, Integer.parseInt(idStation));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "sea":
+                    insertQuery += "DatumSea VALUES (?,?,?,?,?,?,?,?,?)";
+                    try {
+                        parseCSV(insertQuery, "uvRadiation", records, Integer.parseInt(idStation));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
 
-        File file = new File("test.csv");
-        String currentFilePath = file.getAbsolutePath();
-        file.delete();
-
-        currentFilePath = currentFilePath.replace("\\", "\\\\");
-        currentFilePath = currentFilePath.replace(" ", "%20");
-
-        FileWriter writer = new FileWriter("test.csv");
-        CSVPrinter csvPrinter = CSVFormat.EXCEL.withFirstRecordAsHeader().print(writer);
-        csvPrinter.printRecords(records);
-        csvPrinter.close();
-
-        queryString = "USING PERIODIC COMMIT 500 LOAD CSV WITH HEADERS FROM 'file:/" + currentFilePath + "' AS row " +
-                "MATCH (s:Station) WHERE id(s) = $idStation CREATE (n:Datum{datetime:datetime({epochSeconds: toInteger(row.timestamp)}), temperature:toFloat(row.temperature), " +
-                "humidity:toFloat(row.humidity), windModule:toFloat(row.windModule), windDirection:row.windDirection, " +
-                "pressure: toFloat(row.pressure), rain:toFloat(row.rain), ";
-        switch (station.getType().toLowerCase()) {
-            case "city":
-                queryString += "pollutionLevel:toFloat(row.pollutionLevel)";
-                break;
-            case "country":
-                queryString += "dewPoint:toFloat(row.dewPoint)";
-                break;
-            case "mountain":
-                queryString += "snowLevel:toFloat(row.snowLevel)";
-                break;
-            case "sea":
-                queryString += "uvRadiation:toFloat(row.uvRadiation)";
-                break;
-            default:
-                throw new IllegalArgumentException();
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("outcomeUpload", "The .csv file you are trying to upload does not fit for the selected station. Use another one.");
+            request.getRequestDispatcher("/LoadStations").forward(request,response);
         }
 
-
-        queryString += "}), (s)-[:HAS_ACQUIRED]->(n)";
-
-        Neo4jUtil.executeInsert(queryString, param, true);
         request.setAttribute("outcomeUpload", "Your .csv file has been successfully uploaded.");
         request.getRequestDispatcher("/LoadStations").forward(request,response);
     }
@@ -84,5 +102,46 @@ public class UploadDataServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("Error", "Error! GET request not supported");
         getServletContext().getRequestDispatcher("/Error").forward(request, response);
+    }
+
+    private void parseCSV(String insertQuery, String additionalFieldS, Iterable<CSVRecord> records, Integer idStation) throws SQLException{
+        Connection connection = MySQLUtil.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+        int counter = 0;
+        int index = 1;
+        for (CSVRecord record : records) {
+            try {
+                Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
+                Float temperature = Float.parseFloat(record.get("temperature"));
+                Float pressure = Float.parseFloat(record.get("pressure"));
+                Float humidity = Float.parseFloat(record.get("humidity"));
+                Float rain = Float.parseFloat(record.get("rain"));
+                Float windModule = Float.parseFloat(record.get("windModule"));
+                String windDirection = record.get("windDirection");
+                Float additionalField = Float.parseFloat(record.get(additionalFieldS));
+
+                preparedStatement.setInt(index++, idStation);
+                preparedStatement.setLong(index++, timestamp);
+                preparedStatement.setFloat(index++, temperature);
+                preparedStatement.setFloat(index++, pressure);
+                preparedStatement.setFloat(index++, humidity);
+                preparedStatement.setFloat(index++, rain);
+                preparedStatement.setFloat(index++, windModule);
+                preparedStatement.setString(index++, windDirection);
+                preparedStatement.setFloat(index++, additionalField);
+
+                preparedStatement.addBatch();
+                index = 1;
+
+                if (counter % 500 == 0 || !records.iterator().hasNext()) {
+                    preparedStatement.executeBatch();
+                }
+                counter++;
+            } catch (NumberFormatException e) {
+                // if a datum contains an invalid field, skip it
+            }
+        }
+        preparedStatement.close();
+        connection.close();
     }
 }

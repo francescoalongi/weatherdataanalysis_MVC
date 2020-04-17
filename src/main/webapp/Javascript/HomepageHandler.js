@@ -296,7 +296,7 @@ function appendSelectToContainer () {
 
     for (var i = 0; i < stationListJSON.length; i++) {
         var option = document.createElement("option");
-        option.setAttribute("value", stationListJSON[i].id);
+        option.setAttribute("value", stationListJSON[i].idStation);
         option.setAttribute("data-station-type", stationListJSON[i].type);
         option.innerText = stationListJSON[i].name;
         selectStation.appendChild(option);

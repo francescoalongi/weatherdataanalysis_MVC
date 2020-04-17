@@ -87,7 +87,7 @@ public class UnitOfMeasure {
         return dewPoint;
     }
 
-    public void setDewPt(String dewPoint) {
+    public void setDewPoint(String dewPoint) {
         this.dewPoint = dewPoint;
     }
 

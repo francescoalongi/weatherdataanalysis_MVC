@@ -1,9 +1,9 @@
 package Controller;
 
 import Model.MinimizedStation;
-import Utils.Neo4jUtil;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
+import Utils.MySQLUtil;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +27,21 @@ public class LoadStationsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN S", true);
+
+        String queryString = "SELECT * from station AS s";
+        List<Map<String,Object>> results = new ArrayList<>();
+        try (Connection connection = MySQLUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(queryString);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            results = MySQLUtil.resultSetToArrayList(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
         for (Map<String, Object> map : results) {
             list.add(mapper.convertValue(map, MinimizedStation.class));

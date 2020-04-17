@@ -1,10 +1,10 @@
 package Controller;
 
 import Model.Station;
-import Utils.Maps;
-import Utils.Neo4jUtil;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import Model.UnitOfMeasure;
+import Utils.MySQLUtil;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
-import static Utils.Maps.asFlattendMap;
+import java.sql.*;
 
 @WebServlet(name = "CreateStationServlet")
 public class CreateStationServlet extends HttpServlet {
@@ -28,26 +25,50 @@ public class CreateStationServlet extends HttpServlet {
         String json = br.readLine();
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Map<String, Object> params = mapper.readValue(json, HashMap.class);
-            String queryString = "CREATE (n:Station {name: $name, type: $type, latitude: $latitude, longitude: $longitude, altitude: $altitude}), " +
-                    " (m:UnitOfMeasure {temperature: $temperature, pressure: $pressure, humidity: $humidity, rain: $rain, windModule: $windModule, " +
-                    "windDirection: $windDirection, ";
-            switch ((String)params.get("type")) {
-                case "Country":
-                    queryString += "dewPoint: $dewPoint})";
-                    break;
-                case "City":
-                    queryString += "pollutionLevel: $pollutionLevel})";
-                    break;
-                case "Mountain":
-                    queryString += "snowLevel: $snowLevel})";
-                    break;
-                case "Sea":
-                    queryString += "uvRadiation: $uvRadiation})";
+            Station station = mapper.readValue(json, Station.class);
+            UnitOfMeasure unitOfMeasure = station.getUnitOfMeasure();
+            String unitOfMeasureQuery = "INSERT INTO unitofmeasure (temperature, pressure, humidity, rain, " +
+                    "windModule, windDirection, uvRadiation, snowLevel, pollutionLevel, dewPoint) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String stationQuery = "INSERT INTO station (idUnitOfMeasure, name, type, latitude, longitude, altitude) VALUES (?,?,?,?,?,?)";
+            Integer idUnitOfMeasure;
+            try (Connection connection = MySQLUtil.getConnection();
+                 PreparedStatement preparedStatementUOM = connection.prepareStatement(unitOfMeasureQuery, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement preparedStatementSta = connection.prepareStatement(stationQuery)) {
+
+                int i = 1;
+                preparedStatementUOM.setString(i++, unitOfMeasure.getTemperature());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getPressure());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getHumidity());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getRain());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getWindModule());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getWindDirection());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getUvRadiation());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getSnowLevel());
+                preparedStatementUOM.setString(i++, unitOfMeasure.getPollutionLevel());
+                preparedStatementUOM.setString(i, unitOfMeasure.getDewPoint());
+
+                preparedStatementUOM.executeUpdate();
+                ResultSet generatedKeys = preparedStatementUOM.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                  idUnitOfMeasure = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Unable to obtain AI id of UnitOfMeasure.");
+                }
+
+                i = 1;
+                preparedStatementSta.setInt(i++, idUnitOfMeasure);
+                preparedStatementSta.setString(i++, station.getName());
+                preparedStatementSta.setString(i++, station.getType());
+                preparedStatementSta.setFloat(i++, station.getLatitude());
+                preparedStatementSta.setFloat(i++, station.getLongitude());
+                preparedStatementSta.setFloat(i++, station.getAltitude());
+
+                preparedStatementSta.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            queryString += ", (n)-[:MEASURED_USING]->(m)";
-            Map<String, Object> t_params = asFlattendMap(params);
-            Neo4jUtil.executeInsert(queryString, t_params, false);
+
         } catch (JsonMappingException e) {
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");

@@ -19,23 +19,12 @@
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
-  <dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>org.hibernate.ogm</groupId>
-      <artifactId>hibernate-ogm-bom</artifactId>
-      <version>5.4.1.Final</version>
-      <type>pom</type>
-      <scope>import</scope>
-    </dependency>
-  </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
-      <groupId>org.neo4j.driver</groupId>
-      <artifactId>neo4j-java-driver</artifactId>
-      <version>1.7.2</version>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.19</version>
     </dependency>
 
     <dependency>
@@ -49,9 +38,9 @@
       <version>1.6</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.9.13</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.10.3</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>

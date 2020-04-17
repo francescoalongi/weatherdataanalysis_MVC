@@ -1,8 +1,9 @@
 package Controller;
 
 import Model.*;
-import Utils.Neo4jUtil;
-import org.codehaus.jackson.map.ObjectMapper;
+import Utils.MySQLUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 @WebServlet(name = "DownloadDataServlet")
@@ -37,46 +39,63 @@ public class DownloadDataServlet extends HttpServlet {
         }
         Integer idStation = Integer.parseInt(request.getParameter("station_id"));
 
-        Map<String, Object> param = new HashMap<>();
-        param.put("idStation", idStation);
+        String stationQuery = "SELECT * FROM station AS s WHERE s.idStation = ?";
+        String unitOfMeasureQuery = "SELECT * FROM unitofmeasure AS u WHERE u.idUnitOfMeasure = ?";
+        List<Map<String,Object>> results = new ArrayList<>();
+        try (Connection connection = MySQLUtil.getConnection();
+             PreparedStatement preparedStatementSta = connection.prepareStatement(stationQuery);
+             PreparedStatement preparedStatementUOM = connection.prepareStatement(unitOfMeasureQuery)) {
+            preparedStatementSta.setInt(1, idStation);
+            ResultSet rs = preparedStatementSta.executeQuery();
+            results = MySQLUtil.resultSetToArrayList(rs);
+            preparedStatementUOM.setInt(1, (Integer) results.get(0).get("idUnitOfMeasure"));
+            rs = preparedStatementUOM.executeQuery();
+            results.get(0).put("unitOfMeasure", MySQLUtil.resultSetToArrayList(rs).get(0));
+            results.get(0).remove("idUnitOfMeasure");
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        String stationInfoQueryString = "MATCH (n:Station) WHERE id(n) = $idStation RETURN n";
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> result = (Map<String, Object>) Neo4jUtil.executeSelect(stationInfoQueryString, false, false, param);
-        Station station = mapper.convertValue(result, Station.class);
+        Station station = mapper.convertValue(results.get(0), Station.class);
 
-        param.put("beginTimestamp", beginTimestamp);
-        param.put("endTimestamp", endTimestamp);
+        String table = "";
 
-        String queryString = "MATCH (n:Station), (n)-[:HAS_ACQUIRED]->(m:Datum) WHERE id(n) = $idStation AND " +
-                "m.datetime > datetime({epochSeconds:$beginTimestamp}) AND m.datetime < datetime({epochSeconds:$endTimestamp}) RETURN m";
+        switch (station.getType().toLowerCase()) {
+            case "country":
+                table = "DatumCountry";
+                break;
+            case "city":
+                table = "DatumCity";
+                break;
+            case "mountain":
+                table = "DatumMountain";
+                break;
+            case "sea":
+                table = "DatumSea";
+                break;
+        }
 
-        //retrieve the data required
-        List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect(queryString, true, false, param);
+        String selectionQuery = "SELECT * FROM " + table + " WHERE idStation = ? AND timestamp >= ? AND timestamp <= ?";
+
+        try (Connection connection = MySQLUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(selectionQuery)) {
+            preparedStatement.setInt(1, idStation);
+            preparedStatement.setLong(2, beginTimestamp);
+            preparedStatement.setLong(3, endTimestamp);
+            ResultSet rs = preparedStatement.executeQuery();
+            results = MySQLUtil.resultSetToArrayList(rs);
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         List data = new ArrayList<>();
         for (Map<String, Object> map : results) {
-            ZonedDateTime datetime = (ZonedDateTime) map.get("datetime");
-            map.remove("datetime");
-            map.put("idStation", map.get("id"));
-            map.remove("id");
             map.put("type", "Datum"+station.getType());
-            map.put("timestamp", datetime.toEpochSecond());
-            //map.put("", mapper.convertValue(station, Map.class));
             data.add(mapper.convertValue(map, Datum.class));
 
-//            switch (station.getType().toLowerCase()) {
-//                case "country":
-//                    data.add(mapper.convertValue(map, DatumCountry.class));
-//                    break;
-//                case "city":
-//                    data.add(mapper.convertValue(map, DatumCity.class));
-//                    break;
-//                default:
-//                    throw new IllegalArgumentException();
-//
-//
-//            }
         }
 
         if (data.size() == 0) {
