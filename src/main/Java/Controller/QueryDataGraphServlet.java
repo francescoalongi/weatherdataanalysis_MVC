@@ -120,7 +120,10 @@ public class QueryDataGraphServlet extends HttpServlet {
                     preparedStatement.setInt(1, stationId);
                     preparedStatement.setLong(2, beginTimestamp);
                     preparedStatement.setLong(3, endTimestamp);
+                    long bTime = System.currentTimeMillis();
                     ResultSet rs = preparedStatement.executeQuery();
+                    long eTime = System.currentTimeMillis();
+                    System.out.println(selectionQuery + " --> " + (eTime - bTime));
                     results = MySQLUtil.resultSetToArrayList(rs);
                     rs.close();
                 } catch (SQLException e) {

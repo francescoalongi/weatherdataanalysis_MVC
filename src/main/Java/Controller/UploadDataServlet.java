@@ -109,6 +109,7 @@ public class UploadDataServlet extends HttpServlet {
         PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
         int counter = 0;
         int index = 1;
+        long executionTime = 0;
         for (CSVRecord record : records) {
             try {
                 Long timestamp = Long.parseLong(record.get("timestamp")); // /uFEFF is the Byte Order Mark --> removed, it gave problems
@@ -134,13 +135,17 @@ public class UploadDataServlet extends HttpServlet {
                 index = 1;
 
                 if (counter % 500 == 0 || !records.iterator().hasNext()) {
+                    long bTime = System.currentTimeMillis();
                     preparedStatement.executeBatch();
+                    long eTime = System.currentTimeMillis();
+                    executionTime += eTime - bTime;
                 }
                 counter++;
             } catch (NumberFormatException e) {
                 // if a datum contains an invalid field, skip it
             }
         }
+        System.out.println(insertQuery + " --> " + executionTime);
         preparedStatement.close();
         connection.close();
     }
