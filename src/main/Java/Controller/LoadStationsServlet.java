@@ -2,8 +2,8 @@ package Controller;
 
 import Model.MinimizedStation;
 import Utils.Neo4jUtil;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +24,7 @@ public class LoadStationsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Map<String,Object>> results = (List<Map<String,Object>>) Neo4jUtil.executeSelect("MATCH (S:Station) RETURN S", true);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<MinimizedStation> list = new ArrayList<>();
         for (Map<String, Object> map : results) {
             list.add(mapper.convertValue(map, MinimizedStation.class));

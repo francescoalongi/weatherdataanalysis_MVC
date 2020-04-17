@@ -2,10 +2,10 @@ package Controller;
 
 import Model.*;
 import Utils.Neo4jUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -38,13 +38,6 @@ public class UploadDataServlet extends HttpServlet {
         InputStream fileContent = filePart.getInputStream();
         Reader in = new InputStreamReader(fileContent, StandardCharsets.UTF_8);
         Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
-
-//        File file = new File("test.csv");
-//        String currentFilePath = file.getAbsolutePath();
-//        file.delete();
-//
-//        currentFilePath = currentFilePath.replace("\\", "\\\\");
-//        currentFilePath = currentFilePath.replace(" ", "%20");
 
         String tempFilePath = Neo4jUtil.neo4jPath + "/import/temp.csv";
         FileWriter writer = new FileWriter(tempFilePath);
