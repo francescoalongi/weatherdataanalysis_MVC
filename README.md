@@ -16,3 +16,6 @@ The following diagram shows the structure of this project.
 * [MySQL](https://www.mysql.com/) - RDBMS used
 * [Hibernate](https://hibernate.org/orm/documentation/5.4/) - Used to handle the object-relational impedance mismatch
 * [Maven](https://maven.apache.org/) - Dependency Management
+
+## Further details
+If you wish to know more about this project check the [related paper](https://doi.org/10.1002/spe.3116) which have been published on Wiley Online Library.
